@@ -62,17 +62,17 @@
   header.profile{
     background:linear-gradient(160deg,#2a1551 0%, #6a2fb0 50%, #9a4fd0 80%, #e9b949 140%);
     color:var(--paper);
-    padding:34px 16px 26px;
+    padding:44px 16px 24px;
     text-align:center;
     position:relative;
     overflow:hidden;
   }
   header.profile::after{
-    content:"✦ ⋆ ✧ ⊹ ✦ ⋆ ✧ ⊹ ✦ ⋆ ✧ ⊹ ✦ ⋆ ✧ ⊹ ✦ ⋆ ✧ ⊹ ✦ ⋆";
-    position:absolute;inset:0;color:rgba(255,255,255,.35);font-size:13px;line-height:46px;
-    letter-spacing:34px;word-spacing:10px;overflow:hidden;pointer-events:none;
+    content:"✦   ⋆      ✧     ⊹    ✦      ⋆    ✧";
+    position:absolute;top:0;left:0;right:0;height:40px;color:rgba(255,255,255,.22);font-size:11px;
+    letter-spacing:40px;white-space:nowrap;overflow:hidden;pointer-events:none;
     animation:twinkle 3.5s ease-in-out infinite}
-  @keyframes twinkle{0%,100%{opacity:.35}50%{opacity:.7}}
+  @keyframes twinkle{0%,100%{opacity:.25}50%{opacity:.5}}
   .crest{
     width:54px;height:54px;border-radius:50%;margin:0 auto 12px;
     background:var(--paper);display:flex;align-items:center;justify-content:center;
@@ -178,7 +178,7 @@
 
   .people-input{display:flex;gap:8px}
   .people-input input{flex:1}
-  .people-input .btn{flex:none;padding:0 14px}
+  .people-input .btn{flex:none;padding:0 16px;align-self:stretch;display:flex;align-items:center}
   .pessoas-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
   .pchip{display:inline-flex;align-items:center;gap:6px;background:var(--paper-2);border:1px solid var(--line);
     border-radius:999px;padding:5px 6px 5px 11px;font-size:13px;color:var(--ink)}
@@ -211,12 +211,6 @@
     position:relative;z-index:1}
   .stat{text-align:center}
 
-  /* cabeçalho: foto à esquerda, nome ao lado */
-  .id-row{display:flex;align-items:center;gap:14px;justify-content:center;text-align:left;position:relative;z-index:1}
-  .id-row .avatar{margin:0;flex:none;width:86px;height:86px}
-  .id-text .title{font-size:24px;line-height:1.08;margin:0}
-  .id-text .family{margin:3px 0 0}
-
   /* boas-vindas: nossa foto + título dourado brilhando (fundo claro) */
   .w-avatar{width:132px;height:132px;margin:0 auto 14px}
   .w-title .plane{font-size:.7em;margin-right:8px;display:inline-block;animation:bob 3s ease-in-out infinite}
@@ -227,7 +221,7 @@
 
   /* fotos em "quadro" + descrição um pouco separada */
   .card{padding:10px;overflow:visible;border-radius:16px}
-  .carousel{border-radius:12px;border:1px solid var(--line)}
+  .carousel{border-radius:14px}
   .card .body{padding:14px 6px 4px}
 
   /* foto(s) em destaque — tela cheia */
@@ -305,13 +299,15 @@
   .heart-float{position:fixed;z-index:330;font-size:20px;pointer-events:none;transform:translate(-50%,-50%);
     animation:heartup .9s ease-out forwards}
   @keyframes heartup{0%{opacity:0;transform:translate(-50%,-50%) scale(.6)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-150%) scale(1.1)}}
+  .lb-heart{position:fixed;bottom:22px;right:18px;z-index:5;animation:none}
 
-  /* moldura mágica brilhante nas fotos */
-  .card .carousel{box-shadow:0 0 0 3px var(--gold), 0 0 0 5px var(--purple), 0 8px 26px rgba(60,31,110,.3);
-    background:linear-gradient(135deg,#2a1551,#3c1f6e)}
-  .card{position:relative}
-  .card::before{content:"";position:absolute;inset:4px;border-radius:16px;pointer-events:none;
-    box-shadow:0 0 18px rgba(233,185,73,.35);opacity:.8}
+  /* moldura fina, tipo fio brilhante */
+  .card .carousel{background:linear-gradient(135deg,#2a1551,#3c1f6e);
+    box-shadow:0 0 9px rgba(233,185,73,.4), 0 6px 18px rgba(60,31,110,.22)}
+  .card .carousel::after{content:"";position:absolute;inset:0;border-radius:14px;padding:1.5px;
+    background:linear-gradient(135deg,#f3cb63,#c77dd6 50%,#f3cb63);
+    -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;z-index:1}
 
   /* ---------- cartões de foto no admin ---------- */
   .add-fotos{width:100%;border:2px dashed var(--gold);background:var(--paper);color:var(--ink);
@@ -323,13 +319,11 @@
   .fc-top img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:10px}
   .fc-num{position:absolute;left:8px;top:8px;font-size:11px;background:rgba(74,53,40,.7);color:#fff;padding:3px 9px;border-radius:999px}
   .fc-remove{position:absolute;right:8px;top:8px;border:0;background:rgba(214,69,61,.92);color:#fff;width:28px;height:28px;border-radius:50%;font-size:14px;cursor:pointer}
-  .foto-card .fc-local{width:100%;border:1px solid var(--line);border-radius:9px;padding:9px 11px;font-size:14px;background:#fff;margin-bottom:8px}
   .foto-card .people-input{margin-bottom:0}
   .foto-card .pessoas-chips{margin-top:8px}
   .form-head{text-align:center;margin-bottom:18px}
   .form-head h3{font-family:"Fraunces",serif;font-weight:600;font-size:22px;color:var(--ink)}
   .form-sub{font-size:13px;color:var(--ink-soft);margin-top:3px}
-  .preview{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:14px;border:1px solid var(--line);margin-top:10px}
   .form .grid2.mt{margin-top:6px}
   .form .field label{display:flex;align-items:center;gap:6px}
   .btn.big{padding:14px;font-size:15px;margin-top:6px;border-radius:12px}
@@ -503,9 +497,13 @@ function ligarInteracoes(){
 function abrirLightbox(post, startIndex){
   if(!post) return;
   const fotos=post.fotos||[];
+  const hearts=lsGet("qn_hearts")||{};
   const lb=document.createElement("div"); lb.className="lightbox";
   lb.innerHTML=`
     <button class="lb-close" aria-label="Fechar">✕</button>
+    <button class="heart-btn lb-heart" data-post="${post.id}" aria-label="Curtir">
+      <span class="heart">❤️</span><span class="heart-count">${hearts[post.id]||0}</span>
+    </button>
     <div class="lb-track">${fotos.map(f=>`
       <div class="lb-slide">
         <img src="${f.src}" alt="">
@@ -517,6 +515,7 @@ function abrirLightbox(post, startIndex){
     ${fotos.length>1?`<div class="lb-dots">${fotos.map((_,i)=>`<span class="${i===(startIndex||0)?'on':''}"></span>`).join("")}</div>`:""}`;
   document.body.appendChild(lb);
   document.body.style.overflow="hidden";
+  ativarCoracao(lb.querySelector(".lb-heart"));
   const track=lb.querySelector(".lb-track");
   const dots=lb.querySelectorAll(".lb-dots span");
   requestAnimationFrame(()=>{ track.scrollLeft=(startIndex||0)*track.clientWidth; });
@@ -618,13 +617,8 @@ function htmlPerfil(){
   return `
   <header class="profile">
     ${visitante()?`<div class="hello">Olá, ${esc(visitante())} 👋</div>`:""}
-    <div class="id-row">
-      <div class="avatar"><img src="${AVATAR_FAMILIA}" alt="Família Queiroz Nascimento"></div>
-      <div class="id-text">
-        <h1 class="title"><span class="plane">✈️</span><span class="shine">Eurotrip 2026</span></h1>
-        <div class="family">Família Queiroz Nascimento</div>
-      </div>
-    </div>
+    <h1 class="title"><span class="plane">✈️</span><span class="shine">Eurotrip</span></h1>
+    <div class="family">Família Queiroz Nascimento</div>
     <div class="stats">
       <div class="stat"><b>${posts.length}</b><span>Momentos</span></div>
       <div class="stat"><b>${nFotos}</b><span>Fotos</span></div>
@@ -773,32 +767,32 @@ function ligarCarrosseis(){
   });
 }
 
-/* coração suspenso: clique = bate +1; segurar = sobe rápido; contador embaixo */
-function ligarCoracoes(){
-  const hearts = lsGet("qn_hearts")||{};
-  app.querySelectorAll(".heart-btn").forEach(btn=>{
-    const id=btn.dataset.post;
-    const heartEl=btn.querySelector(".heart");
-    const countEl=btn.querySelector(".heart-count");
-    let hold=null, fast=null;
-    const bump=()=>{
-      hearts[id]=(hearts[id]||0)+1; lsSet("qn_hearts",hearts);
-      countEl.textContent=hearts[id];
-      heartEl.classList.remove("beat"); void heartEl.offsetWidth; heartEl.classList.add("beat");
-      soltarCoracao(btn);
-    };
-    const press=(e)=>{ e.preventDefault(); e.stopPropagation(); bump();
-      hold=setTimeout(()=>{ fast=setInterval(bump,130); },380); };
-    const release=(e)=>{ if(e) e.stopPropagation(); clearTimeout(hold); clearInterval(fast); hold=fast=null; };
-    btn.addEventListener("click",e=>{e.stopPropagation();});
-    btn.addEventListener("mousedown",press);
-    btn.addEventListener("mouseup",release);
-    btn.addEventListener("mouseleave",release);
-    btn.addEventListener("touchstart",press,{passive:false});
-    btn.addEventListener("touchend",release);
-    btn.addEventListener("touchcancel",release);
-  });
+/* coração: tocar = bate +1; segurar = sobe rápido. Só conta no coração, nunca na foto. */
+function ativarCoracao(btn){
+  const id=btn.dataset.post;
+  const heartEl=btn.querySelector(".heart");
+  const countEl=btn.querySelector(".heart-count");
+  let hold=null, fast=null;
+  const bump=()=>{
+    const hearts=lsGet("qn_hearts")||{};
+    hearts[id]=(hearts[id]||0)+1; lsSet("qn_hearts",hearts);
+    countEl.textContent=hearts[id];
+    heartEl.classList.remove("beat"); void heartEl.offsetWidth; heartEl.classList.add("beat");
+    soltarCoracao(btn);
+  };
+  const press=(e)=>{ e.preventDefault(); e.stopPropagation(); bump();
+    hold=setTimeout(()=>{ fast=setInterval(bump,140); },420); };
+  const release=(e)=>{ if(e) e.stopPropagation(); clearTimeout(hold); clearInterval(fast); hold=fast=null; };
+  // impede que o toque no coração abra/feche o destaque ou conte na foto
+  ["click","dblclick"].forEach(ev=>btn.addEventListener(ev,e=>{e.stopPropagation();e.preventDefault();}));
+  btn.addEventListener("mousedown",press);
+  btn.addEventListener("mouseup",release);
+  btn.addEventListener("mouseleave",release);
+  btn.addEventListener("touchstart",press,{passive:false});
+  btn.addEventListener("touchend",e=>{ e.stopPropagation(); release(e); },{passive:true});
+  btn.addEventListener("touchcancel",release);
 }
+function ligarCoracoes(){ app.querySelectorAll(".heart-btn").forEach(ativarCoracao); }
 /* coraçãozinho que sobe e some a cada batida */
 function soltarCoracao(btn){
   const r=btn.getBoundingClientRect();
@@ -1069,6 +1063,7 @@ function renderLogin(){
         <button type="button" class="eye" id="verSenha" title="Mostrar senha" aria-label="Mostrar senha">👁</button>
       </div>
       <button class="btn primary block" id="entrar">Entrar</button>
+      <button class="btn ghost block" id="voltarInicio" style="margin-top:8px;color:var(--ink);border:1px solid var(--line)">← Voltar à tela inicial</button>
       <div class="err" id="erro"></div>
     </div>`;
   $("#verSenha").onclick = ()=>{
@@ -1077,6 +1072,7 @@ function renderLogin(){
     $("#verSenha").textContent = mostrar ? "🙈" : "👁";
     s.focus();
   };
+  $("#voltarInicio").onclick = ()=> renderBoasVindas();
   const tentar = ()=> renderAdmin();   // entra sem exigir senha
   $("#entrar").onclick = tentar;
   $("#senha").onkeydown = e=>{ if(e.key==="Enter") tentar(); };
