@@ -34,18 +34,18 @@
 
 <style>
   :root{
-    --ink:#1c2541;          /* azul-tinta passaporte */
-    --ink-soft:#3a4a6b;
-    --paper:#f7f3ec;        /* papel cartão */
-    --paper-2:#efe8db;
-    --stamp:#d6453d;        /* vermelho carimbo */
-    --gold:#c79a3b;
-    --line:#e2d9c8;
-    --shadow:0 8px 30px rgba(28,37,65,.10);
+    --ink:#4a3528;          /* café/espresso aconchegante */
+    --ink-soft:#7a5c48;
+    --paper:#fbf3e7;        /* creme quente */
+    --paper-2:#f3e7d3;
+    --stamp:#c9714b;        /* terracota / argila */
+    --gold:#e0a44a;         /* mel */
+    --line:#ead9c2;
+    --shadow:0 10px 30px rgba(74,53,40,.12);
 
-    --fr:#3b5bdb;  /* França */
-    --be:#f0a500;  /* Bélgica */
-    --nl:#e8590c;  /* Holanda */
+    --fr:#5b7bb4;  /* França  */
+    --be:#cf9b3e;  /* Bélgica */
+    --nl:#d4703a;  /* Holanda */
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{background:var(--paper);color:var(--ink);font-family:"Inter",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
@@ -57,7 +57,7 @@
 
   /* ---------- CABEÇALHO / PERFIL ---------- */
   header.profile{
-    background:linear-gradient(180deg,var(--ink) 0%, var(--ink-soft) 100%);
+    background:linear-gradient(160deg,#5a3e2e 0%, #a9663f 55%, #c9844a 100%);
     color:var(--paper);
     padding:34px 16px 26px;
     text-align:center;
@@ -77,21 +77,26 @@
   }
   .eyebrow{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:600;position:relative;z-index:1}
   h1.title{font-family:"Fraunces",serif;font-weight:600;font-size:30px;line-height:1.05;margin:6px 0 4px;position:relative;z-index:1}
-  .subtitle{font-size:13px;color:#cdd5e6;position:relative;z-index:1}
+  .subtitle{font-size:13px;color:#f0e0c6;position:relative;z-index:1}
 
   .stats{display:flex;justify-content:center;gap:30px;margin-top:18px;position:relative;z-index:1}
   .stat b{font-family:"Fraunces",serif;font-size:22px;display:block;line-height:1}
-  .stat span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#bcc6dc}
+  .stat span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#e3cfac}
 
-  /* ---------- BARRA DE FILTROS / TOGGLE ---------- */
-  .toolbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);
-    padding:12px 16px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center}
-  .chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;flex:1}
-  .chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-size:13px;font-weight:500;color:var(--ink-soft);display:flex;align-items:center;gap:7px;transition:.15s}
+  /* ---------- FILTROS (linha única rolável) ---------- */
+  .filters{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);padding:12px 0}
+  .filters .chips{display:flex;gap:8px;flex-wrap:nowrap;overflow-x:auto;padding:0 16px;
+    scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .filters .chips::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 15px;font-size:13px;font-weight:500;color:var(--ink-soft);display:flex;align-items:center;gap:7px;transition:.15s;white-space:nowrap}
   .chip .dot{width:9px;height:9px;border-radius:50%}
   .chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  /* ---------- SELETOR DE VISTA (canto separado) ---------- */
+  .view-row{display:flex;align-items:center;justify-content:flex-end;gap:9px;margin-top:16px}
+  .view-row .lbl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);font-weight:600}
   .view-toggle{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:#fff}
-  .view-toggle button{border:0;background:transparent;padding:8px 12px;color:var(--ink-soft);font-size:13px}
+  .view-toggle button{border:0;background:transparent;padding:7px 13px;color:var(--ink-soft);font-size:13px}
   .view-toggle button[aria-pressed="true"]{background:var(--paper-2);color:var(--ink)}
 
   /* ---------- GRADE ---------- */
@@ -158,6 +163,21 @@
     h1.title{font-size:26px}
     .stats{gap:24px}
   }
+
+  /* ---------- extras: pessoas, bandeira, período ---------- */
+  .chip .flag{font-size:14px;line-height:1}
+  .card .people{font-size:13px;color:var(--ink-soft);margin-top:8px}
+  .card .date{display:flex;align-items:center;gap:5px}
+
+  .people-input{display:flex;gap:8px}
+  .people-input input{flex:1}
+  .people-input .btn{flex:none;padding:0 14px}
+  .pessoas-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .pchip{display:inline-flex;align-items:center;gap:6px;background:var(--paper-2);border:1px solid var(--line);
+    border-radius:999px;padding:5px 6px 5px 11px;font-size:13px;color:var(--ink)}
+  .pchip button{border:0;background:rgba(74,53,40,.12);color:var(--ink);border-radius:50%;
+    width:18px;height:18px;font-size:12px;line-height:1;cursor:pointer}
+  .hint{font-size:11px;color:var(--ink-soft);margin-top:4px}
 </style>
 </head>
 <body>
@@ -189,8 +209,10 @@ const EXEMPLOS = [
     pais: "França",
     cidade: "Paris",
     local: "Champ de Mars",
-    legenda: "Primeiro dia em Paris. A Torre Eiffel ao entardecer foi exatamente como a gente sonhou.",
-    data: "2026-04-12"
+    pessoas: ["Família"],
+    legenda: "Primeiros dias em Paris. A Torre Eiffel ao entardecer foi exatamente como a gente sonhou.",
+    data: "2026-04-09",
+    dataFim: "2026-04-12"
   },
   {
     id: "ex2",
@@ -198,8 +220,10 @@ const EXEMPLOS = [
     pais: "Holanda",
     cidade: "Amsterdã",
     local: "Canais do centro histórico",
+    pessoas: [],
     legenda: "Passeio de barco pelos canais. As casinhas coloridas valem cada foto.",
-    data: "2026-04-19"
+    data: "2026-04-19",
+    dataFim: ""
   }
 ];
 
@@ -228,11 +252,35 @@ function carregarEmSegundoPlano(){
 }
 
 /* ---- datas legíveis em pt-BR ---- */
+const MESES=["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
 function fmtData(iso){
   if(!iso) return "";
   const [a,m,d] = iso.split("-").map(Number);
-  const meses=["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
-  return `${String(d).padStart(2,"0")} ${meses[(m||1)-1]} ${a}`;
+  return `${String(d).padStart(2,"0")} ${MESES[(m||1)-1]} ${a}`;
+}
+/* período: "09 até 12 abr 2026", "30 abr até 02 mai 2026", ou data única */
+function fmtPeriodo(ini, fim){
+  if(!ini) return "";
+  if(!fim || fim===ini) return fmtData(ini);
+  const [a1,m1,d1]=ini.split("-").map(Number);
+  const [a2,m2,d2]=fim.split("-").map(Number);
+  const dd1=String(d1).padStart(2,"0"), dd2=String(d2).padStart(2,"0");
+  if(a1===a2 && m1===m2) return `${dd1} até ${dd2} ${MESES[m1-1]} ${a1}`;
+  if(a1===a2)            return `${dd1} ${MESES[m1-1]} até ${dd2} ${MESES[m2-1]} ${a1}`;
+  return `${fmtData(ini)} até ${fmtData(fim)}`;
+}
+/* valores já usados (para sugestões automáticas no admin) */
+function valoresUnicos(campo){
+  const s=new Set();
+  posts.forEach(p=>{ const v=p[campo];
+    if(Array.isArray(v)) v.forEach(x=>{ if(x) s.add(x); });
+    else if(v) s.add(v);
+  });
+  return [...s].sort((a,b)=>a.localeCompare(b,"pt"));
+}
+function esc(t){ return String(t).replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
+function datalistHTML(id,campo){
+  return `<datalist id="${id}">${valoresUnicos(campo).map(v=>`<option value="${esc(v)}">`).join("")}</datalist>`;
 }
 function ordenados(){
   return posts.slice().sort((a,b)=> (a.data<b.data?1:-1));
@@ -247,7 +295,7 @@ function dotStyle(pais){ return (PAISES[pais]?.dot)||"var(--ink)"; }
 
 function htmlPerfil(){
   const nPaises = new Set(posts.map(p=>p.pais)).size;
-  const datas = posts.map(p=>p.data).filter(Boolean).sort();
+  const datas = posts.flatMap(p=>[p.data,p.dataFim]).filter(Boolean).sort();
   let dias = posts.length ? 1 : 0;
   if(datas.length>1){
     const d1=new Date(datas[0]), d2=new Date(datas[datas.length-1]);
@@ -267,17 +315,24 @@ function htmlPerfil(){
   </header>`;
 }
 
-function htmlToolbar(){
-  const chip = (nome,dot)=>`
+function htmlFiltros(){
+  const chip = (nome,emoji)=>`
     <button class="chip" data-pais="${nome}" aria-pressed="${filtroPais===nome}">
-      ${dot?`<span class="dot" style="background:${dot}"></span>`:""}${nome}
+      <span class="flag">${emoji}</span>${nome}
     </button>`;
   return `
-  <div class="toolbar">
+  <div class="filters">
     <div class="chips">
-      ${chip("Todos","")}
-      ${Object.keys(PAISES).map(p=>chip(p,dotStyle(p))).join("")}
+      ${chip("Todos","🌍")}
+      ${Object.keys(PAISES).map(p=>chip(p, PAISES[p].flag)).join("")}
     </div>
+  </div>`;
+}
+
+function htmlVista(){
+  return `
+  <div class="view-row">
+    <span class="lbl">Ver</span>
     <div class="view-toggle">
       <button data-vista="grade" aria-pressed="${modoVista==="grade"}">▦ Grade</button>
       <button data-vista="feed"  aria-pressed="${modoVista==="feed"}">▤ Feed</button>
@@ -308,7 +363,8 @@ function htmlFeed(lista){
           <span class="place">${[p.local,p.cidade].filter(Boolean).join(" · ")}</span>
         </div>
         <div class="caption">${p.legenda||""}</div>
-        <div class="date">${fmtData(p.data)}</div>
+        ${(p.pessoas&&p.pessoas.length)?`<div class="people">👥 ${p.pessoas.map(esc).join(" · ")}</div>`:""}
+        <div class="date">📅 ${fmtPeriodo(p.data,p.dataFim)}</div>
       </div>
     </article>`).join("")}</div>`;
 }
@@ -323,8 +379,11 @@ function renderPublico(){
   const lista = filtrados();
   app.innerHTML = `
     ${htmlPerfil()}
-    ${htmlToolbar()}
-    <div class="wrap">${modoVista==="grade"?htmlGrade(lista):htmlFeed(lista)}</div>
+    ${htmlFiltros()}
+    <div class="wrap">
+      ${htmlVista()}
+      ${modoVista==="grade"?htmlGrade(lista):htmlFeed(lista)}
+    </div>
   `;
   // eventos
   app.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{filtroPais=b.dataset.pais;renderPublico();});
@@ -365,17 +424,31 @@ function renderAdmin(){
           </div>
           <div class="field">
             <label>Cidade</label>
-            <input type="text" id="fCidade" placeholder="Paris">
+            <input type="text" id="fCidade" list="dlCidades" placeholder="Paris" autocomplete="off">
           </div>
+        </div>
+        <div class="field">
+          <label>Local</label>
+          <input type="text" id="fLocal" list="dlLocais" placeholder="Torre Eiffel" autocomplete="off">
+          <div class="hint">Conforme você adiciona, os locais já usados aparecem como sugestão.</div>
+        </div>
+        <div class="field">
+          <label>Quem aparece na foto</label>
+          <div class="people-input">
+            <input type="text" id="fPessoa" list="dlPessoas" placeholder="Nome da pessoa" autocomplete="off">
+            <button type="button" class="btn primary" id="addPessoa">＋</button>
+          </div>
+          <div class="pessoas-chips" id="pessoasChips"></div>
+          <div class="hint">Digite o nome e toque em ＋ (ou Enter). Os nomes já usados aparecem como sugestão.</div>
         </div>
         <div class="grid2">
           <div class="field">
-            <label>Local</label>
-            <input type="text" id="fLocal" placeholder="Torre Eiffel">
+            <label>Data — de</label>
+            <input type="date" id="fData">
           </div>
           <div class="field">
-            <label>Data</label>
-            <input type="date" id="fData">
+            <label>até (opcional)</label>
+            <input type="date" id="fDataFim">
           </div>
         </div>
         <div class="field">
@@ -385,6 +458,10 @@ function renderAdmin(){
         <button class="btn primary block" id="salvar">Adicionar momento</button>
         <button class="btn ghost block" id="cancelar" style="display:none;color:var(--ink);border-color:var(--line)">Cancelar edição</button>
       </div>
+
+      <datalist id="dlLocais"></datalist>
+      <datalist id="dlCidades"></datalist>
+      <datalist id="dlPessoas"></datalist>
 
       <div class="admin-list" id="lista"></div>
     </div>
@@ -401,6 +478,32 @@ function renderAdmin(){
   };
   $("#fFotoUrl").oninput = e=>{ fotoData = e.target.value.trim(); preview.src = fotoData; };
 
+  // ---- sugestões automáticas (locais, cidades, pessoas já usados) ----
+  function refreshSugestoes(){
+    $("#dlLocais").innerHTML  = valoresUnicos("local").map(v=>`<option value="${esc(v)}">`).join("");
+    $("#dlCidades").innerHTML = valoresUnicos("cidade").map(v=>`<option value="${esc(v)}">`).join("");
+    $("#dlPessoas").innerHTML = valoresUnicos("pessoas").map(v=>`<option value="${esc(v)}">`).join("");
+  }
+  refreshSugestoes();
+
+  // ---- marcar pessoas na foto (chips) ----
+  let pessoasAtual = [];
+  function pintarPessoas(){
+    $("#pessoasChips").innerHTML = pessoasAtual.map((nome,i)=>`
+      <span class="pchip">${esc(nome)}<button type="button" data-rm="${i}" title="Remover">✕</button></span>`).join("");
+    $("#pessoasChips").querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>{
+      pessoasAtual.splice(+b.dataset.rm,1); pintarPessoas();
+    });
+  }
+  function addPessoa(){
+    const nome = $("#fPessoa").value.trim();
+    if(!nome) return;
+    if(!pessoasAtual.some(x=>x.toLowerCase()===nome.toLowerCase())) pessoasAtual.push(nome);
+    $("#fPessoa").value=""; $("#fPessoa").focus(); pintarPessoas();
+  }
+  $("#addPessoa").onclick = addPessoa;
+  $("#fPessoa").onkeydown = e=>{ if(e.key==="Enter"){ e.preventDefault(); addPessoa(); } };
+
   // lista de posts existentes
   function pintarLista(){
     $("#lista").innerHTML = ordenados().map(p=>`
@@ -408,7 +511,7 @@ function renderAdmin(){
         <img src="${p.foto}" alt="">
         <div class="info">
           <b>${[p.local,p.cidade].filter(Boolean).join(" · ")||p.pais}</b>
-          <small>${PAISES[p.pais]?.flag||""} ${p.pais} · ${fmtData(p.data)}</small>
+          <small>${PAISES[p.pais]?.flag||""} ${p.pais} · ${fmtPeriodo(p.data,p.dataFim)}</small>
         </div>
         <div class="acts">
           <button class="icon-btn" data-edit="${p.id}">Editar</button>
@@ -424,7 +527,8 @@ function renderAdmin(){
       editandoId = p.id;
       fotoData = p.foto; preview.src = p.foto;
       $("#fPais").value=p.pais; $("#fCidade").value=p.cidade||""; $("#fLocal").value=p.local||"";
-      $("#fData").value=p.data||""; $("#fLegenda").value=p.legenda||"";
+      $("#fData").value=p.data||""; $("#fDataFim").value=p.dataFim||""; $("#fLegenda").value=p.legenda||"";
+      pessoasAtual = Array.isArray(p.pessoas)?p.pessoas.slice():[]; pintarPessoas();
       $("#formTitulo").textContent="Editar momento";
       $("#salvar").textContent="Salvar alterações";
       $("#cancelar").style.display="block";
@@ -434,9 +538,9 @@ function renderAdmin(){
   pintarLista();
 
   function limparForm(){
-    editandoId=null; fotoData="";
-    ["fCidade","fLocal","fLegenda","fFotoUrl"].forEach(id=>$("#"+id).value="");
-    $("#fData").value=""; preview.removeAttribute("src");
+    editandoId=null; fotoData=""; pessoasAtual=[]; pintarPessoas();
+    ["fCidade","fLocal","fLegenda","fFotoUrl","fPessoa"].forEach(id=>$("#"+id).value="");
+    $("#fData").value=""; $("#fDataFim").value=""; preview.removeAttribute("src");
     $("#formTitulo").textContent="Novo momento";
     $("#salvar").textContent="Adicionar momento";
     $("#cancelar").style.display="none";
@@ -444,12 +548,17 @@ function renderAdmin(){
 
   $("#salvar").onclick = ()=>{
     if(!fotoData){ alert("Escolha uma foto (arquivo ou URL)."); return; }
+    // se o usuário digitou um nome e não clicou em +, inclui mesmo assim
+    const pend = $("#fPessoa").value.trim();
+    if(pend && !pessoasAtual.some(x=>x.toLowerCase()===pend.toLowerCase())) pessoasAtual.push(pend);
     const dados = {
       foto:fotoData,
       pais:$("#fPais").value,
       cidade:$("#fCidade").value.trim(),
       local:$("#fLocal").value.trim(),
+      pessoas:pessoasAtual.slice(),
       data:$("#fData").value,
+      dataFim:$("#fDataFim").value,
       legenda:$("#fLegenda").value.trim()
     };
     if(editandoId){
@@ -458,7 +567,7 @@ function renderAdmin(){
     }else{
       posts.push({id:"p"+Date.now(),...dados});
     }
-    limparForm(); pintarLista();
+    limparForm(); pintarLista(); refreshSugestoes();
   };
   $("#cancelar").onclick = limparForm;
 
@@ -472,7 +581,7 @@ function renderAdmin(){
   $("#arq").onchange = e=>{
     const file=e.target.files[0]; if(!file) return;
     const rd=new FileReader();
-    rd.onload=()=>{ try{ const j=JSON.parse(rd.result); if(Array.isArray(j)){ posts=j; pintarLista(); alert("Dados importados!"); } }catch{ alert("Arquivo inválido."); } };
+    rd.onload=()=>{ try{ const j=JSON.parse(rd.result); if(Array.isArray(j)){ posts=j; pintarLista(); refreshSugestoes(); alert("Dados importados!"); } }catch{ alert("Arquivo inválido."); } };
     rd.readAsText(file);
   };
   $("#ver").onclick = ()=>{ renderPublico();
