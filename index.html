@@ -1,1 +1,866 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Eurotrip 2026 — Momentos</title>
+
+<!--
+  ============================================================
+  EUROTRIP 2026 — MURAL DE MOMENTOS  (arquivo único)
+  ============================================================
+  COMO FUNCIONA:
+  • Ao abrir o link, mostra o FEED PÚBLICO (só visualização).
+  • Para EDITAR, abra o link com  ?admin=1  no final
+    (ex.: https://seuusuario.github.io/repo/?admin=1)
+    e digite a senha.
+
+  SENHA (troque aqui):  ⬇⬇⬇
+-->
+<script>const SENHA_ADMIN = "eurotrip";</script>
+<!--
+  FLUXO DE PUBLICAÇÃO:
+  1. Abra com ?admin=1 → adicione/edite os momentos.
+  2. Clique em "Exportar dados.json" → baixa o arquivo.
+  3. Faça commit do dados.json no mesmo repositório do GitHub.
+  4. Pronto: todos que abrirem o link veem o mesmo conteúdo.
+  (Se não houver dados.json no repo, o app usa os exemplos abaixo.)
+  ============================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#4a3528;          /* café/espresso aconchegante */
+    --ink-soft:#7a5c48;
+    --paper:#fbf3e7;        /* creme quente */
+    --paper-2:#f3e7d3;
+    --stamp:#c9714b;        /* terracota / argila */
+    --gold:#e0a44a;         /* mel */
+    --line:#ead9c2;
+    --shadow:0 10px 30px rgba(74,53,40,.12);
+
+    --fr:#5b7bb4;  /* França  */
+    --be:#cf9b3e;  /* Bélgica */
+    --nl:#d4703a;  /* Holanda */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--paper);color:var(--ink);font-family:"Inter",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  body{padding-bottom:40px}
+  img{display:block;max-width:100%}
+  button{font-family:inherit;cursor:pointer}
+
+  .wrap{max-width:680px;margin:0 auto;padding:0 16px}
+
+  /* ---------- CABEÇALHO / PERFIL ---------- */
+  header.profile{
+    background:linear-gradient(160deg,#5a3e2e 0%, #a9663f 55%, #c9844a 100%);
+    color:var(--paper);
+    padding:34px 16px 26px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  header.profile::after{
+    content:"";position:absolute;inset:0;opacity:.10;
+    background-image:radial-gradient(circle at 1px 1px, #fff 1px, transparent 0);
+    background-size:18px 18px;pointer-events:none;
+  }
+  .crest{
+    width:54px;height:54px;border-radius:50%;margin:0 auto 12px;
+    background:var(--paper);display:flex;align-items:center;justify-content:center;
+    border:2px solid var(--gold);box-shadow:var(--shadow);position:relative;z-index:1;
+    font-family:"Fraunces",serif;font-weight:600;font-size:20px;letter-spacing:.04em;color:#7a4a2c;
+  }
+  .family{font-family:"Fraunces",serif;font-weight:500;font-size:15px;color:#f6e6c9;margin:2px 0 4px;position:relative;z-index:1}
+  .eyebrow{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:600;position:relative;z-index:1}
+  h1.title{font-family:"Fraunces",serif;font-weight:600;font-size:30px;line-height:1.05;margin:6px 0 4px;position:relative;z-index:1}
+  .subtitle{font-size:13px;color:#f0e0c6;position:relative;z-index:1}
+
+  .stats{display:flex;justify-content:center;gap:30px;margin-top:18px;position:relative;z-index:1}
+  .stat b{font-family:"Fraunces",serif;font-size:22px;display:block;line-height:1}
+  .stat span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#e3cfac}
+
+  /* ---------- FILTROS (fixos, sem rolagem) ---------- */
+  .filters{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);padding:11px 0}
+  .filters .chips{display:flex;gap:6px;flex-wrap:nowrap;padding:0 12px}
+  .chip{flex:1 1 0;min-width:0;justify-content:center;border:1px solid var(--line);background:#fff;border-radius:999px;
+    padding:8px 4px;font-size:12.5px;font-weight:500;color:var(--ink-soft);display:flex;align-items:center;gap:5px;
+    transition:.15s;white-space:nowrap}
+  .chip .flag{font-size:13px;line-height:1}
+  .chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+  /* ---------- SELETOR DE VISTA (canto separado) ---------- */
+  .view-row{display:flex;align-items:center;justify-content:flex-end;gap:9px;margin-top:16px}
+  .view-row .lbl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);font-weight:600}
+  .view-toggle{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:#fff}
+  .view-toggle button{border:0;background:transparent;padding:7px 13px;color:var(--ink-soft);font-size:13px}
+  .view-toggle button[aria-pressed="true"]{background:var(--paper-2);color:var(--ink)}
+
+  /* ---------- GRADE ---------- */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:14px}
+  .grid figure{position:relative;aspect-ratio:1;overflow:hidden;background:var(--paper-2);border-radius:4px}
+  .grid img{width:100%;height:100%;object-fit:cover}
+  .grid .tag{position:absolute;left:6px;bottom:6px;font-size:10px;background:rgba(28,37,65,.78);color:#fff;padding:3px 7px;border-radius:999px}
+
+  /* ---------- FEED (cartões-postais) ---------- */
+  .feed{margin-top:18px;display:flex;flex-direction:column;gap:26px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+  .card .photo{position:relative;background:var(--paper-2)}
+  .card .photo img{width:100%;max-height:560px;object-fit:cover}
+  .stamp{position:absolute;top:12px;right:12px;background:rgba(247,243,236,.95);border:1px dashed var(--stamp);
+    color:var(--stamp);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    padding:6px 9px;border-radius:6px;transform:rotate(4deg);text-align:center;line-height:1.3}
+  .card .body{padding:14px 16px 18px}
+  .card .meta{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-soft);margin-bottom:7px}
+  .card .meta .dot{width:9px;height:9px;border-radius:50%}
+  .card .meta .place{font-weight:600;color:var(--ink)}
+  .card .caption{font-size:15px;line-height:1.5}
+  .card .date{font-size:11px;color:#9a9486;margin-top:9px;letter-spacing:.04em}
+
+  .empty{text-align:center;color:var(--ink-soft);padding:54px 20px;font-size:14px}
+  .empty .big{font-size:34px;margin-bottom:10px}
+
+  /* ---------- ADMIN ---------- */
+  .admin-bar{background:var(--ink);color:#fff;padding:10px 16px;font-size:13px;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
+  .admin-bar b{font-weight:600}
+  .btn{border:0;border-radius:9px;padding:9px 14px;font-size:13px;font-weight:600}
+  .btn.primary{background:var(--gold);color:var(--ink)}
+  .btn.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.4)}
+  .btn.danger{background:var(--stamp);color:#fff}
+  .btn.block{display:block;width:100%;margin-top:4px}
+
+  .panel{max-width:680px;margin:18px auto;padding:0 16px}
+  .form{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+  .form h3{font-family:"Fraunces",serif;font-weight:600;font-size:18px;margin-bottom:14px}
+  .field{margin-bottom:12px}
+  .field label{display:block;font-size:12px;font-weight:600;color:var(--ink-soft);margin-bottom:5px}
+  .field input,.field textarea,.field select{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px 11px;font-family:inherit;font-size:14px;background:var(--paper)}
+  .field textarea{min-height:70px;resize:vertical}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .preview{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:9px;border:1px solid var(--line);margin-top:8px;background:var(--paper-2)}
+
+  .admin-list{margin-top:16px;display:flex;flex-direction:column;gap:8px}
+  .admin-item{display:flex;gap:10px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:11px;padding:8px}
+  .admin-item img{width:52px;height:52px;border-radius:8px;object-fit:cover;flex:none}
+  .admin-item .info{flex:1;min-width:0}
+  .admin-item .info b{font-size:13px;display:block}
+  .admin-item .info small{font-size:11px;color:var(--ink-soft)}
+  .admin-item .acts{display:flex;gap:6px;flex:none}
+  .icon-btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 9px;font-size:12px;color:var(--ink-soft)}
+
+  /* ---------- LOGIN ---------- */
+  .login{max-width:340px;margin:60px auto;background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px;box-shadow:var(--shadow);text-align:center}
+  .login .crest{margin-bottom:16px;border-color:var(--gold);font-size:24px}
+  .login h3{font-family:"Fraunces",serif;font-size:20px;margin-bottom:6px}
+  .login p{font-size:13px;color:var(--ink-soft);margin-bottom:16px}
+  .pass-wrap{position:relative;margin-bottom:12px}
+  .pass-wrap input{width:100%;border:1px solid var(--line);border-radius:9px;padding:11px 44px 11px 14px;font-size:15px}
+  .pass-wrap .eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:transparent;font-size:18px;padding:6px;cursor:pointer;line-height:1}
+  .err{color:var(--stamp);font-size:12px;margin-top:8px;min-height:16px}
+
+  /* botão de cadeado flutuante (acesso ao admin) */
+  .lock-fab{position:fixed;right:16px;bottom:16px;z-index:40;width:46px;height:46px;border-radius:50%;
+    border:1px solid var(--line);background:#fff;color:var(--ink);font-size:18px;box-shadow:var(--shadow);
+    display:flex;align-items:center;justify-content:center}
+
+  @media (max-width:430px){
+    h1.title{font-size:26px}
+    .stats{gap:24px}
+  }
+
+  /* ---------- extras: pessoas, bandeira, período ---------- */
+  .chip .flag{font-size:14px;line-height:1}
+  .card .people{font-size:13px;color:var(--ink-soft);margin-top:8px}
+  .card .date{display:flex;align-items:center;gap:5px}
+
+  .people-input{display:flex;gap:8px}
+  .people-input input{flex:1}
+  .people-input .btn{flex:none;padding:0 14px}
+  .pessoas-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .pchip{display:inline-flex;align-items:center;gap:6px;background:var(--paper-2);border:1px solid var(--line);
+    border-radius:999px;padding:5px 6px 5px 11px;font-size:13px;color:var(--ink)}
+  .pchip button{border:0;background:rgba(74,53,40,.12);color:var(--ink);border-radius:50%;
+    width:18px;height:18px;font-size:12px;line-height:1;cursor:pointer}
+  .hint{font-size:11px;color:var(--ink-soft);margin-top:4px}
+
+  /* ---------- saudação + avião no título ---------- */
+  .hello{position:relative;z-index:1;font-size:13px;color:#f6e6c9;margin-bottom:10px;font-weight:500}
+  .title .plane{font-size:.7em;margin-right:8px;vertical-align:middle;display:inline-block;transform:rotate(-12deg)}
+
+  /* ---------- data na grade ---------- */
+  .grid figure .g-date{position:absolute;left:6px;top:6px;font-size:10px;background:rgba(247,243,236,.92);
+    color:var(--ink);padding:3px 7px;border-radius:999px;font-weight:600;box-shadow:0 1px 4px rgba(74,53,40,.15)}
+
+  /* ---------- dica de duplo toque ---------- */
+  .card .photo{cursor:pointer;user-select:none}
+  .dbl-hint{position:absolute;left:12px;bottom:12px;font-size:11px;color:#fff;background:rgba(74,53,40,.55);
+    padding:4px 9px;border-radius:999px;backdrop-filter:blur(2px);opacity:.85}
+
+  /* ---------- fogos de reação ---------- */
+  .spark{position:fixed;width:10px;height:10px;border-radius:50%;pointer-events:none;z-index:60;
+    transform:translate(-50%,-50%);animation:spark .95s ease-out forwards}
+  @keyframes spark{
+    0%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+    100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.3)}
+  }
+  .burst{position:fixed;z-index:61;font-size:30px;pointer-events:none;transform:translate(-50%,-50%);
+    animation:burst .9s ease-out forwards}
+  @keyframes burst{0%{opacity:0;transform:translate(-50%,-50%) scale(.4)}
+    30%{opacity:1;transform:translate(-50%,-60%) scale(1.2)}
+    100%{opacity:0;transform:translate(-50%,-90%) scale(1)}}
+
+  /* ---------- tela de boas-vindas ---------- */
+  .welcome{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
+    background:linear-gradient(160deg,#5a3e2e 0%, #a9663f 55%, #c9844a 100%)}
+  .w-card{background:var(--paper);border-radius:20px;box-shadow:0 18px 50px rgba(74,53,40,.3);
+    padding:34px 26px;max-width:360px;width:100%;text-align:center}
+  .w-plane{font-size:42px;transform:rotate(-12deg);display:inline-block;margin-bottom:6px}
+  .w-eyebrow{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:600}
+  .w-title{font-family:"Fraunces",serif;font-weight:600;font-size:30px;color:var(--ink);margin:4px 0 12px}
+  .w-sub{font-size:14px;color:var(--ink-soft);line-height:1.5;margin-bottom:16px}
+  .w-ask{font-size:14px;color:var(--ink);font-weight:600;margin-bottom:12px}
+  .w-card input{width:100%;border:1px solid var(--line);border-radius:11px;padding:13px;font-size:16px;
+    text-align:center;background:#fff;margin-bottom:12px}
+  .w-tip{font-size:12px;color:var(--ink-soft);margin-top:14px}
+
+  /* ---------- carrossel de fotos (feed) ---------- */
+  .carousel{position:relative}
+  .track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .track::-webkit-scrollbar{display:none}
+  .slide{flex:0 0 100%;scroll-snap-align:center;position:relative}
+  .slide img{width:100%;max-height:560px;object-fit:cover;display:block}
+  .ovs{position:absolute;left:10px;bottom:10px;display:flex;flex-direction:column;gap:6px;align-items:flex-start;max-width:84%}
+  .ov{font-size:12px;color:#fff;background:rgba(74,53,40,.62);padding:5px 11px;border-radius:999px;backdrop-filter:blur(3px)}
+  .count{position:absolute;top:12px;left:12px;font-size:11px;color:#fff;background:rgba(74,53,40,.55);padding:3px 9px;border-radius:999px;z-index:1}
+  .dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px}
+  .dots span{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.55);transition:.2s}
+  .dots span.on{background:#fff;width:18px;border-radius:999px}
+  .g-multi{position:absolute;right:6px;top:6px;font-size:10px;background:rgba(74,53,40,.78);color:#fff;padding:3px 7px;border-radius:999px}
+
+  /* ---------- cartões de foto no admin ---------- */
+  .add-fotos{width:100%;border:2px dashed var(--gold);background:var(--paper);color:var(--ink);
+    border-radius:14px;padding:16px;font-size:14px;font-weight:600;margin-bottom:4px}
+  .add-fotos:hover{background:#fffaf1}
+  .fotos-cont{display:flex;flex-direction:column;gap:14px;margin-bottom:12px}
+  .foto-card{border:1px solid var(--line);border-radius:14px;padding:10px;background:var(--paper)}
+  .fc-top{position:relative;margin-bottom:10px}
+  .fc-top img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:10px}
+  .fc-num{position:absolute;left:8px;top:8px;font-size:11px;background:rgba(74,53,40,.7);color:#fff;padding:3px 9px;border-radius:999px}
+  .fc-remove{position:absolute;right:8px;top:8px;border:0;background:rgba(214,69,61,.92);color:#fff;width:28px;height:28px;border-radius:50%;font-size:14px;cursor:pointer}
+  .foto-card .fc-local{width:100%;border:1px solid var(--line);border-radius:9px;padding:9px 11px;font-size:14px;background:#fff;margin-bottom:8px}
+  .foto-card .people-input{margin-bottom:0}
+  .foto-card .pessoas-chips{margin-top:8px}
+  .form-head{text-align:center;margin-bottom:18px}
+  .form-head h3{font-family:"Fraunces",serif;font-weight:600;font-size:22px;color:var(--ink)}
+  .form-sub{font-size:13px;color:var(--ink-soft);margin-top:3px}
+  .dropzone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+    border:2px dashed var(--gold);border-radius:14px;background:var(--paper);padding:30px 16px;cursor:pointer;
+    transition:.18s;text-align:center}
+  .dropzone:hover{background:#fffaf1}
+  .dropzone.ok{border-style:solid;border-color:#9bbf8a;background:#f4f8ef}
+  .dz-icon{font-size:30px}
+  .dz-text{font-size:13px;font-weight:600;color:var(--ink-soft)}
+  .preview{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:14px;border:1px solid var(--line);margin-top:10px}
+  #fFotoUrl{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13px;
+    background:var(--paper);margin-top:10px}
+  .form .grid2.mt{margin-top:6px}
+  .form .field label{display:flex;align-items:center;gap:6px}
+  .btn.big{padding:14px;font-size:15px;margin-top:6px;border-radius:12px}
+
+  @media (max-width:430px){
+    h1.title{font-size:26px}
+    .stats{gap:24px}
+  }
+</style>
+</head>
+<body>
+
+<!-- O conteúdo é montado por JS conforme o modo (público ou admin) -->
+<div id="app"></div>
+
+<script>
+/* ===================== DADOS DE EXEMPLO =====================
+   Usados só quando NÃO existe dados.json no repositório.
+   Substitua publicando seu próprio dados.json pelo painel admin. */
+const PAISES = {
+  "França":  { dot:"var(--fr)", flag:"🇫🇷" },
+  "Bélgica": { dot:"var(--be)", flag:"🇧🇪" },
+  "Holanda": { dot:"var(--nl)", flag:"🇳🇱" }
+};
+
+/* duas fotos de exemplo (ilustrações SVG embutidas) */
+const FOTO_PARIS =
+"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800'%3E%3Cdefs%3E%3ClinearGradient id='s' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23f6c6a4'/%3E%3Cstop offset='.55' stop-color='%23e89b97'/%3E%3Cstop offset='1' stop-color='%237a8bbf'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='800' fill='url(%23s)'/%3E%3Ccircle cx='640' cy='150' r='52' fill='%23fff3d6' opacity='.85'/%3E%3Cg fill='%231c2541' opacity='.88'%3E%3Cpolygon points='400,120 372,520 428,520'/%3E%3Cpolygon points='340,520 460,520 480,640 320,640'/%3E%3Cpolygon points='320,640 480,640 500,760 300,760'/%3E%3Crect x='392' y='90' width='16' height='40'/%3E%3C/g%3E%3Cg stroke='%231c2541' stroke-width='4' opacity='.55'%3E%3Cline x1='372' y1='430' x2='428' y2='430'/%3E%3Cline x1='352' y1='560' x2='448' y2='560'/%3E%3C/g%3E%3Crect y='720' width='800' height='80' fill='%235d6b94' opacity='.6'/%3E%3C/svg%3E";
+
+const FOTO_AMS =
+"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800'%3E%3Cdefs%3E%3ClinearGradient id='k' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23bcd6e8'/%3E%3Cstop offset='1' stop-color='%23dfe9ef'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='800' fill='url(%23k)'/%3E%3Cg%3E%3Crect x='120' y='250' width='90' height='340' fill='%23c0584b'/%3E%3Crect x='210' y='220' width='80' height='370' fill='%23e2b04a'/%3E%3Crect x='290' y='270' width='86' height='320' fill='%233f5e7d'/%3E%3Crect x='376' y='230' width='80' height='360' fill='%238a9a5b'/%3E%3Crect x='456' y='260' width='90' height='330' fill='%23b6624f'/%3E%3Crect x='546' y='235' width='80' height='355' fill='%23dcb863'/%3E%3Cg fill='%23f7f3ec' opacity='.8'%3E%3Crect x='140' y='300' width='24' height='34'/%3E%3Crect x='235' y='280' width='24' height='34'/%3E%3Crect x='312' y='320' width='24' height='34'/%3E%3Crect x='398' y='290' width='24' height='34'/%3E%3Crect x='486' y='310' width='24' height='34'/%3E%3Crect x='572' y='292' width='24' height='34'/%3E%3C/g%3E%3Cg fill='%231c2541'%3E%3Cpolygon points='120,250 165,210 210,250'/%3E%3Cpolygon points='210,220 250,184 290,220'/%3E%3Cpolygon points='376,230 416,196 456,230'/%3E%3Cpolygon points='546,235 586,200 626,235'/%3E%3C/g%3E%3Crect x='0' y='590' width='800' height='210' fill='%237fa8bf'/%3E%3Crect x='0' y='590' width='800' height='210' fill='%235d8aa8' opacity='.4'/%3E%3Cellipse cx='400' cy='600' rx='320' ry='10' fill='%23fff' opacity='.25'/%3E%3C/svg%3E";
+
+const FOTO_PARIS2 =
+"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800'%3E%3Cdefs%3E%3ClinearGradient id='p2' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23f4b07a'/%3E%3Cstop offset='1' stop-color='%23b86b8a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='800' fill='url(%23p2)'/%3E%3Ccircle cx='400' cy='300' r='70' fill='%23ffe6c0' opacity='.85'/%3E%3Cg fill='%234a2f3a' opacity='.85'%3E%3Crect x='300' y='420' width='200' height='250'/%3E%3Crect x='282' y='400' width='236' height='28'/%3E%3Crect x='362' y='480' width='76' height='190' fill='%23f4b07a'/%3E%3C/g%3E%3Crect y='670' width='800' height='130' fill='%236b4a5a' opacity='.6'/%3E%3C/svg%3E";
+
+const EXEMPLOS = [
+  {
+    id: "ex1",
+    pais: "França",
+    cidade: "Paris",
+    legenda: "Primeiros dias em Paris — deslize para ver mais fotos. 💛",
+    data: "2026-04-09",
+    dataFim: "2026-04-12",
+    fotos: [
+      { src: FOTO_PARIS,  local: "Champ de Mars", pessoas: ["Família"] },
+      { src: FOTO_PARIS2, local: "Trocadéro",     pessoas: ["Maria","João"] }
+    ]
+  },
+  {
+    id: "ex2",
+    pais: "Holanda",
+    cidade: "Amsterdã",
+    legenda: "Passeio de barco pelos canais. As casinhas coloridas valem cada foto.",
+    data: "2026-04-19",
+    dataFim: "",
+    fotos: [
+      { src: FOTO_AMS, local: "Canais do centro histórico", pessoas: [] }
+    ]
+  }
+];
+
+/* ===================== ESTADO ===================== */
+let posts = [];
+let filtroPais = "Todos";
+let modoVista = "grade"; // "grade" | "feed"
+const ehAdmin = new URLSearchParams(location.search).get("admin") === "1";
+
+const $ = (s,el=document)=>el.querySelector(s);
+const app = $("#app");
+
+/* ---- armazenamento no navegador do visitante (seguro: cai para memória se bloqueado) ---- */
+const _mem = {};
+function lsGet(k){ try{ const v=localStorage.getItem(k); return v==null?null:JSON.parse(v); }catch(e){ return (k in _mem)?_mem[k]:null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){ _mem[k]=v; } }
+function visitante(){ return lsGet("qn_visitante"); }
+
+/* ---- fogos/reação ao dar dois toques numa foto ---- */
+function festejar(x,y){
+  const cores=["#e0a44a","#c9714b","#5b7bb4","#d4703a","#cf9b3e","#e8a0b0","#7bbf8a"];
+  for(let i=0;i<26;i++){
+    const s=document.createElement("span"); s.className="spark";
+    const ang=Math.random()*Math.PI*2, dist=45+Math.random()*80;
+    s.style.left=x+"px"; s.style.top=y+"px"; s.style.background=cores[i%cores.length];
+    s.style.setProperty("--dx",(Math.cos(ang)*dist)+"px");
+    s.style.setProperty("--dy",(Math.sin(ang)*dist - 20)+"px");
+    document.body.appendChild(s); setTimeout(()=>s.remove(),950);
+  }
+  const burst=document.createElement("div"); burst.className="burst"; burst.textContent="🎉";
+  burst.style.left=x+"px"; burst.style.top=y+"px";
+  document.body.appendChild(burst); setTimeout(()=>burst.remove(),900);
+}
+function reagir(id,x,y){
+  festejar(x,y);
+  const r = lsGet("qn_reacoes")||{};
+  r[id]=(r[id]||0)+1;                 // grava no navegador dela (não é exibido)
+  lsSet("qn_reacoes", r);
+}
+/* liga duplo-clique (desktop) e duplo-toque (celular) nos elementos com data-react */
+function ligarReacoes(){
+  app.querySelectorAll("[data-react]").forEach(el=>{
+    el.ondblclick = e => reagir(el.dataset.react, e.clientX, e.clientY);
+    let ultimo = 0;
+    el.addEventListener("touchend", e=>{
+      const agora = Date.now();
+      if(agora - ultimo < 320){
+        const t = e.changedTouches[0];
+        reagir(el.dataset.react, t.clientX, t.clientY);
+        e.preventDefault();
+      }
+      ultimo = agora;
+    }, {passive:false});
+  });
+}
+
+/* ---- tenta carregar dados.json em SEGUNDO PLANO (não trava a tela) ---- */
+function carregarEmSegundoPlano(){
+  try{
+    fetch("dados.json", {cache:"no-store"})
+      .then(r => r.ok ? r.json() : null)
+      .then(j => {
+        if(Array.isArray(j) && j.length){
+          posts = normalizarLista(j);
+          if(!ehAdmin && visitante()) renderPublico();   // só atualiza se já entrou
+        }
+      })
+      .catch(()=>{ /* sem dados.json — fica com os exemplos */ });
+  }catch(e){ /* ambiente sem fetch — ignora */ }
+}
+
+/* ---- datas legíveis em pt-BR ---- */
+const MESES=["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+function fmtData(iso){
+  if(!iso) return "";
+  const [a,m,d] = iso.split("-").map(Number);
+  return `${String(d).padStart(2,"0")} ${MESES[(m||1)-1]} ${a}`;
+}
+/* período: "09 até 12 abr 2026", "30 abr até 02 mai 2026", ou data única */
+function fmtPeriodo(ini, fim){
+  if(!ini) return "";
+  if(!fim || fim===ini) return fmtData(ini);
+  const [a1,m1,d1]=ini.split("-").map(Number);
+  const [a2,m2,d2]=fim.split("-").map(Number);
+  const dd1=String(d1).padStart(2,"0"), dd2=String(d2).padStart(2,"0");
+  if(a1===a2 && m1===m2) return `${dd1} até ${dd2} ${MESES[m1-1]} ${a1}`;
+  if(a1===a2)            return `${dd1} ${MESES[m1-1]} até ${dd2} ${MESES[m2-1]} ${a1}`;
+  return `${fmtData(ini)} até ${fmtData(fim)}`;
+}
+/* valores já usados (para sugestões automáticas no admin) */
+function valoresUnicos(campo){
+  const s=new Set();
+  posts.forEach(p=>{
+    if(campo==="local" || campo==="pessoas"){
+      (p.fotos||[]).forEach(f=>{ const v=f[campo];
+        if(Array.isArray(v)) v.forEach(x=>{ if(x) s.add(x); });
+        else if(v) s.add(v);
+      });
+    } else {
+      const v=p[campo]; if(v) s.add(v);
+    }
+  });
+  return [...s].sort((a,b)=>a.localeCompare(b,"pt"));
+}
+/* compatibilidade: converte posts de uma foto só para o formato de várias fotos */
+function normalizar(p){
+  const q={...p};
+  if(!Array.isArray(q.fotos)){
+    q.fotos=[{ src:q.foto||"", local:q.local||"", pessoas:Array.isArray(q.pessoas)?q.pessoas.slice():[] }];
+  }
+  delete q.foto; delete q.local; delete q.pessoas;
+  return q;
+}
+function normalizarLista(arr){ return (arr||[]).map(normalizar); }
+function esc(t){ return String(t).replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
+function datalistHTML(id,campo){
+  return `<datalist id="${id}">${valoresUnicos(campo).map(v=>`<option value="${esc(v)}">`).join("")}</datalist>`;
+}
+function ordenados(){
+  return posts.slice().sort((a,b)=> (a.data<b.data?1:-1));
+}
+function filtrados(){
+  const o = ordenados();
+  return filtroPais==="Todos" ? o : o.filter(p=>p.pais===filtroPais);
+}
+
+/* ===================== RENDER PÚBLICO ===================== */
+function dotStyle(pais){ return (PAISES[pais]?.dot)||"var(--ink)"; }
+
+function htmlPerfil(){
+  const nPaises = new Set(posts.map(p=>p.pais)).size;
+  const datas = posts.flatMap(p=>[p.data,p.dataFim]).filter(Boolean).sort();
+  let dias = posts.length ? 1 : 0;
+  if(datas.length>1){
+    const d1=new Date(datas[0]), d2=new Date(datas[datas.length-1]);
+    dias = Math.round((d2-d1)/86400000)+1;
+  }
+  return `
+  <header class="profile">
+    ${visitante()?`<div class="hello">Olá, ${esc(visitante())} 👋</div>`:""}
+    <div class="eyebrow">Diário de viagem</div>
+    <h1 class="title"><span class="plane">✈️</span>Eurotrip 2026</h1>
+    <div class="family">Família Queiroz Nascimento</div>
+    <div class="stats">
+      <div class="stat"><b>${posts.length}</b><span>Momentos</span></div>
+      <div class="stat"><b>${nPaises}</b><span>Países</span></div>
+      <div class="stat"><b>${dias}</b><span>Dias</span></div>
+    </div>
+  </header>`;
+}
+
+function htmlFiltros(){
+  const chip = (nome,emoji)=>`
+    <button class="chip" data-pais="${nome}" aria-pressed="${filtroPais===nome}">
+      <span class="flag">${emoji}</span>${nome}
+    </button>`;
+  return `
+  <div class="filters">
+    <div class="chips">
+      ${chip("Todos","🌍")}
+      ${Object.keys(PAISES).map(p=>chip(p, PAISES[p].flag)).join("")}
+    </div>
+  </div>`;
+}
+
+function htmlVista(){
+  return `
+  <div class="view-row">
+    <span class="lbl">Ver</span>
+    <div class="view-toggle">
+      <button data-vista="grade" aria-pressed="${modoVista==="grade"}">▦ Grade</button>
+      <button data-vista="feed"  aria-pressed="${modoVista==="feed"}">▤ Feed</button>
+    </div>
+  </div>`;
+}
+
+function htmlGrade(lista){
+  if(!lista.length) return htmlVazio();
+  return `<div class="grid">${lista.map(p=>{
+    const cover=(p.fotos&&p.fotos[0]&&p.fotos[0].src)||"";
+    const multi=(p.fotos&&p.fotos.length>1)?`<span class="g-multi">⧉ ${p.fotos.length}</span>`:"";
+    return `<figure data-id="${p.id}">
+      <img src="${cover}" alt="${p.cidade||''}" loading="lazy">
+      <span class="g-date">${fmtPeriodo(p.data,p.dataFim)}</span>
+      ${multi}
+      <span class="tag">${PAISES[p.pais]?.flag||""} ${p.cidade||p.pais}</span>
+    </figure>`;
+  }).join("")}</div>`;
+}
+
+function htmlFeed(lista){
+  if(!lista.length) return htmlVazio();
+  return `<div class="feed">${lista.map(p=>{
+    const fotos=p.fotos||[];
+    const slides=fotos.map(f=>`
+      <div class="slide">
+        <img src="${f.src}" loading="lazy" alt="">
+        <div class="ovs">
+          ${f.local?`<span class="ov">📍 ${esc(f.local)}</span>`:""}
+          ${(f.pessoas&&f.pessoas.length)?`<span class="ov">🏷️ ${f.pessoas.map(esc).join(" · ")}</span>`:""}
+        </div>
+      </div>`).join("");
+    const dots=fotos.length>1?`<div class="dots">${fotos.map((_,i)=>`<span class="${i===0?'on':''}"></span>`).join("")}</div>`:"";
+    const count=fotos.length>1?`<div class="count">1/${fotos.length}</div>`:"";
+    return `
+    <article class="card">
+      <div class="carousel" data-react="${p.id}">
+        <div class="track">${slides}</div>
+        <div class="stamp">${PAISES[p.pais]?.flag||""}<br>${p.cidade||p.pais}</div>
+        ${count}${dots}
+      </div>
+      <div class="body">
+        <div class="caption">${p.legenda||""}</div>
+        <div class="date">📅 ${fmtPeriodo(p.data,p.dataFim)}</div>
+      </div>
+    </article>`;
+  }).join("")}</div>`;
+}
+
+function htmlVazio(){
+  return `<div class="empty"><div class="big">🗺️</div>
+    Nenhum momento em <b>${filtroPais}</b> ainda.<br>
+    ${ehAdmin?"Adicione um momento no painel acima.":"Volte em breve!"}</div>`;
+}
+
+function renderPublico(){
+  const lista = filtrados();
+  app.innerHTML = `
+    ${htmlPerfil()}
+    ${htmlFiltros()}
+    <div class="wrap">
+      ${htmlVista()}
+      ${modoVista==="grade"?htmlGrade(lista):htmlFeed(lista)}
+    </div>
+    <button class="lock-fab" id="lockBtn" title="Área do administrador" aria-label="Área do administrador">🔒</button>
+  `;
+  $("#lockBtn").onclick = ()=> renderLogin();
+  // eventos
+  app.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{filtroPais=b.dataset.pais;renderPublico();});
+  app.querySelectorAll(".view-toggle button").forEach(b=>b.onclick=()=>{modoVista=b.dataset.vista;renderPublico();});
+  // na grade, tocar abre o feed
+  if(modoVista==="grade"){
+    app.querySelectorAll(".grid figure").forEach(f=>f.onclick=()=>{modoVista="feed";renderPublico();});
+  } else {
+    ligarReacoes();    // reações (dois toques) nas fotos
+    ligarCarrosseis(); // deslize lateral + bolinhas
+  }
+}
+
+/* atualiza bolinhas/contador conforme desliza */
+function ligarCarrosseis(){
+  app.querySelectorAll(".carousel").forEach(c=>{
+    const track=c.querySelector(".track");
+    const dots=c.querySelectorAll(".dots span");
+    const count=c.querySelector(".count");
+    const total=track.children.length;
+    if(total<=1) return;
+    track.addEventListener("scroll",()=>{
+      const i=Math.round(track.scrollLeft/track.clientWidth);
+      dots.forEach((d,k)=>d.classList.toggle("on",k===i));
+      if(count) count.textContent=(i+1)+"/"+total;
+    },{passive:true});
+  });
+}
+
+/* ===================== ADMIN ===================== */
+let editandoId = null;
+
+function renderAdmin(){
+  app.innerHTML = `
+    <div class="admin-bar">
+      <b>Painel de edição</b>
+      <button class="btn primary" id="exportar">⬇ Exportar dados.json</button>
+      <button class="btn ghost" id="importar">⬆ Importar</button>
+      <button class="btn ghost" id="ver">👁 Ver feed público</button>
+      <input type="file" id="arq" accept="application/json" hidden>
+    </div>
+    ${htmlPerfil()}
+    <div class="panel">
+      <div class="form">
+        <div class="form-head">
+          <h3 id="formTitulo">✨ Novo momento</h3>
+          <p class="form-sub">Guarde mais um pedacinho da viagem.</p>
+        </div>
+
+        <div class="fotos-cont" id="fotosCont"></div>
+        <button type="button" class="btn add-fotos" id="addFotos">➕ Adicionar foto(s)</button>
+        <input type="file" id="fFotos" accept="image/*" multiple hidden>
+        <div class="hint">Pode colocar várias fotos no mesmo momento. Cada foto tem o seu 📍 local e 🏷️ quem aparece.</div>
+
+        <div class="grid2 mt">
+          <div class="field">
+            <label>🏳️ País</label>
+            <select id="fPais">${Object.keys(PAISES).map(p=>`<option value="${p}">${PAISES[p].flag} ${p}</option>`).join("")}</select>
+          </div>
+          <div class="field">
+            <label>🏙️ Cidade</label>
+            <input type="text" id="fCidade" list="dlCidades" placeholder="Paris" autocomplete="off">
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div class="field">
+            <label>🗓️ De</label>
+            <input type="date" id="fData">
+          </div>
+          <div class="field">
+            <label>até (opcional)</label>
+            <input type="date" id="fDataFim">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>💬 Legenda</label>
+          <textarea id="fLegenda" placeholder="Conte como foi esse momento…"></textarea>
+        </div>
+
+        <button class="btn primary block big" id="salvar">✨ Guardar momento</button>
+        <button class="btn ghost block" id="cancelar" style="display:none;color:var(--ink);border-color:var(--line)">Cancelar edição</button>
+      </div>
+
+      <datalist id="dlLocais"></datalist>
+      <datalist id="dlCidades"></datalist>
+      <datalist id="dlPessoas"></datalist>
+
+      <div class="admin-list" id="lista"></div>
+    </div>
+  `;
+
+  // ---- sugestões automáticas (locais, cidades, pessoas já usados) ----
+  function refreshSugestoes(){
+    $("#dlLocais").innerHTML  = valoresUnicos("local").map(v=>`<option value="${esc(v)}">`).join("");
+    $("#dlCidades").innerHTML = valoresUnicos("cidade").map(v=>`<option value="${esc(v)}">`).join("");
+    $("#dlPessoas").innerHTML = valoresUnicos("pessoas").map(v=>`<option value="${esc(v)}">`).join("");
+  }
+  refreshSugestoes();
+
+  // ---- gerenciador de VÁRIAS fotos (cada uma com seu local e pessoas) ----
+  let fotosAtual = []; // { src, local, pessoas:[] }
+  const cont = $("#fotosCont");
+  function pintarFotos(){
+    cont.innerHTML = fotosAtual.map((f,i)=>`
+      <div class="foto-card">
+        <div class="fc-top">
+          <img src="${f.src}" alt="">
+          <span class="fc-num">Foto ${i+1}</span>
+          <button type="button" class="fc-remove" data-rmfoto="${i}" title="Remover foto">✕</button>
+        </div>
+        <input type="text" class="fc-local" data-i="${i}" list="dlLocais" placeholder="📍 Local desta foto" value="${esc(f.local||'')}" autocomplete="off">
+        <div class="people-input">
+          <input type="text" class="fc-pessoa" data-i="${i}" list="dlPessoas" placeholder="🏷️ Quem aparece nesta foto" autocomplete="off">
+          <button type="button" class="btn primary fc-add" data-i="${i}">＋</button>
+        </div>
+        <div class="pessoas-chips">${(f.pessoas||[]).map((nome,j)=>`<span class="pchip">${esc(nome)}<button type="button" data-rmp="${i}:${j}">✕</button></span>`).join("")}</div>
+      </div>`).join("");
+
+    cont.querySelectorAll(".fc-local").forEach(inp=>inp.oninput=()=>{ fotosAtual[+inp.dataset.i].local=inp.value; });
+    cont.querySelectorAll(".fc-add").forEach(btn=>btn.onclick=()=>addPessoaFoto(+btn.dataset.i));
+    cont.querySelectorAll(".fc-pessoa").forEach(inp=>inp.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); addPessoaFoto(+inp.dataset.i); } });
+    cont.querySelectorAll("[data-rmp]").forEach(b=>b.onclick=()=>{ const [i,j]=b.dataset.rmp.split(":").map(Number); fotosAtual[i].pessoas.splice(j,1); pintarFotos(); });
+    cont.querySelectorAll("[data-rmfoto]").forEach(b=>b.onclick=()=>{ fotosAtual.splice(+b.dataset.rmfoto,1); pintarFotos(); });
+  }
+  function addPessoaFoto(i){
+    const inp = cont.querySelector(`.fc-pessoa[data-i="${i}"]`);
+    const nome = (inp.value||"").trim(); if(!nome) return;
+    if(!fotosAtual[i].pessoas) fotosAtual[i].pessoas=[];
+    if(!fotosAtual[i].pessoas.some(x=>x.toLowerCase()===nome.toLowerCase())) fotosAtual[i].pessoas.push(nome);
+    pintarFotos();
+  }
+  $("#addFotos").onclick = ()=> $("#fFotos").click();
+  $("#fFotos").onchange = e=>{
+    const files=[...e.target.files]; let pend=files.length; if(!pend) return;
+    files.forEach(file=>{
+      const rd=new FileReader();
+      rd.onload=()=>{ fotosAtual.push({src:rd.result, local:"", pessoas:[]}); if(--pend===0) pintarFotos(); };
+      rd.readAsDataURL(file);
+    });
+    e.target.value="";
+  };
+  pintarFotos();
+
+  // lista de posts existentes
+  function pintarLista(){
+    $("#lista").innerHTML = ordenados().map(p=>`
+      <div class="admin-item">
+        <img src="${(p.fotos&&p.fotos[0]&&p.fotos[0].src)||''}" alt="">
+        <div class="info">
+          <b>${p.cidade||p.pais}${(p.fotos&&p.fotos.length>1)?` · ${p.fotos.length} fotos`:''}</b>
+          <small>${PAISES[p.pais]?.flag||""} ${p.pais} · ${fmtPeriodo(p.data,p.dataFim)}</small>
+        </div>
+        <div class="acts">
+          <button class="icon-btn" data-edit="${p.id}">Editar</button>
+          <button class="icon-btn" data-del="${p.id}">Excluir</button>
+        </div>
+      </div>`).join("") || `<div class="empty" style="padding:24px">Nenhum momento ainda.</div>`;
+
+    $("#lista").querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{
+      if(confirm("Excluir este momento?")){ posts=posts.filter(x=>x.id!==b.dataset.del); pintarLista(); }
+    });
+    $("#lista").querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>{
+      const p = posts.find(x=>x.id===b.dataset.edit); if(!p) return;
+      editandoId = p.id;
+      fotosAtual = (p.fotos||[]).map(f=>({src:f.src, local:f.local||"", pessoas:(f.pessoas||[]).slice()})); pintarFotos();
+      $("#fPais").value=p.pais; $("#fCidade").value=p.cidade||"";
+      $("#fData").value=p.data||""; $("#fDataFim").value=p.dataFim||""; $("#fLegenda").value=p.legenda||"";
+      $("#formTitulo").textContent="Editar momento";
+      $("#salvar").textContent="Salvar alterações";
+      $("#cancelar").style.display="block";
+      window.scrollTo({top:0,behavior:"smooth"});
+    });
+  }
+  pintarLista();
+
+  function limparForm(){
+    editandoId=null; fotosAtual=[]; pintarFotos();
+    ["fCidade","fLegenda"].forEach(id=>$("#"+id).value="");
+    $("#fData").value=""; $("#fDataFim").value="";
+    $("#formTitulo").textContent="✨ Novo momento";
+    $("#salvar").textContent="✨ Guardar momento";
+    $("#cancelar").style.display="none";
+  }
+
+  $("#salvar").onclick = ()=>{
+    if(!fotosAtual.length){ alert("Adicione pelo menos uma foto."); return; }
+    // inclui nomes digitados e ainda não confirmados (sem +) em cada foto
+    fotosAtual.forEach((f,i)=>{
+      const inp=cont.querySelector(`.fc-pessoa[data-i="${i}"]`);
+      const pend=inp && inp.value.trim();
+      if(pend && !f.pessoas.some(x=>x.toLowerCase()===pend.toLowerCase())) f.pessoas.push(pend);
+    });
+    const dados = {
+      pais:$("#fPais").value,
+      cidade:$("#fCidade").value.trim(),
+      data:$("#fData").value,
+      dataFim:$("#fDataFim").value,
+      legenda:$("#fLegenda").value.trim(),
+      fotos: fotosAtual.map(f=>({src:f.src, local:(f.local||"").trim(), pessoas:(f.pessoas||[]).slice()}))
+    };
+    if(editandoId){
+      const i=posts.findIndex(x=>x.id===editandoId);
+      posts[i]={...posts[i],...dados};
+    }else{
+      posts.push({id:"p"+Date.now(),...dados});
+    }
+    limparForm(); pintarLista(); refreshSugestoes();
+  };
+  $("#cancelar").onclick = limparForm;
+
+  // exportar / importar / ver
+  $("#exportar").onclick = ()=>{
+    const blob=new Blob([JSON.stringify(posts,null,2)],{type:"application/json"});
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob); a.download="dados.json"; a.click();
+  };
+  $("#importar").onclick = ()=> $("#arq").click();
+  $("#arq").onchange = e=>{
+    const file=e.target.files[0]; if(!file) return;
+    const rd=new FileReader();
+    rd.onload=()=>{ try{ const j=JSON.parse(rd.result); if(Array.isArray(j)){ posts=normalizarLista(j); pintarLista(); refreshSugestoes(); alert("Dados importados!"); } }catch{ alert("Arquivo inválido."); } };
+    rd.readAsText(file);
+  };
+  $("#ver").onclick = ()=>{ renderPublico();
+    const volta=document.createElement("button");
+    volta.textContent="✎ Voltar ao painel"; volta.className="btn primary";
+    volta.style.cssText="position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:50;box-shadow:var(--shadow)";
+    volta.onclick=()=>{ volta.remove(); renderAdmin(); };
+    document.body.appendChild(volta);
+  };
+}
+
+/* ===================== ACESSO ADMIN ===================== */
+/* Senha desativada por enquanto: entra direto.
+   Para reativar depois, troque a função tentar() por:
+   if($("#senha").value===SENHA_ADMIN) renderAdmin(); else $("#erro").textContent="Senha incorreta"; */
+function renderLogin(){
+  app.innerHTML = `
+    <div class="login">
+      <div class="crest">🔒</div>
+      <h3>Área do administrador</h3>
+      <p>Senha opcional por enquanto — é só tocar em Entrar.</p>
+      <div class="pass-wrap">
+        <input type="password" id="senha" placeholder="Senha (opcional)" autofocus>
+        <button type="button" class="eye" id="verSenha" title="Mostrar senha" aria-label="Mostrar senha">👁</button>
+      </div>
+      <button class="btn primary block" id="entrar">Entrar</button>
+      <div class="err" id="erro"></div>
+    </div>`;
+  $("#verSenha").onclick = ()=>{
+    const s=$("#senha"), mostrar = s.type==="password";
+    s.type = mostrar ? "text" : "password";
+    $("#verSenha").textContent = mostrar ? "🙈" : "👁";
+    s.focus();
+  };
+  const tentar = ()=> renderAdmin();   // entra sem exigir senha
+  $("#entrar").onclick = tentar;
+  $("#senha").onkeydown = e=>{ if(e.key==="Enter") tentar(); };
+}
+
+/* ===================== BOAS-VINDAS (pergunta quem é) ===================== */
+function renderBoasVindas(){
+  app.innerHTML = `
+    <div class="welcome">
+      <div class="w-card">
+        <div class="w-plane">✈️</div>
+        <div class="w-eyebrow">Diário de viagem</div>
+        <h2 class="w-title">Eurotrip 2026</h2>
+        <p class="w-sub">A viagem da <b>Família Queiroz Nascimento</b> por França, Bélgica e Holanda.</p>
+        <p class="w-ask">Antes de entrar, como podemos te chamar?</p>
+        <input type="text" id="nomeVisitante" placeholder="Seu nome" autocomplete="off" autofocus>
+        <button class="btn primary block" id="entrarVisitante">Entrar ✨</button>
+        <p class="w-tip">Dê <b>dois toques</b> nas fotos que você amar 💛</p>
+      </div>
+    </div>`;
+  const entrar=()=>{
+    const nome = ($("#nomeVisitante").value||"").trim() || "viajante";
+    lsSet("qn_visitante", nome);
+    renderPublico();
+  };
+  $("#entrarVisitante").onclick = entrar;
+  $("#nomeVisitante").onkeydown = e=>{ if(e.key==="Enter") entrar(); };
+}
+
+/* ===================== INÍCIO ===================== */
+(function init(){
+  try{
+    posts = normalizarLista(EXEMPLOS);     // 1) desenha JÁ, sem esperar nada
+    if(ehAdmin) renderLogin();
+    else if(visitante()) renderPublico();  // já se identificou antes
+    else renderBoasVindas();               // primeira visita: pergunta o nome
+    carregarEmSegundoPlano();              // 2) tenta os dados reais depois
+  }catch(e){
+    app.innerHTML = '<pre style="padding:24px;white-space:pre-wrap;color:#d6453d">'
+      + 'Erro ao iniciar: ' + (e && e.message ? e.message : e) + '</pre>';
+  }
+})();
+</script>
+</body>
+</html>
