@@ -62,7 +62,7 @@
   header.profile{
     background:linear-gradient(160deg,#2a1551 0%, #6a2fb0 50%, #9a4fd0 80%, #e9b949 140%);
     color:var(--paper);
-    padding:44px 16px 24px;
+    padding:34px 16px 24px;
     text-align:center;
     position:relative;
     overflow:hidden;
@@ -80,7 +80,7 @@
     font-family:"Fraunces",serif;font-weight:600;font-size:20px;letter-spacing:.04em;color:#7a4a2c;
   }
   .family{font-family:"Fraunces",serif;font-weight:500;font-size:15px;color:#f6e6c9;margin:2px 0 4px;position:relative;z-index:1}
-  h1.title{font-family:"Fraunces",serif;font-weight:600;font-size:30px;line-height:1.05;margin:6px 0 4px;position:relative;z-index:1}
+  h1.title{font-family:"Fraunces",serif;font-weight:600;font-size:38px;line-height:1.05;margin:6px 0 4px;position:relative;z-index:1}
 
   .stats{display:flex;justify-content:center;gap:30px;margin-top:18px;position:relative;z-index:1}
   .stat b{font-family:"Fraunces",serif;font-size:22px;display:block;line-height:1}
@@ -111,12 +111,14 @@
   /* ---------- FEED (cartões-postais) ---------- */
   .feed{margin-top:18px;display:flex;flex-direction:column;gap:26px}
   .card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
-  .stamp{position:absolute;top:12px;right:12px;z-index:2;
+  .stamp{position:absolute;top:14px;right:16px;z-index:2;
     background:rgba(60,31,110,.66);backdrop-filter:blur(3px);
     color:#fff;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-    padding:8px 14px;border-radius:14px;text-align:center;line-height:1.4;
+    padding:9px 14px 8px;border-radius:10px;text-align:center;line-height:1.4;
     box-shadow:0 4px 14px rgba(0,0,0,.25);
-    animation:floaty 2.6s ease-in-out infinite;animation-delay:.15s}
+    transform:rotate(-4deg)}
+  .stamp .pin{position:absolute;top:-11px;left:-4px;font-size:18px;
+    transform:rotate(-28deg);filter:drop-shadow(0 2px 3px rgba(0,0,0,.4))}
   .stamp .flag-em{font-size:17px}
   .card .body{padding:14px 16px 18px}
   .card .meta{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-soft);margin-bottom:7px}
@@ -129,27 +131,17 @@
   .empty .big{font-size:34px;margin-bottom:10px}
 
   /* ---------- ADMIN ---------- */
-  /* botão flutuante de opções (engrenagem), alinhado com o "Olá" do outro lado */
-  .gear-wrap{position:fixed;top:10px;right:14px;z-index:60}
-  .gear-btn{width:38px;height:38px;border-radius:50%;border:0;cursor:pointer;
-    background:linear-gradient(135deg,#6a2fb0,#9a4fd0);color:#fff;font-size:17px;
-    display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);
-    transition:transform .2s ease}
-  .gear-btn:active{transform:scale(.94)}
-  .gear-menu{position:absolute;top:46px;right:0;min-width:190px;background:var(--paper);
-    border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);
-    padding:6px;display:flex;flex-direction:column;gap:2px;animation:fadein .15s ease}
-  .gear-menu[hidden]{display:none}
-  .gear-menu button{width:100%;text-align:left;background:none;border:0;border-radius:9px;
-    padding:11px 14px;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;
-    font-family:inherit;transition:background .15s ease}
-  .gear-menu button:active,.gear-menu button:hover{background:var(--paper-2)}
+  .admin-top{max-width:680px;margin:18px auto 0;padding:0 16px}
+  .admin-top h2{font-family:"Fraunces",serif;font-weight:600;font-size:20px;margin:6px 0 14px;color:var(--ink)}
   .btn{border:0;border-radius:9px;padding:9px 14px;font-size:13px;font-weight:600}
   .btn.primary{background:linear-gradient(135deg,#f3cb63,#e9b949 60%,#d8a52f);color:var(--purple-deep);
     box-shadow:0 4px 14px rgba(233,185,73,.4)}
   .btn.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.4)}
+  .btn.outline{background:transparent;color:var(--ink);border:1px solid var(--line)}
   .btn.danger{background:var(--stamp);color:#fff}
   .btn.block{display:block;width:100%;margin-top:4px}
+
+  .admin-actions{margin-top:22px;display:flex;flex-direction:column;gap:8px}
 
   .panel{max-width:680px;margin:18px auto;padding:0 16px}
   .form{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
@@ -184,28 +176,10 @@
     border:1px solid var(--line);background:#fff;color:var(--ink);font-size:18px;box-shadow:var(--shadow);
     display:flex;align-items:center;justify-content:center}
 
-  @media (max-width:430px){
-    h1.title{font-size:26px}
-    .stats{gap:24px}
-  }
-
   /* ---------- extras: pessoas, bandeira, período ---------- */
   .chip .flag{font-size:14px;line-height:1}
   .card .date{display:flex;align-items:center;gap:5px}
-
-  .people-input{display:flex;gap:8px}
-  .people-input input{flex:1}
-  .people-input .btn{flex:none;padding:0 16px;align-self:stretch;display:flex;align-items:center}
-  .pessoas-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-  .pchip{display:inline-flex;align-items:center;gap:6px;background:var(--paper-2);border:1px solid var(--line);
-    border-radius:999px;padding:5px 6px 5px 11px;font-size:13px;color:var(--ink)}
-  .pchip button{border:0;background:rgba(74,53,40,.12);color:var(--ink);border-radius:50%;
-    width:18px;height:18px;font-size:12px;line-height:1;cursor:pointer}
   .hint{font-size:11px;color:var(--ink-soft);margin-top:4px}
-
-  /* ---------- saudação + avião no título ---------- */
-  .hello{position:absolute;top:10px;left:14px;z-index:2;font-size:12.5px;color:#fff;font-weight:600;
-    background:rgba(60,31,110,.55);padding:5px 12px;border-radius:999px;box-shadow:0 2px 8px rgba(60,31,110,.3)}
 
   /* foto da família (quadrada — sem corte branco) */
   .avatar{width:110px;height:110px;margin:0 auto 12px;border-radius:18px;overflow:hidden;
@@ -227,14 +201,6 @@
   .stats{display:grid;grid-template-columns:repeat(3,1fr);max-width:320px;margin:18px auto 0;
     position:relative;z-index:1}
   .stat{text-align:center}
-
-  /* boas-vindas: nossa foto + título dourado brilhando (fundo claro) */
-  .w-avatar{width:132px;height:132px;margin:0 auto 14px}
-  .w-title .plane{font-size:.7em;margin-right:8px;display:inline-block;animation:bob 3s ease-in-out infinite}
-  .w-title .shine{
-    background:linear-gradient(100deg,var(--purple) 0%,var(--purple) 36%,var(--gold) 50%,var(--purple) 64%,var(--purple) 100%);
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-    background-size:250% auto;animation:shine 4.2s linear infinite}
 
   /* fotos em "quadro" + descrição um pouco separada */
   .card{padding:10px;overflow:visible;border-radius:16px}
@@ -261,6 +227,7 @@
   .lb-dots span.on{background:#fff;width:20px;border-radius:999px}
   /* coluna de ações do destaque: dentro da foto, canto inferior direito */
   .lb-actions{position:absolute;bottom:10px;right:10px;z-index:6;display:flex;flex-direction:column;gap:8px;align-items:center}
+  .lb-tools{position:absolute;top:10px;left:10px;z-index:6;display:flex;flex-direction:column;gap:8px;align-items:center}
   @keyframes fadein{from{opacity:0}to{opacity:1}}
   .autosave-toast{position:fixed;bottom:18px;left:50%;transform:translate(-50%,16px);
     background:rgba(42,21,81,.92);color:#fff;font-size:12px;font-weight:600;
@@ -287,25 +254,6 @@
     30%{opacity:1;transform:translate(-50%,-60%) scale(1.2)}
     100%{opacity:0;transform:translate(-50%,-90%) scale(1)}}
 
-  /* ---------- tela de boas-vindas ---------- */
-  .welcome{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
-    background:linear-gradient(160deg,#2a1551 0%, #6a2fb0 55%, #9a4fd0 90%, #e9b949 150%)}
-  .w-card{background:var(--paper);border-radius:20px;box-shadow:0 18px 50px rgba(74,53,40,.3);
-    padding:34px 26px;max-width:360px;width:100%;text-align:center}
-  .w-title{font-family:"Fraunces",serif;font-weight:600;font-size:30px;color:var(--ink);margin:4px 0 12px}
-  .w-sub{font-size:14px;color:var(--ink-soft);line-height:1.5;margin-bottom:16px}
-  .w-ask{font-size:14px;color:var(--ink);font-weight:600;margin-bottom:12px}
-  .w-card input{width:100%;border:1px solid var(--line);border-radius:11px;padding:13px;font-size:16px;
-    text-align:center;background:#fff;margin-bottom:12px}
-  .w-tip{font-size:12px;color:var(--ink-soft);margin-top:14px}
-  .w-lock{position:fixed;top:18px;right:18px;z-index:10;width:46px;height:46px;border-radius:50%;
-    border:0;cursor:pointer;font-size:19px;color:#fff;
-    background:linear-gradient(135deg,#6a2fb0,#9a4fd0);
-    box-shadow:0 0 14px rgba(233,185,73,.5),0 6px 18px rgba(0,0,0,.25),inset 0 1px 3px rgba(255,255,255,.25);
-    display:flex;align-items:center;justify-content:center;
-    animation:floaty 2.6s ease-in-out infinite}
-  .w-lock:active{transform:scale(.94)}
-
   /* ---------- carrossel de fotos (feed) — sempre 9:16 ---------- */
   .feed .card{max-width:430px;margin-left:auto;margin-right:auto}
   .carousel{position:relative;overflow:hidden;background:#2a1551;border-radius:14px;aspect-ratio:9/16}
@@ -319,26 +267,27 @@
   a.ov-link:active{transform:scale(.96)}
   .g-multi{position:absolute;right:6px;top:6px;font-size:10px;background:rgba(60,31,110,.8);color:#fff;padding:3px 7px;border-radius:999px}
 
-  /* balãozinho discreto com a descrição da foto */
-  .desc-bubble{position:absolute;top:14px;left:10px;right:10px;z-index:4;
-    background:rgba(42,21,81,.82);color:#fff;font-size:12.5px;line-height:1.5;
-    padding:10px 12px;border-radius:10px;backdrop-filter:blur(3px);
-    box-shadow:0 4px 14px rgba(0,0,0,.3);animation:fadein .15s ease}
+  /* balãozinho discreto com a descrição da foto: centralizado, sem sobrepor nada */
+  .desc-bubble{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:4;
+    max-width:78%;width:max-content;
+    background:rgba(42,21,81,.85);color:#fff;font-size:12.5px;line-height:1.5;text-align:center;
+    padding:10px 14px;border-radius:12px;backdrop-filter:blur(3px);
+    box-shadow:0 4px 18px rgba(0,0,0,.35);animation:fadein .15s ease}
 
   /* bolinhas FORA da foto (não cobrem a etiqueta de pessoas) */
   .dots-bar{display:flex;gap:6px;justify-content:center;padding:9px 0 2px}
   .dots-bar span{width:6px;height:6px;border-radius:50%;background:var(--line);transition:.2s}
   .dots-bar span.on{background:var(--purple);width:18px;border-radius:999px}
 
-  /* coluna de ações (descrição + download + coração) suspensa no canto */
-  .actions-col{position:absolute;bottom:12px;right:12px;z-index:3;display:flex;flex-direction:column;gap:8px;align-items:center}
+  /* botões de baixar/descrição: fixos no canto superior esquerdo */
+  .tools-col{position:absolute;top:12px;left:12px;z-index:3;display:flex;flex-direction:column;gap:8px;align-items:center}
   .dl-btn{width:26px;height:26px;border-radius:50%;border:0;cursor:pointer;flex:none;
     background:rgba(42,21,81,.32);backdrop-filter:blur(2px);color:rgba(255,255,255,.8);font-size:11.5px;
-    display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.18);
-    animation:floaty 2.6s ease-in-out infinite}
+    display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.18)}
   .dl-btn:active{transform:scale(.92)}
-  .dl-down{animation-delay:.35s}
-  .dl-desc{animation-delay:.65s}
+
+  /* coração: suspenso no canto inferior direito */
+  .actions-col{position:absolute;bottom:12px;right:12px;z-index:3;display:flex;flex-direction:column;gap:8px;align-items:center}
 
   /* coração suspenso: vidro escuro + contorno dourado/roxo (3D), sem brilho extra */
   .heart-btn{position:relative;border:2px solid transparent;
@@ -358,8 +307,6 @@
     animation:heartup .9s ease-out forwards}
   @keyframes heartup{0%{opacity:0;transform:translate(-50%,-50%) scale(.6)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-150%) scale(1.1)}}
   .lb-heart{animation:floaty 2.6s ease-in-out infinite}
-  .lb-dl{animation-delay:.35s}
-  .lb-desc{animation-delay:.65s}
 
   /* moldura fina, tipo fio brilhante */
   .card .carousel{background:linear-gradient(135deg,#2a1551,#3c1f6e);
@@ -379,8 +326,6 @@
   .fc-top img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:10px}
   .fc-num{position:absolute;left:8px;top:8px;font-size:11px;background:rgba(74,53,40,.7);color:#fff;padding:3px 9px;border-radius:999px}
   .fc-remove{position:absolute;right:8px;top:8px;border:0;background:rgba(214,69,61,.92);color:#fff;width:28px;height:28px;border-radius:50%;font-size:14px;cursor:pointer}
-  .foto-card .people-input{margin-bottom:0}
-  .foto-card .pessoas-chips{margin-top:8px}
 
   /* botõezinhos discretos: ver foto grande / descrição */
   .fc-tools{display:flex;gap:8px;margin-bottom:10px}
@@ -413,7 +358,7 @@
   .btn.big{padding:14px;font-size:15px;margin-top:6px;border-radius:12px}
 
   @media (max-width:430px){
-    h1.title{font-size:26px}
+    h1.title{font-size:32px}
     .stats{gap:24px}
   }
 </style>
@@ -436,7 +381,6 @@ const PAISES = {
 /* sugestões já prontas (aparecem como opção enquanto você digita no admin) */
 const SEED_LOCAIS = ["Torre Eiffel","Sacré-Cœur","Museu do Louvre","Arco do Triunfo","Catedral de Notre-Dame","Champs-Élysées","Montmartre","Trocadéro","Rio Sena","Palácio de Versalhes","Disneyland Paris","Grand-Place","Atomium","Manneken Pis","Galerias Saint-Hubert","Pairi Daiza","Centro histórico de Bruges","Canais de Amsterdã","Museu Van Gogh","Rijksmuseum","Praça Dam","Casa de Anne Frank","Vondelpark","Zaanse Schans","Moinhos de Zaanse Schans"];
 const SEED_CIDADES = ["Paris","Bruxelas","Brugelette","Amsterdam","Zaandam"];
-const SEED_PESSOAS = ["Maria","Thaysa","Junior"];
 function uniaoOrdenada(seed, usados){
   return [...new Set([...(seed||[]), ...(usados||[])])].sort((a,b)=>a.localeCompare(b,"pt"));
 }
@@ -453,6 +397,11 @@ const FOTO_JUNIOR = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQD
 
 /* dados embutidos no site exportado (preenchido ao "Exportar site"). Não editar à mão. */
 const DADOS_EMBUTIDOS = []; /* fim-dados */
+
+/* configurações embutidas no site (título e família). Não editar à mão. */
+const CONFIG_EMBUTIDO = {}; /* fim-config */
+const CONFIG_PADRAO = { titulo:"Eurotrip", familia:"Família Queiroz Nascimento" };
+let config = Object.assign({}, CONFIG_PADRAO, CONFIG_EMBUTIDO);
 
 const EXEMPLOS = [
   {
@@ -483,7 +432,6 @@ const app = $("#app");
 const _mem = {};
 function lsGet(k){ try{ const v=localStorage.getItem(k); return v==null?null:JSON.parse(v); }catch(e){ return (k in _mem)?_mem[k]:null; } }
 function lsSet(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){ _mem[k]=v; } }
-function visitante(){ return lsGet("qn_visitante"); }
 
 /* ---- IndexedDB: guarda rascunhos do admin (fotos em base64 são pesadas p/ localStorage) ---- */
 const IDB_NOME="eurotrip_db", IDB_LOJA="kv";
@@ -655,14 +603,15 @@ function abrirLightbox(post, startIndex){
           <img src="${f.src}" alt="" draggable="false">
           <div class="lb-ovs">
             ${f.local?`<a class="ov ov-link" href="${mapsURL(f.local,post.cidade,post.pais)}" target="_blank" rel="noopener">📍 ${esc(f.local)}</a>`:""}
-            ${(f.pessoas&&f.pessoas.length)?`<span class="ov">🏷️ ${f.pessoas.map(esc).join(" · ")}</span>`:""}
           </div>
         </div>`).join("")}</div>
       <button class="lb-close" aria-label="Fechar">✕</button>
       ${fotos.length>1?`<div class="lb-dots">${fotos.map((_,i)=>`<span class="${i===(startIndex||0)?'on':''}"></span>`).join("")}</div>`:""}
-      <div class="lb-actions">
+      <div class="lb-tools">
         ${temDescricao?`<button class="dl-btn lb-desc dl-desc" data-post="${post.id}" aria-label="Descrição da foto" title="Descrição da foto">💬</button>`:""}
         <button class="dl-btn lb-dl" id="lbDl" aria-label="Baixar foto" title="Baixar foto">📥</button>
+      </div>
+      <div class="lb-actions">
         <button class="heart-btn lb-heart" data-post="${post.id}" aria-label="Curtir">
           <span class="heart">❤️</span><span class="heart-count">${hearts[post.id]||0}</span>
         </button>
@@ -718,7 +667,7 @@ function carregarEmSegundoPlano(){
           // só substitui se vier MAIS completo (mais momentos ou mais fotos no total)
           if(novos.length>=posts.length && totalFotos(novos)>=totalFotos(posts)){
             posts = novos;
-            if(visitante()) renderPublico();   // só atualiza se já entrou
+            renderPublico();
           }
         }
       })
@@ -796,9 +745,8 @@ function htmlPerfil(){
   }
   return `
   <header class="profile">
-    ${visitante()?`<div class="hello">Olá, ${esc(visitante())} 👋</div>`:""}
-    <h1 class="title"><span class="plane">✈️</span><span class="shine">Eurotrip</span></h1>
-    <div class="family">Família Queiroz Nascimento</div>
+    <h1 class="title"><span class="plane">✈️</span><span class="shine">${esc(config.titulo)}</span></h1>
+    <div class="family">${esc(config.familia)}</div>
     <div class="stats">
       <div class="stat"><b>${posts.length}</b><span>Momentos</span></div>
       <div class="stat"><b>${nFotos}</b><span>Fotos</span></div>
@@ -957,7 +905,6 @@ function htmlFeed(lista){
         <img src="${f.src}" loading="lazy" alt="" draggable="false">
         <div class="ovs">
           ${f.local?`<a class="ov ov-link" href="${mapsURL(f.local,p.cidade,p.pais)}" target="_blank" rel="noopener" title="Abrir no Google Maps">📍 ${esc(f.local)}</a>`:""}
-          ${(f.pessoas&&f.pessoas.length)?`<span class="ov">🏷️ ${f.pessoas.map(esc).join(" · ")}</span>`:""}
         </div>
       </div>`).join("");
     const dots=fotos.length>1?`<div class="dots-bar">${fotos.map((_,i)=>`<span class="${i===0?'on':''}"></span>`).join("")}</div>`:"";
@@ -965,10 +912,12 @@ function htmlFeed(lista){
     <article class="card">
       <div class="carousel" data-react="${p.id}">
         <div class="track">${slides}</div>
-        <div class="stamp"><span class="flag-em">${PAISES[p.pais]?.flag||""}</span><br>${p.cidade||p.pais}</div>
-        <div class="actions-col">
+        <div class="stamp"><span class="pin">📌</span><span class="flag-em">${PAISES[p.pais]?.flag||""}</span><br>${p.cidade||p.pais}</div>
+        <div class="tools-col">
           ${temDescricao?`<button class="dl-btn dl-desc" data-post="${p.id}" aria-label="Descrição da foto" title="Descrição da foto">💬</button>`:""}
           <button class="dl-btn dl-down" data-post="${p.id}" aria-label="Baixar foto" title="Baixar foto">📥</button>
+        </div>
+        <div class="actions-col">
           <button class="heart-btn" data-post="${p.id}" aria-label="Curtir">
             <span class="heart">❤️</span>
             <span class="heart-count">${hearts[p.id]||0}</span>
@@ -1116,18 +1065,25 @@ async function renderAdmin(){
   }
   if(Array.isArray(rascunho) && rascunho.length) posts = normalizarLista(rascunho);
 
+  // retoma as configurações (título/família) editadas neste aparelho
+  const configSalvo = await idbGet("qn_config");
+  if(configSalvo) config = Object.assign({}, config, configSalvo);
+
   app.innerHTML = `
-    <div class="gear-wrap">
-      <button class="gear-btn" id="gearBtn" aria-label="Opções">⚙️</button>
-      <div class="gear-menu" id="gearMenu" hidden>
-        <button id="ver">Ver feed público</button>
-        <button id="importar">Importar momentos</button>
-        <button id="exportarMom">Exportar momentos</button>
-        <button id="exportarSite">Baixar site</button>
+    <input type="file" id="arq" accept="application/json" hidden>
+    <div class="admin-top">
+      <h2>🛠️ Painel — ${esc(config.titulo)}</h2>
+      <div class="grid2">
+        <div class="field">
+          <label>✈️ Título do site</label>
+          <input type="text" id="fTitulo" value="${esc(config.titulo)}">
+        </div>
+        <div class="field">
+          <label>👪 Nome da família</label>
+          <input type="text" id="fFamilia" value="${esc(config.familia)}">
+        </div>
       </div>
     </div>
-    <input type="file" id="arq" accept="application/json" hidden>
-    ${htmlPerfil()}
     <div class="panel">
       <div class="form">
         <div class="form-head">
@@ -1172,9 +1128,15 @@ async function renderAdmin(){
 
       <datalist id="dlLocais"></datalist>
       <datalist id="dlCidades"></datalist>
-      <datalist id="dlPessoas"></datalist>
 
       <div class="admin-list" id="lista"></div>
+
+      <div class="admin-actions">
+        <button class="btn outline block" id="ver">Ver feed público</button>
+        <button class="btn outline block" id="importar">Importar momentos</button>
+        <button class="btn outline block" id="exportarMom">Exportar momentos</button>
+        <button class="btn primary block" id="exportarSite">Baixar site</button>
+      </div>
     </div>
   `;
 
@@ -1182,7 +1144,6 @@ async function renderAdmin(){
   function refreshSugestoes(){
     $("#dlLocais").innerHTML  = uniaoOrdenada(SEED_LOCAIS,  valoresUnicos("local")).map(v=>`<option value="${esc(v)}">`).join("");
     $("#dlCidades").innerHTML = uniaoOrdenada(SEED_CIDADES, valoresUnicos("cidade")).map(v=>`<option value="${esc(v)}">`).join("");
-    $("#dlPessoas").innerHTML = uniaoOrdenada(SEED_PESSOAS, valoresUnicos("pessoas")).map(v=>`<option value="${esc(v)}">`).join("");
   }
   refreshSugestoes();
 
@@ -1211,21 +1172,10 @@ async function renderAdmin(){
           <label>📍 Local</label>
           <input type="text" class="fc-local" data-i="${i}" list="dlLocais" placeholder="Ex.: Grand-Place" value="${esc(f.local||'')}" autocomplete="off">
         </div>
-        <div class="field">
-          <label>🏷️ Quem aparece</label>
-          <div class="people-input">
-            <input type="text" class="fc-pessoa" data-i="${i}" list="dlPessoas" placeholder="Nome da pessoa" autocomplete="off">
-            <button type="button" class="btn primary fc-add" data-i="${i}">＋</button>
-          </div>
-          <div class="pessoas-chips">${(f.pessoas||[]).map((nome,j)=>`<span class="pchip">${esc(nome)}<button type="button" data-rmp="${i}:${j}">✕</button></span>`).join("")}</div>
-        </div>
       </div>`).join("");
 
     cont.querySelectorAll(".fc-local").forEach(inp=>inp.oninput=()=>{ fotosAtual[+inp.dataset.i].local=inp.value; agendarSalvarFormDraft(); });
     cont.querySelectorAll(".fc-descricao").forEach(t=>t.oninput=()=>{ fotosAtual[+t.dataset.i].descricao=t.value; agendarSalvarFormDraft(); });
-    cont.querySelectorAll(".fc-add").forEach(btn=>btn.onclick=()=>addPessoaFoto(+btn.dataset.i));
-    cont.querySelectorAll(".fc-pessoa").forEach(inp=>inp.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); addPessoaFoto(+inp.dataset.i); } });
-    cont.querySelectorAll("[data-rmp]").forEach(b=>b.onclick=()=>{ const [i,j]=b.dataset.rmp.split(":").map(Number); fotosAtual[i].pessoas.splice(j,1); pintarFotos(); agendarSalvarFormDraft(); });
     cont.querySelectorAll("[data-rmfoto]").forEach(b=>b.onclick=()=>{ const i=+b.dataset.rmfoto; fotosAtual.splice(i,1); descAbertas.delete(i); descAbertas=new Set([...descAbertas].map(k=>k>i?k-1:k)); pintarFotos(); agendarSalvarFormDraft(); });
     cont.querySelectorAll("[data-ver]").forEach(b=>b.onclick=()=>mostrarImagemGrande(fotosAtual[+b.dataset.ver].src));
     cont.querySelectorAll("[data-desc]").forEach(b=>b.onclick=()=>{
@@ -1233,13 +1183,6 @@ async function renderAdmin(){
       if(descAbertas.has(i)) descAbertas.delete(i); else descAbertas.add(i);
       pintarFotos();
     });
-  }
-  function addPessoaFoto(i){
-    const inp = cont.querySelector(`.fc-pessoa[data-i="${i}"]`);
-    const nome = (inp.value||"").trim(); if(!nome) return;
-    if(!fotosAtual[i].pessoas) fotosAtual[i].pessoas=[];
-    if(!fotosAtual[i].pessoas.some(x=>x.toLowerCase()===nome.toLowerCase())) fotosAtual[i].pessoas.push(nome);
-    pintarFotos(); agendarSalvarFormDraft();
   }
   $("#addFotos").onclick = ()=> $("#fFotos").click();
   $("#fFotos").onchange = e=>{
@@ -1362,12 +1305,6 @@ async function renderAdmin(){
 
   $("#salvar").onclick = async ()=>{
     if(!fotosAtual.length){ alert("Adicione pelo menos uma foto."); return; }
-    // inclui nomes digitados e ainda não confirmados (sem +) em cada foto
-    fotosAtual.forEach((f,i)=>{
-      const inp=cont.querySelector(`.fc-pessoa[data-i="${i}"]`);
-      const pend=inp && inp.value.trim();
-      if(pend && !f.pessoas.some(x=>x.toLowerCase()===pend.toLowerCase())) f.pessoas.push(pend);
-    });
     const dados = {
       pais:$("#fPais").value,
       cidade:$("#fCidade").value.trim(),
@@ -1389,13 +1326,17 @@ async function renderAdmin(){
   };
   $("#cancelar").onclick = ()=>{ limparFormDraft(); limparForm(); };
 
-  // ---- engrenagem suspensa (abre/fecha o menu de opções) ----
-  const gearMenu=$("#gearMenu");
-  $("#gearBtn").onclick = (e)=>{ e.stopPropagation(); gearMenu.hidden=!gearMenu.hidden; };
-  document.addEventListener("click",(e)=>{ if(!e.target.closest(".gear-wrap")) gearMenu.hidden=true; });
-  gearMenu.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{ gearMenu.hidden=true; }));
+  // ---- configurações do site (título / nome da família), editáveis e salvas ----
+  let _configTimer=null;
+  async function salvarConfig(){
+    await idbSet("qn_config", config);
+    mostrarSalvo("Configurações salvas ✓");
+  }
+  function agendarSalvarConfig(){ clearTimeout(_configTimer); _configTimer=setTimeout(salvarConfig,500); }
+  $("#fTitulo").addEventListener("input",()=>{ config.titulo=$("#fTitulo").value; agendarSalvarConfig(); });
+  $("#fFamilia").addEventListener("input",()=>{ config.familia=$("#fFamilia").value; agendarSalvarConfig(); });
 
-  // ---- baixar o SITE COMPLETO (index.html com os momentos embutidos) ----
+  // ---- baixar o SITE COMPLETO (index.html com os momentos e configurações embutidos) ----
   $("#exportarSite").onclick = async ()=>{
     try{
       const resp = await fetch(location.href, {cache:"no-store"});
@@ -1405,6 +1346,9 @@ async function renderAdmin(){
       const re = /const DADOS_EMBUTIDOS = [\s\S]*?; \/\* fim-dados \*\//;
       if(!re.test(html)){ alert("Não encontrei o marcador de dados no arquivo."); return; }
       html = html.replace(re, 'const DADOS_EMBUTIDOS = '+json+'; /* fim-dados */');
+      const cfgJson = JSON.stringify(config).replace(/</g,"\\u003c");
+      const reCfg = /const CONFIG_EMBUTIDO = [\s\S]*?; \/\* fim-config \*\//;
+      if(reCfg.test(html)) html = html.replace(reCfg, 'const CONFIG_EMBUTIDO = '+cfgJson+'; /* fim-config */');
       const blob=new Blob([html],{type:"text/html"});
       const a=document.createElement("a");
       a.href=URL.createObjectURL(blob); a.download="index.html"; a.click();
@@ -1461,7 +1405,7 @@ function renderLogin(){
         <button type="button" class="eye" id="verSenha" title="Mostrar senha" aria-label="Mostrar senha">👁</button>
       </div>
       <button class="btn primary block" id="entrar">Entrar</button>
-      <button class="btn ghost block" id="voltarInicio" style="margin-top:8px;color:var(--ink);border:1px solid var(--line)">Voltar à tela inicial</button>
+      <button class="btn ghost block" id="voltarInicio" style="margin-top:8px;color:var(--ink);border:1px solid var(--line)">Voltar ao feed</button>
       <div class="err" id="erro"></div>
     </div>`;
   $("#verSenha").onclick = ()=>{
@@ -1470,36 +1414,10 @@ function renderLogin(){
     $("#verSenha").textContent = mostrar ? "🙈" : "👁";
     s.focus();
   };
-  $("#voltarInicio").onclick = ()=> renderBoasVindas();
+  $("#voltarInicio").onclick = ()=> renderPublico();
   const tentar = ()=> renderAdmin();   // entra sem exigir senha
   $("#entrar").onclick = tentar;
   $("#senha").onkeydown = e=>{ if(e.key==="Enter") tentar(); };
-}
-
-/* ===================== BOAS-VINDAS (pergunta quem é) ===================== */
-function renderBoasVindas(){
-  app.innerHTML = `
-    <div class="welcome">
-      <button class="w-lock" id="wLock" title="Área do administrador" aria-label="Área do administrador">🔒</button>
-      <div class="w-card">
-        <h2 class="w-title"><span class="plane">✈️</span><span class="shine">Eurotrip</span></h2>
-        <p class="w-sub">A viagem da <b>Família Queiroz Nascimento</b> por França, Bélgica e Holanda.</p>
-        <p class="w-ask">Antes de entrar, como podemos te chamar?</p>
-        <input type="text" id="nomeVisitante" placeholder="Seu nome" autocomplete="off" value="${esc(visitante()||'')}" autofocus>
-        <button class="btn primary block" id="entrarVisitante">Entrar ✨</button>
-        <p class="w-tip">Toque numa foto para vê-la grande e use o coração 💛</p>
-      </div>
-    </div>`;
-  const entrar=()=>{
-    const nome = ($("#nomeVisitante").value||"").trim() || "viajante";
-    lsSet("qn_visitante", nome);
-    renderPublico();
-  };
-  $("#entrarVisitante").onclick = entrar;
-  $("#nomeVisitante").onkeydown = e=>{ if(e.key==="Enter") entrar(); };
-  $("#wLock").onclick = ()=> renderLogin();
-  const campo=$("#nomeVisitante");
-  if(campo.value) campo.select();
 }
 
 /* ===================== INÍCIO ===================== */
@@ -1507,8 +1425,7 @@ function renderBoasVindas(){
   try{
     posts = normalizarLista(DADOS_EMBUTIDOS.length ? DADOS_EMBUTIDOS : EXEMPLOS); // 1) desenha JÁ
     if(ehAdmin) renderLogin();
-    else if(visitante()) renderPublico();  // já se identificou antes: vai direto
-    else renderBoasVindas();               // primeiro acesso: pergunta "quem é você"
+    else renderPublico();                  // vai direto pro feed/grade
     carregarEmSegundoPlano();              // 2) tenta os dados reais depois
   }catch(e){
     app.innerHTML = '<pre style="padding:24px;white-space:pre-wrap;color:#d6453d">'
