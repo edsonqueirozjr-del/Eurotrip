@@ -93,8 +93,8 @@
     scrollbar-width:none;-webkit-overflow-scrolling:touch}
   .filter-carousel::-webkit-scrollbar{display:none}
   .filter-slide{flex:0 0 100%;scroll-snap-align:start;display:flex;gap:6px;padding:0 12px}
-  .chip{flex:0 0 auto;justify-content:center;border:1px solid var(--line);background:#fff;border-radius:999px;
-    padding:8px 12px;font-size:12.5px;font-weight:500;color:var(--ink-soft);display:flex;align-items:center;gap:5px;
+  .chip{flex:1 1 0;min-width:0;justify-content:center;border:1px solid var(--line);background:#fff;border-radius:999px;
+    padding:8px 4px;font-size:12.5px;font-weight:500;color:var(--ink-soft);display:flex;align-items:center;gap:5px;
     transition:.15s;white-space:nowrap}
   .chip .flag{font-size:13px;line-height:1}
   .chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
@@ -135,12 +135,11 @@
   .card .caption{font-size:15px;line-height:1.5}
   .card .date{font-size:11px;color:#9a9486;margin-top:9px;letter-spacing:.04em}
 
-  /* data, legenda e "by" acima da foto */
-  .card-header{padding:10px 14px 8px;border-bottom:1px solid var(--line)}
-  .card-meta-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px}
+  /* data, "by" e legenda acima da foto */
+  .card-header{padding:10px 14px 8px}
   .card-date{font-size:11px;color:#9a9486;letter-spacing:.04em}
-  .card-by{font-size:11px;color:var(--ink-soft);font-style:italic}
-  .card-caption{font-size:14px;line-height:1.45;color:var(--ink);margin-top:2px}
+  .card-by{font-size:11px;color:#9a9486;letter-spacing:.04em;margin-top:2px}
+  .card-caption{font-size:14px;line-height:1.45;color:var(--ink);margin-top:6px}
 
   .empty{text-align:center;color:var(--ink-soft);padding:54px 20px;font-size:14px}
   .empty .big{font-size:34px;margin-bottom:10px}
@@ -280,7 +279,6 @@
   .slide img{width:100%;height:100%;object-fit:cover;display:block;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;pointer-events:none}
   .ovs{position:absolute;left:10px;bottom:10px;display:flex;flex-direction:column;gap:6px;align-items:flex-start;max-width:84%;z-index:2}
   .ov{font-size:12px;color:#fff;background:rgba(60,31,110,.66);padding:6px 12px;border-radius:999px;backdrop-filter:blur(3px);text-decoration:none}
-  a.ov-link{border:1px solid rgba(255,255,255,.35)}
   a.ov-link:active{transform:scale(.96)}
   .g-multi{position:absolute;right:6px;top:6px;font-size:10px;background:rgba(60,31,110,.8);color:#fff;padding:3px 7px;border-radius:999px}
 
@@ -301,9 +299,9 @@
 
   /* botões de baixar/descrição: fixos no canto superior esquerdo */
   .tools-col{position:absolute;top:12px;left:12px;z-index:3;display:flex;flex-direction:column;gap:8px;align-items:center}
-  .dl-btn{width:26px;height:26px;border-radius:50%;border:0;cursor:pointer;flex:none;
-    background:rgba(42,21,81,.32);backdrop-filter:blur(2px);color:rgba(255,255,255,.8);font-size:11.5px;
-    display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.18)}
+  .dl-btn{width:26px;height:26px;border:0;cursor:pointer;flex:none;background:transparent;
+    color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;
+    filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))}
   .dl-btn:active{transform:scale(.92)}
 
   /* coração: suspenso no canto inferior direito */
@@ -771,7 +769,7 @@ function htmlPerfil(){
   }
   return `
   <header class="profile">
-    <h1 class="title"><span class="shine">Perfil</span></h1>
+    <h1 class="title"><span class="shine">${esc(config.titulo)}</span></h1>
     ${membroLogado?`<div class="family">${esc(membroLogado)}</div>`:`<div class="family">${esc(config.familia)}</div>`}
     <div class="stats">
       <div class="stat"><b>${posts.length}</b><span>Momentos</span></div>
@@ -951,10 +949,8 @@ function htmlFeed(lista){
     return `
     <article class="card">
       <div class="card-header">
-        <div class="card-meta-row">
-          <span class="card-date">📅 ${fmtPeriodo(p.data,p.dataFim)}</span>
-          ${p.autor?`<span class="card-by">by ${esc(p.autor)}</span>`:""}
-        </div>
+        <div class="card-date">📅 ${fmtPeriodo(p.data,p.dataFim)}</div>
+        ${p.autor?`<div class="card-by">👤 by ${esc(p.autor)}</div>`:""}
         ${p.legenda?`<div class="card-caption">${esc(p.legenda)}</div>`:""}
       </div>
       <div class="carousel" data-react="${p.id}">
@@ -1114,6 +1110,7 @@ function soltarCoracao(btn){
 
 /* ===================== ADMIN ===================== */
 let editandoId = null;
+let autorEditando = null; // guarda o autor original ao editar um momento existente
 async function salvarRascunho(){
   await idbSet("qn_posts_admin", posts);
   mostrarSalvo("Momentos salvos ✓");
@@ -1188,13 +1185,6 @@ async function renderAdmin(){
         </div>
 
         <div class="field">
-          <label>✍️ Publicado por</label>
-          <select id="fAutor">
-            ${MEMBROS.map(m=>`<option value="${m}">${m}</option>`).join("")}
-          </select>
-        </div>
-
-        <div class="field">
           <label>💬 Legenda do momento</label>
           <textarea id="fLegenda" placeholder="Conte como foi esse momento…"></textarea>
         </div>
@@ -1212,7 +1202,7 @@ async function renderAdmin(){
         <button class="btn outline block" id="ver">Ver feed público</button>
         <button class="btn outline block" id="importar">Importar momentos</button>
         <button class="btn outline block" id="exportarMom">Exportar momentos</button>
-        <button class="btn primary block" id="exportarSite">Baixar site</button>
+        <button class="btn outline block" id="exportarSite">Baixar site</button>
       </div>
     </div>
   `;
@@ -1282,8 +1272,6 @@ async function renderAdmin(){
     });
   }
   pintarFotos();
-  // preenche autor com o membro logado por padrão
-  if(membroLogado) $("#fAutor").value=membroLogado;
 
   // ---- autosave do que está sendo digitado (sobrevive a recarregar a página) ----
   let _draftTimer=null;
@@ -1293,17 +1281,16 @@ async function renderAdmin(){
   }
   async function salvarFormDraft(){
     await idbSet("qn_form_draft", {
-      editandoId,
+      editandoId, autorEditando,
       pais:$("#fPais").value, cidade:$("#fCidade").value,
       data:$("#fData").value, dataFim:$("#fDataFim").value,
-      autor:$("#fAutor").value,
       legenda:$("#fLegenda").value, fotos:fotosAtual
     });
     mostrarSalvo("Rascunho salvo ✓");
   }
   async function limparFormDraft(){ await idbDel("qn_form_draft"); }
 
-  ["fPais","fCidade","fData","fDataFim","fAutor","fLegenda"].forEach(id=>{
+  ["fPais","fCidade","fData","fDataFim","fLegenda"].forEach(id=>{
     const el=$("#"+id);
     el.addEventListener("input",agendarSalvarFormDraft);
     el.addEventListener("change",agendarSalvarFormDraft);
@@ -1325,12 +1312,12 @@ async function renderAdmin(){
       }
     }
     editandoId = draft.editandoId||null;
+    autorEditando = draft.autorEditando||null;
     fotosAtual = draft.fotos||[];
     if(draft.pais) $("#fPais").value=draft.pais;
     $("#fCidade").value=draft.cidade||"";
     $("#fData").value=draft.data||"";
     $("#fDataFim").value=draft.dataFim||"";
-    if(draft.autor) $("#fAutor").value=draft.autor;
     $("#fLegenda").value=draft.legenda||"";
     if(editandoId){
       $("#formTitulo").textContent="Editar momento";
@@ -1361,11 +1348,10 @@ async function renderAdmin(){
     });
     $("#lista").querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>{
       const p = posts.find(x=>x.id===b.dataset.edit); if(!p) return;
-      editandoId = p.id; descAbertas=new Set();
+      editandoId = p.id; autorEditando = p.autor||null; descAbertas=new Set();
       fotosAtual = (p.fotos||[]).map(f=>({src:f.src, local:f.local||"", pessoas:(f.pessoas||[]).slice(), descricao:f.descricao||""})); pintarFotos();
       $("#fPais").value=p.pais; $("#fCidade").value=p.cidade||"";
       $("#fData").value=p.data||""; $("#fDataFim").value=p.dataFim||"";
-      $("#fAutor").value=p.autor||membroLogado||"";
       $("#fLegenda").value=p.legenda||"";
       $("#formTitulo").textContent="Editar momento";
       $("#salvar").textContent="Salvar alterações";
@@ -1378,10 +1364,9 @@ async function renderAdmin(){
 
   function limparForm(){
     clearTimeout(_draftTimer);
-    editandoId=null; fotosAtual=[]; descAbertas=new Set(); pintarFotos();
+    editandoId=null; autorEditando=null; fotosAtual=[]; descAbertas=new Set(); pintarFotos();
     ["fCidade","fLegenda"].forEach(id=>$("#"+id).value="");
     $("#fData").value=""; $("#fDataFim").value="";
-    if(membroLogado) $("#fAutor").value=membroLogado;
     $("#formTitulo").textContent="✨ Novo momento";
     $("#salvar").textContent="✨ Guardar momento";
     $("#cancelar").style.display="none";
@@ -1394,7 +1379,7 @@ async function renderAdmin(){
       cidade:$("#fCidade").value.trim(),
       data:$("#fData").value,
       dataFim:$("#fDataFim").value,
-      autor:$("#fAutor").value||membroLogado||"",
+      autor: editandoId ? (autorEditando||membroLogado||"") : (membroLogado||""),
       legenda:$("#fLegenda").value.trim(),
       fotos: fotosAtual.map(f=>({src:f.src, local:(f.local||"").trim(), pessoas:(f.pessoas||[]).slice(), descricao:(f.descricao||"").trim()}))
     };
