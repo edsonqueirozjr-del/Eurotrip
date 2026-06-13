@@ -87,13 +87,21 @@
   .stat span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#e3cfac}
 
   /* ---------- FILTROS (fixos, sem rolagem) ---------- */
-  .filters{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);padding:11px 0}
-  .filters .chips{display:flex;gap:6px;flex-wrap:nowrap;padding:0 12px}
-  .chip{flex:1 1 0;min-width:0;justify-content:center;border:1px solid var(--line);background:#fff;border-radius:999px;
-    padding:8px 4px;font-size:12.5px;font-weight:500;color:var(--ink-soft);display:flex;align-items:center;gap:5px;
+  .filters{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line);padding:11px 0 6px}
+  /* carrossel que desliza entre países e autores */
+  .filter-carousel{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;
+    scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .filter-carousel::-webkit-scrollbar{display:none}
+  .filter-slide{flex:0 0 100%;scroll-snap-align:start;display:flex;gap:6px;padding:0 12px}
+  .chip{flex:0 0 auto;justify-content:center;border:1px solid var(--line);background:#fff;border-radius:999px;
+    padding:8px 12px;font-size:12.5px;font-weight:500;color:var(--ink-soft);display:flex;align-items:center;gap:5px;
     transition:.15s;white-space:nowrap}
   .chip .flag{font-size:13px;line-height:1}
   .chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+  /* pontinhos indicadores de qual filtro está ativo */
+  .filter-dots{display:flex;justify-content:center;gap:6px;margin-top:6px}
+  .filter-dots span{width:6px;height:6px;border-radius:50%;background:var(--line);transition:.2s}
+  .filter-dots span.on{background:var(--purple);width:16px;border-radius:999px}
 
   /* ---------- SELETOR DE VISTA (canto separado) ---------- */
   .view-row{display:flex;align-items:center;justify-content:flex-end;gap:9px;margin-top:16px}
@@ -127,12 +135,20 @@
   .card .caption{font-size:15px;line-height:1.5}
   .card .date{font-size:11px;color:#9a9486;margin-top:9px;letter-spacing:.04em}
 
+  /* data, legenda e "by" acima da foto */
+  .card-header{padding:10px 14px 8px;border-bottom:1px solid var(--line)}
+  .card-meta-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px}
+  .card-date{font-size:11px;color:#9a9486;letter-spacing:.04em}
+  .card-by{font-size:11px;color:var(--ink-soft);font-style:italic}
+  .card-caption{font-size:14px;line-height:1.45;color:var(--ink);margin-top:2px}
+
   .empty{text-align:center;color:var(--ink-soft);padding:54px 20px;font-size:14px}
   .empty .big{font-size:34px;margin-bottom:10px}
 
   /* ---------- ADMIN ---------- */
   .admin-top{max-width:680px;margin:18px auto 0;padding:0 16px}
-  .admin-top h2{font-family:"Fraunces",serif;font-weight:600;font-size:20px;margin:6px 0 14px;color:var(--ink)}
+  .admin-top-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .admin-top h2{font-family:"Fraunces",serif;font-weight:600;font-size:20px;margin:0;color:var(--ink)}
   .btn{border:0;border-radius:9px;padding:9px 14px;font-size:13px;font-weight:600}
   .btn.primary{background:linear-gradient(135deg,#f3cb63,#e9b949 60%,#d8a52f);color:var(--purple-deep);
     box-shadow:0 4px 14px rgba(233,185,73,.4)}
@@ -166,6 +182,7 @@
   .login .crest{margin-bottom:16px;border-color:var(--gold);font-size:24px}
   .login h3{font-family:"Fraunces",serif;font-size:20px;margin-bottom:6px}
   .login p{font-size:13px;color:var(--ink-soft);margin-bottom:16px}
+  .member-btns{display:flex;flex-direction:column;gap:8px;margin-bottom:4px}
   .pass-wrap{position:relative;margin-bottom:12px}
   .pass-wrap input{width:100%;border:1px solid var(--line);border-radius:9px;padding:11px 44px 11px 14px;font-size:15px}
   .pass-wrap .eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:transparent;font-size:18px;padding:6px;cursor:pointer;line-height:1}
@@ -267,12 +284,15 @@
   a.ov-link:active{transform:scale(.96)}
   .g-multi{position:absolute;right:6px;top:6px;font-size:10px;background:rgba(60,31,110,.8);color:#fff;padding:3px 7px;border-radius:999px}
 
-  /* balãozinho discreto com a descrição da foto: centralizado, sem sobrepor nada */
-  .desc-bubble{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:4;
-    max-width:78%;width:max-content;
-    background:rgba(42,21,81,.85);color:#fff;font-size:12.5px;line-height:1.5;text-align:center;
-    padding:10px 14px;border-radius:12px;backdrop-filter:blur(3px);
+  /* balão de fala (speech bubble) para a descrição da foto */
+  .desc-bubble{position:absolute;top:52px;left:4px;z-index:5;
+    max-width:80%;width:max-content;
+    background:rgba(42,21,81,.9);color:#fff;font-size:12.5px;line-height:1.5;
+    padding:10px 13px;border-radius:12px;backdrop-filter:blur(4px);
     box-shadow:0 4px 18px rgba(0,0,0,.35);animation:fadein .15s ease}
+  /* rabinho do balão apontando para o 💬 (topo-esquerdo) */
+  .desc-bubble::before{content:"";position:absolute;top:-8px;left:8px;
+    border:5px solid transparent;border-bottom-color:rgba(42,21,81,.9)}
 
   /* bolinhas FORA da foto (não cobrem a etiqueta de pessoas) */
   .dots-bar{display:flex;gap:6px;justify-content:center;padding:9px 0 2px}
@@ -422,8 +442,9 @@ const EXEMPLOS = [
 /* ===================== ESTADO ===================== */
 let posts = [];
 let filtroPais = "Todos";
+let filtroAutor = "Todos";
+let filtroAtivo = "pais"; // "pais" | "autor"
 let modoVista = "grade"; // "grade" | "feed"
-const ehAdmin = new URLSearchParams(location.search).get("admin") === "1";
 
 const $ = (s,el=document)=>el.querySelector(s);
 const app = $("#app");
@@ -432,6 +453,9 @@ const app = $("#app");
 const _mem = {};
 function lsGet(k){ try{ const v=localStorage.getItem(k); return v==null?null:JSON.parse(v); }catch(e){ return (k in _mem)?_mem[k]:null; } }
 function lsSet(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){ _mem[k]=v; } }
+
+const MEMBROS = ["Junior","Thaysa","Maria"];
+let membroLogado = ""; // preenchido após lsGet abaixo
 
 /* ---- IndexedDB: guarda rascunhos do admin (fotos em base64 são pesadas p/ localStorage) ---- */
 const IDB_NOME="eurotrip_db", IDB_LOJA="kv";
@@ -661,7 +685,7 @@ function carregarEmSegundoPlano(){
     fetch("dados.json", {cache:"no-store"})
       .then(r => r.ok ? r.json() : null)
       .then(j => {
-        if(Array.isArray(j) && j.length && !ehAdmin){
+        if(Array.isArray(j) && j.length){
           const novos = normalizarLista(j);
           const totalFotos = (lista)=>lista.reduce((s,p)=>s+((p.fotos&&p.fotos.length)||0),0);
           // só substitui se vier MAIS completo (mais momentos ou mais fotos no total)
@@ -729,8 +753,10 @@ function ordenados(){
   });
 }
 function filtrados(){
-  const o = ordenados();
-  return filtroPais==="Todos" ? o : o.filter(p=>p.pais===filtroPais);
+  let o = ordenados();
+  if(filtroPais!=="Todos") o = o.filter(p=>p.pais===filtroPais);
+  if(filtroAutor!=="Todos") o = o.filter(p=>p.autor===filtroAutor);
+  return o;
 }
 
 /* ===================== RENDER PÚBLICO ===================== */
@@ -745,8 +771,8 @@ function htmlPerfil(){
   }
   return `
   <header class="profile">
-    <h1 class="title"><span class="plane">✈️</span><span class="shine">${esc(config.titulo)}</span></h1>
-    <div class="family">${esc(config.familia)}</div>
+    <h1 class="title"><span class="shine">Perfil</span></h1>
+    ${membroLogado?`<div class="family">${esc(membroLogado)}</div>`:`<div class="family">${esc(config.familia)}</div>`}
     <div class="stats">
       <div class="stat"><b>${posts.length}</b><span>Momentos</span></div>
       <div class="stat"><b>${nFotos}</b><span>Fotos</span></div>
@@ -756,15 +782,29 @@ function htmlPerfil(){
 }
 
 function htmlFiltros(){
-  const chip = (nome,emoji)=>`
+  const chipPais = (nome,emoji)=>`
     <button class="chip" data-pais="${nome}" aria-pressed="${filtroPais===nome}">
       <span class="flag">${emoji}</span>${nome}
     </button>`;
+  const chipAutor = (nome)=>`
+    <button class="chip chip-autor" data-autor="${nome}" aria-pressed="${filtroAutor===nome}">
+      ${nome}
+    </button>`;
   return `
   <div class="filters">
-    <div class="chips">
-      ${chip("Todos","🌍")}
-      ${Object.keys(PAISES).map(p=>chip(p, PAISES[p].flag)).join("")}
+    <div class="filter-carousel" id="filterCarousel">
+      <div class="filter-slide">
+        ${chipPais("Todos","🌍")}
+        ${Object.keys(PAISES).map(p=>chipPais(p, PAISES[p].flag)).join("")}
+      </div>
+      <div class="filter-slide">
+        ${chipAutor("Todos")}
+        ${MEMBROS.map(m=>chipAutor(m)).join("")}
+      </div>
+    </div>
+    <div class="filter-dots">
+      <span class="${filtroAtivo==='pais'?'on':''}"></span>
+      <span class="${filtroAtivo==='autor'?'on':''}"></span>
     </div>
   </div>`;
 }
@@ -910,6 +950,13 @@ function htmlFeed(lista){
     const dots=fotos.length>1?`<div class="dots-bar">${fotos.map((_,i)=>`<span class="${i===0?'on':''}"></span>`).join("")}</div>`:"";
     return `
     <article class="card">
+      <div class="card-header">
+        <div class="card-meta-row">
+          <span class="card-date">📅 ${fmtPeriodo(p.data,p.dataFim)}</span>
+          ${p.autor?`<span class="card-by">by ${esc(p.autor)}</span>`:""}
+        </div>
+        ${p.legenda?`<div class="card-caption">${esc(p.legenda)}</div>`:""}
+      </div>
       <div class="carousel" data-react="${p.id}">
         <div class="track">${slides}</div>
         <div class="stamp"><span class="pin">📌</span><span class="flag-em">${PAISES[p.pais]?.flag||""}</span><br>${p.cidade||p.pais}</div>
@@ -925,18 +972,17 @@ function htmlFeed(lista){
         </div>
       </div>
       ${dots}
-      <div class="body">
-        <div class="caption">${p.legenda||""}</div>
-        <div class="date">📅 ${fmtPeriodo(p.data,p.dataFim)}</div>
-      </div>
     </article>`;
   }).join("")}</div>`;
 }
 
 function htmlVazio(){
+  const filtroLabel = filtroAtivo==="autor"
+    ? (filtroAutor==="Todos"?"todos":"de "+filtroAutor)
+    : (filtroPais==="Todos"?"nenhum":filtroPais);
   return `<div class="empty"><div class="big">🗺️</div>
-    Nenhum momento em <b>${filtroPais}</b> ainda.<br>
-    ${ehAdmin?"Adicione um momento no painel acima.":"Volte em breve!"}</div>`;
+    Nenhum momento ${filtroLabel} ainda.<br>
+    Volte em breve!</div>`;
 }
 
 function renderPublico(){
@@ -951,8 +997,21 @@ function renderPublico(){
     <button class="lock-fab" id="lockBtn" title="Área do administrador" aria-label="Área do administrador">🔒</button>
   `;
   $("#lockBtn").onclick = ()=> renderLogin();
-  // eventos
-  app.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{filtroPais=b.dataset.pais;renderPublico();});
+  // chips de país
+  app.querySelectorAll(".chip[data-pais]").forEach(b=>b.onclick=()=>{filtroPais=b.dataset.pais;renderPublico();});
+  // chips de autor
+  app.querySelectorAll(".chip-autor[data-autor]").forEach(b=>b.onclick=()=>{filtroAutor=b.dataset.autor;renderPublico();});
+  // deslize do carrossel de filtros (país ↔ autor)
+  const fc=app.querySelector("#filterCarousel");
+  if(fc){
+    // posiciona no slide ativo
+    if(filtroAtivo==="autor") fc.scrollLeft=fc.scrollWidth/2;
+    fc.addEventListener("scroll",()=>{
+      const meio=fc.scrollLeft > fc.scrollWidth/4;
+      const novoFiltro=meio?"autor":"pais";
+      if(novoFiltro!==filtroAtivo){ filtroAtivo=novoFiltro; renderPublico(); }
+    },{passive:true});
+  }
   app.querySelectorAll(".view-toggle button").forEach(b=>b.onclick=()=>{modoVista=b.dataset.vista;renderPublico();});
   // na grade, tocar abre o feed
   if(modoVista==="grade"){
@@ -1009,17 +1068,22 @@ function ligarDescricoes(raiz){
       e.preventDefault(); e.stopPropagation();
       if(!post||!track) return;
       const i=Math.round(track.scrollLeft/Math.max(1,track.clientWidth));
-      const slide=track.children[i];
-      if(!slide) return;
-      const aberto=slide.querySelector(".desc-bubble");
-      if(aberto){ aberto.remove(); return; }
+      // remove balão existente neste stage
       stage.querySelectorAll(".desc-bubble").forEach(b=>b.remove());
+      // se o balão já estava aberto (toggle), fecha
+      if(btn.dataset.bubbleOpen==="1"){ btn.dataset.bubbleOpen=""; return; }
       const desc=(post.fotos[i]&&post.fotos[i].descricao)||"";
       const bubble=document.createElement("div");
       bubble.className="desc-bubble";
       bubble.textContent=desc||"Esta foto não tem descrição.";
-      slide.appendChild(bubble);
-      const fechaFora=(ev)=>{ if(!bubble.contains(ev.target)&&ev.target!==btn){ bubble.remove(); document.removeEventListener("click",fechaFora,true); } };
+      stage.appendChild(bubble);
+      btn.dataset.bubbleOpen="1";
+      const fechaFora=(ev)=>{
+        if(!bubble.contains(ev.target)&&ev.target!==btn){
+          bubble.remove(); btn.dataset.bubbleOpen="";
+          document.removeEventListener("click",fechaFora,true);
+        }
+      };
       setTimeout(()=>document.addEventListener("click",fechaFora,true),0);
     });
   });
@@ -1056,6 +1120,9 @@ async function salvarRascunho(){
 }
 
 async function renderAdmin(){
+  // precisa de membro logado
+  if(!membroLogado){ renderLogin(); return; }
+
   // retoma o que já foi feito antes (salvo no navegador deste aparelho)
   let rascunho = await idbGet("qn_posts_admin");
   if(!Array.isArray(rascunho) || !rascunho.length){
@@ -1072,14 +1139,17 @@ async function renderAdmin(){
   app.innerHTML = `
     <input type="file" id="arq" accept="application/json" hidden>
     <div class="admin-top">
-      <h2>🛠️ Painel — ${esc(config.titulo)}</h2>
+      <div class="admin-top-row">
+        <h2>Painel — ${esc(membroLogado)}</h2>
+        <button class="btn outline" id="sairAdmin">Sair</button>
+      </div>
       <div class="grid2">
         <div class="field">
-          <label>✈️ Título do site</label>
+          <label>Título</label>
           <input type="text" id="fTitulo" value="${esc(config.titulo)}">
         </div>
         <div class="field">
-          <label>👪 Nome da família</label>
+          <label>Sub título</label>
           <input type="text" id="fFamilia" value="${esc(config.familia)}">
         </div>
       </div>
@@ -1118,7 +1188,14 @@ async function renderAdmin(){
         </div>
 
         <div class="field">
-          <label>💬 Legenda</label>
+          <label>✍️ Publicado por</label>
+          <select id="fAutor">
+            ${MEMBROS.map(m=>`<option value="${m}">${m}</option>`).join("")}
+          </select>
+        </div>
+
+        <div class="field">
+          <label>💬 Legenda do momento</label>
           <textarea id="fLegenda" placeholder="Conte como foi esse momento…"></textarea>
         </div>
 
@@ -1205,6 +1282,8 @@ async function renderAdmin(){
     });
   }
   pintarFotos();
+  // preenche autor com o membro logado por padrão
+  if(membroLogado) $("#fAutor").value=membroLogado;
 
   // ---- autosave do que está sendo digitado (sobrevive a recarregar a página) ----
   let _draftTimer=null;
@@ -1217,13 +1296,14 @@ async function renderAdmin(){
       editandoId,
       pais:$("#fPais").value, cidade:$("#fCidade").value,
       data:$("#fData").value, dataFim:$("#fDataFim").value,
+      autor:$("#fAutor").value,
       legenda:$("#fLegenda").value, fotos:fotosAtual
     });
     mostrarSalvo("Rascunho salvo ✓");
   }
   async function limparFormDraft(){ await idbDel("qn_form_draft"); }
 
-  ["fPais","fCidade","fData","fDataFim","fLegenda"].forEach(id=>{
+  ["fPais","fCidade","fData","fDataFim","fAutor","fLegenda"].forEach(id=>{
     const el=$("#"+id);
     el.addEventListener("input",agendarSalvarFormDraft);
     el.addEventListener("change",agendarSalvarFormDraft);
@@ -1250,6 +1330,7 @@ async function renderAdmin(){
     $("#fCidade").value=draft.cidade||"";
     $("#fData").value=draft.data||"";
     $("#fDataFim").value=draft.dataFim||"";
+    if(draft.autor) $("#fAutor").value=draft.autor;
     $("#fLegenda").value=draft.legenda||"";
     if(editandoId){
       $("#formTitulo").textContent="Editar momento";
@@ -1283,7 +1364,9 @@ async function renderAdmin(){
       editandoId = p.id; descAbertas=new Set();
       fotosAtual = (p.fotos||[]).map(f=>({src:f.src, local:f.local||"", pessoas:(f.pessoas||[]).slice(), descricao:f.descricao||""})); pintarFotos();
       $("#fPais").value=p.pais; $("#fCidade").value=p.cidade||"";
-      $("#fData").value=p.data||""; $("#fDataFim").value=p.dataFim||""; $("#fLegenda").value=p.legenda||"";
+      $("#fData").value=p.data||""; $("#fDataFim").value=p.dataFim||"";
+      $("#fAutor").value=p.autor||membroLogado||"";
+      $("#fLegenda").value=p.legenda||"";
       $("#formTitulo").textContent="Editar momento";
       $("#salvar").textContent="Salvar alterações";
       $("#cancelar").style.display="block";
@@ -1298,6 +1381,7 @@ async function renderAdmin(){
     editandoId=null; fotosAtual=[]; descAbertas=new Set(); pintarFotos();
     ["fCidade","fLegenda"].forEach(id=>$("#"+id).value="");
     $("#fData").value=""; $("#fDataFim").value="";
+    if(membroLogado) $("#fAutor").value=membroLogado;
     $("#formTitulo").textContent="✨ Novo momento";
     $("#salvar").textContent="✨ Guardar momento";
     $("#cancelar").style.display="none";
@@ -1310,6 +1394,7 @@ async function renderAdmin(){
       cidade:$("#fCidade").value.trim(),
       data:$("#fData").value,
       dataFim:$("#fDataFim").value,
+      autor:$("#fAutor").value||membroLogado||"",
       legenda:$("#fLegenda").value.trim(),
       fotos: fotosAtual.map(f=>({src:f.src, local:(f.local||"").trim(), pessoas:(f.pessoas||[]).slice(), descricao:(f.descricao||"").trim()}))
     };
@@ -1327,6 +1412,7 @@ async function renderAdmin(){
   $("#cancelar").onclick = ()=>{ limparFormDraft(); limparForm(); };
 
   // ---- configurações do site (título / nome da família), editáveis e salvas ----
+  $("#sairAdmin").onclick=()=>{ membroLogado=""; lsSet("qn_membro",""); renderPublico(); };
   let _configTimer=null;
   async function salvarConfig(){
     await idbSet("qn_config", config);
@@ -1399,34 +1485,28 @@ function renderLogin(){
   app.innerHTML = `
     <div class="login">
       <div class="crest">🔒</div>
-      <h3>Área do administrador</h3>
-      <div class="pass-wrap">
-        <input type="password" id="senha" placeholder="Senha" autofocus>
-        <button type="button" class="eye" id="verSenha" title="Mostrar senha" aria-label="Mostrar senha">👁</button>
+      <h3>Quem é você?</h3>
+      <p>Escolha seu nome para entrar</p>
+      <div class="member-btns">
+        ${MEMBROS.map(m=>`<button class="btn primary block member-btn" data-membro="${m}">${m}</button>`).join("")}
       </div>
-      <button class="btn primary block" id="entrar">Entrar</button>
       <button class="btn ghost block" id="voltarInicio" style="margin-top:8px;color:var(--ink);border:1px solid var(--line)">Voltar ao feed</button>
-      <div class="err" id="erro"></div>
     </div>`;
-  $("#verSenha").onclick = ()=>{
-    const s=$("#senha"), mostrar = s.type==="password";
-    s.type = mostrar ? "text" : "password";
-    $("#verSenha").textContent = mostrar ? "🙈" : "👁";
-    s.focus();
-  };
+  app.querySelectorAll(".member-btn").forEach(b=>b.onclick=()=>{
+    membroLogado = b.dataset.membro;
+    lsSet("qn_membro", membroLogado);
+    renderAdmin();
+  });
   $("#voltarInicio").onclick = ()=> renderPublico();
-  const tentar = ()=> renderAdmin();   // entra sem exigir senha
-  $("#entrar").onclick = tentar;
-  $("#senha").onkeydown = e=>{ if(e.key==="Enter") tentar(); };
 }
 
 /* ===================== INÍCIO ===================== */
 (function init(){
   try{
-    posts = normalizarLista(DADOS_EMBUTIDOS.length ? DADOS_EMBUTIDOS : EXEMPLOS); // 1) desenha JÁ
-    if(ehAdmin) renderLogin();
-    else renderPublico();                  // vai direto pro feed/grade
-    carregarEmSegundoPlano();              // 2) tenta os dados reais depois
+    membroLogado = lsGet("qn_membro") || "";
+    posts = normalizarLista(DADOS_EMBUTIDOS.length ? DADOS_EMBUTIDOS : EXEMPLOS);
+    renderPublico();                   // sempre começa no feed/grade
+    carregarEmSegundoPlano();          // tenta os dados reais depois
   }catch(e){
     app.innerHTML = '<pre style="padding:24px;white-space:pre-wrap;color:#d6453d">'
       + 'Erro ao iniciar: ' + (e && e.message ? e.message : e) + '</pre>';
