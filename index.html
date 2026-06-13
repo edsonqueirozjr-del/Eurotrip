@@ -126,16 +126,17 @@
   .empty .big{font-size:34px;margin-bottom:10px}
 
   /* ---------- ADMIN ---------- */
-  /* botão flutuante de opções (engrenagem) */
-  .gear-wrap{position:fixed;top:16px;right:16px;z-index:60}
-  .gear-btn{width:46px;height:46px;border-radius:50%;border:0;cursor:pointer;
-    background:linear-gradient(135deg,#6a2fb0,#9a4fd0);color:#fff;font-size:20px;
+  /* botão flutuante de opções (engrenagem), alinhado com o "Olá" do outro lado */
+  .gear-wrap{position:fixed;top:10px;right:14px;z-index:60}
+  .gear-btn{width:38px;height:38px;border-radius:50%;border:0;cursor:pointer;
+    background:linear-gradient(135deg,#6a2fb0,#9a4fd0);color:#fff;font-size:17px;
     display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);
     transition:transform .2s ease}
   .gear-btn:active{transform:scale(.94)}
-  .gear-menu{position:absolute;top:54px;right:0;min-width:190px;background:var(--paper);
+  .gear-menu{position:absolute;top:46px;right:0;min-width:190px;background:var(--paper);
     border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);
     padding:6px;display:flex;flex-direction:column;gap:2px;animation:fadein .15s ease}
+  .gear-menu[hidden]{display:none}
   .gear-menu button{width:100%;text-align:left;background:none;border:0;border-radius:9px;
     padding:11px 14px;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;
     font-family:inherit;transition:background .15s ease}
@@ -281,6 +282,13 @@
   .w-card input{width:100%;border:1px solid var(--line);border-radius:11px;padding:13px;font-size:16px;
     text-align:center;background:#fff;margin-bottom:12px}
   .w-tip{font-size:12px;color:var(--ink-soft);margin-top:14px}
+  .w-lock{position:fixed;top:18px;right:18px;z-index:10;width:46px;height:46px;border-radius:50%;
+    border:0;cursor:pointer;font-size:19px;color:#fff;
+    background:linear-gradient(135deg,#6a2fb0,#9a4fd0);
+    box-shadow:0 0 14px rgba(233,185,73,.5),0 6px 18px rgba(0,0,0,.25),inset 0 1px 3px rgba(255,255,255,.25);
+    display:flex;align-items:center;justify-content:center;
+    animation:floaty 2.6s ease-in-out infinite}
+  .w-lock:active{transform:scale(.94)}
 
   /* ---------- carrossel de fotos (feed) — sempre 9:16 ---------- */
   .feed .card{max-width:430px;margin-left:auto;margin-right:auto}
@@ -301,19 +309,36 @@
   .dots-bar span{width:6px;height:6px;border-radius:50%;background:var(--line);transition:.2s}
   .dots-bar span.on{background:var(--purple);width:18px;border-radius:999px}
 
-  /* coração suspenso com contador */
-  .heart-btn{position:absolute;bottom:12px;right:12px;z-index:3;border:0;background:rgba(255,255,255,.92);
-    border-radius:16px;padding:7px 6px 5px;display:flex;flex-direction:column;align-items:center;gap:1px;
-    cursor:pointer;box-shadow:0 4px 14px rgba(60,31,110,.35);animation:floaty 2.6s ease-in-out infinite}
-  .heart-btn .heart{font-size:20px;line-height:1;display:inline-block}
-  .heart-btn .heart.beat{animation:beat .45s ease}
-  .heart-btn .heart-count{font-size:11px;font-weight:700;color:var(--purple)}
+  /* coluna de ações (download + coração) suspensa no canto */
+  .actions-col{position:absolute;bottom:12px;right:12px;z-index:3;display:flex;flex-direction:column;gap:10px;align-items:center}
+  .dl-btn{width:38px;height:38px;border-radius:50%;border:0;cursor:pointer;flex:none;
+    background:rgba(42,21,81,.55);backdrop-filter:blur(3px);color:#fff;font-size:16px;
+    display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+  .dl-btn:active{transform:scale(.92)}
+
+  /* coração suspenso: vidro escuro + contorno dourado/roxo brilhante (3D) */
+  .heart-btn{position:relative;border:2px solid transparent;
+    background:
+      linear-gradient(rgba(42,21,81,.55),rgba(42,21,81,.55)) padding-box,
+      linear-gradient(135deg,var(--gold),var(--purple) 60%,#f3cb63) border-box;
+    border-radius:18px;padding:7px 7px 5px;display:flex;flex-direction:column;align-items:center;gap:1px;
+    cursor:pointer;backdrop-filter:blur(3px);
+    box-shadow:0 0 12px rgba(233,185,73,.55), inset 0 1px 3px rgba(255,255,255,.25), inset 0 -2px 4px rgba(0,0,0,.3), 0 4px 14px rgba(60,31,110,.4);
+    animation:floaty 2.6s ease-in-out infinite}
+  .heart-btn .heart{font-size:21px;line-height:1;display:inline-block;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}
+  .heart-btn .heart.beat{animation:beat .6s cubic-bezier(.34,1.56,.64,1)}
+  .heart-btn .heart-count{font-size:11px;font-weight:800;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+  .heart-btn::after{content:"";position:absolute;inset:-6px;border-radius:22px;pointer-events:none;
+    background:radial-gradient(circle,rgba(243,203,99,.65),transparent 70%);opacity:0}
+  .heart-btn.pulse::after{animation:ringpulse .6s ease-out}
+  @keyframes ringpulse{0%{opacity:.9;transform:scale(.7)}100%{opacity:0;transform:scale(1.7)}}
   @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-  @keyframes beat{0%{transform:scale(1)}25%{transform:scale(1.45) rotate(-8deg)}50%{transform:scale(.9) rotate(6deg)}100%{transform:scale(1)}}
+  @keyframes beat{0%{transform:scale(1) rotate(0)}20%{transform:scale(1.6) rotate(-16deg)}40%{transform:scale(.85) rotate(10deg)}60%{transform:scale(1.25) rotate(-6deg)}80%{transform:scale(.95) rotate(3deg)}100%{transform:scale(1) rotate(0)}}
   .heart-float{position:fixed;z-index:330;font-size:20px;pointer-events:none;transform:translate(-50%,-50%);
     animation:heartup .9s ease-out forwards}
   @keyframes heartup{0%{opacity:0;transform:translate(-50%,-50%) scale(.6)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-150%) scale(1.1)}}
   .lb-heart{position:fixed;bottom:24px;right:16px;z-index:5;animation:none}
+  .lb-dl{position:fixed;bottom:24px;right:64px;z-index:5}
 
   /* moldura fina, tipo fio brilhante */
   .card .carousel{background:linear-gradient(135deg,#2a1551,#3c1f6e);
@@ -480,6 +505,7 @@ function incCoracao(id, x, y){
   document.querySelectorAll('.heart-btn[data-post="'+id+'"]').forEach(btn=>{
     const c=btn.querySelector(".heart-count"); if(c) c.textContent=hearts[id];
     const h=btn.querySelector(".heart"); if(h){ h.classList.remove("beat"); void h.offsetWidth; h.classList.add("beat"); }
+    btn.classList.remove("pulse"); void btn.offsetWidth; btn.classList.add("pulse");
   });
   if(x!=null) festejar(x,y);
   return hearts[id];
@@ -493,7 +519,7 @@ function ligarInteracoes(){
     const track=c.querySelector(".track");
     const indice=()=>Math.round(track.scrollLeft/Math.max(1,track.clientWidth));
     let sx=0, sy=0, moved=false, holdT=null, fastI=null, didHold=false, px=0, py=0;
-    const guarded=(e)=> e.target.closest(".heart-btn") || e.target.closest(".ov-link");
+    const guarded=(e)=> e.target.closest(".heart-btn") || e.target.closest(".ov-link") || e.target.closest(".dl-btn");
     const start=(x,y)=>{ moved=false; didHold=false; px=x; py=y;
       holdT=setTimeout(()=>{ didHold=true; incCoracao(id,px,py); fastI=setInterval(()=>incCoracao(id,px,py),150); }, 320); };
     const cancel=()=>{ clearTimeout(holdT); clearInterval(fastI); holdT=fastI=null; };
@@ -521,6 +547,7 @@ function abrirLightbox(post, startIndex){
   const lb=document.createElement("div"); lb.className="lightbox";
   lb.innerHTML=`
     <button class="lb-close" aria-label="Fechar">✕</button>
+    <button class="dl-btn lb-dl" id="lbDl" aria-label="Baixar foto" title="Baixar foto">⬇️</button>
     <button class="heart-btn lb-heart" data-post="${post.id}" aria-label="Curtir">
       <span class="heart">❤️</span><span class="heart-count">${hearts[post.id]||0}</span>
     </button>
@@ -539,6 +566,12 @@ function abrirLightbox(post, startIndex){
   const track=lb.querySelector(".lb-track");
   const dots=lb.querySelectorAll(".lb-dots span");
   requestAnimationFrame(()=>{ track.scrollLeft=(startIndex||0)*track.clientWidth; });
+  lb.querySelector("#lbDl").addEventListener("click",e=>{
+    e.preventDefault(); e.stopPropagation();
+    const i=Math.round(track.scrollLeft/Math.max(1,track.clientWidth));
+    const foto=fotos[i];
+    if(foto) baixarFoto(foto.src, nomeArquivoFoto(post,i));
+  });
   if(dots.length){
     track.addEventListener("scroll",()=>{
       const i=Math.round(track.scrollLeft/Math.max(1,track.clientWidth));
@@ -551,7 +584,7 @@ function abrirLightbox(post, startIndex){
   // tocar na foto grande conta +1; segurar sobe rápido; arrastar navega
   const pid=post.id;
   let sx=0, sy=0, moved=false, holdT=null, fastI=null, didHold=false, px=0, py=0;
-  const guarded=(e)=> e.target.closest(".heart-btn")||e.target.closest(".lb-close")||e.target.closest(".ov-link");
+  const guarded=(e)=> e.target.closest(".heart-btn")||e.target.closest(".lb-close")||e.target.closest(".ov-link")||e.target.closest(".dl-btn");
   const start=(x,y)=>{ moved=false; didHold=false; px=x; py=y;
     holdT=setTimeout(()=>{ didHold=true; incCoracao(pid,px,py); fastI=setInterval(()=>incCoracao(pid,px,py),150); },320); };
   const cancel=()=>{ clearTimeout(holdT); clearInterval(fastI); holdT=fastI=null; };
@@ -700,6 +733,20 @@ function mapsURL(local, cidade, pais){
   const q=[local,cidade,pais].filter(Boolean).join(", ");
   return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q);
 }
+/* baixa a foto (funciona no feed e no destaque) */
+function nomeArquivoFoto(post,i){
+  const base=(post.cidade||post.pais||"eurotrip").toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+    .replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
+  return `eurotrip-${base}-${(i||0)+1}.jpg`;
+}
+function baixarFoto(src, nome){
+  try{
+    const a=document.createElement("a");
+    a.href=src; a.download=nome||"foto.jpg";
+    document.body.appendChild(a); a.click(); a.remove();
+  }catch(e){ window.open(src,"_blank"); }
+}
 
 function htmlFeed(lista){
   if(!lista.length) return htmlVazio();
@@ -722,10 +769,13 @@ function htmlFeed(lista){
         <div class="track">${slides}</div>
         <div class="stamp"><span class="flag-em">${PAISES[p.pais]?.flag||""}</span><br>${p.cidade||p.pais}</div>
         ${count}
-        <button class="heart-btn" data-post="${p.id}" aria-label="Curtir">
-          <span class="heart">❤️</span>
-          <span class="heart-count">${hearts[p.id]||0}</span>
-        </button>
+        <div class="actions-col">
+          <button class="dl-btn" data-post="${p.id}" aria-label="Baixar foto" title="Baixar foto">⬇️</button>
+          <button class="heart-btn" data-post="${p.id}" aria-label="Curtir">
+            <span class="heart">❤️</span>
+            <span class="heart-count">${hearts[p.id]||0}</span>
+          </button>
+        </div>
       </div>
       ${dots}
       <div class="body">
@@ -764,6 +814,7 @@ function renderPublico(){
     ligarInteracoes();   // tocar conta + abre; segurar sobe rápido
     ligarCarrosseis();   // deslize lateral + bolinhas
     ligarCoracoes();     // coração com contador
+    ligarDownloads();    // baixar a foto atual
   }
 }
 
@@ -801,6 +852,22 @@ function ativarCoracao(btn){
   btn.addEventListener("touchcancel",release);
 }
 function ligarCoracoes(){ app.querySelectorAll(".heart-btn").forEach(ativarCoracao); }
+/* botão de download: baixa a foto que está sendo exibida no momento */
+function ligarDownloads(){
+  app.querySelectorAll(".dl-btn[data-post]").forEach(btn=>{
+    const id=btn.dataset.post;
+    const post=posts.find(p=>p.id===id);
+    const carousel=btn.closest(".carousel");
+    const track=carousel&&carousel.querySelector(".track");
+    btn.addEventListener("click",e=>{
+      e.preventDefault(); e.stopPropagation();
+      if(!post||!track) return;
+      const i=Math.round(track.scrollLeft/Math.max(1,track.clientWidth));
+      const foto=post.fotos[i];
+      if(foto) baixarFoto(foto.src, nomeArquivoFoto(post,i));
+    });
+  });
+}
 /* coraçãozinho que sobe e some a cada batida */
 function soltarCoracao(btn){
   const r=btn.getBoundingClientRect();
