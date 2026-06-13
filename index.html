@@ -251,6 +251,11 @@
   .lb-dots span{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.5);transition:.2s}
   .lb-dots span.on{background:#fff;width:20px;border-radius:999px}
   @keyframes fadein{from{opacity:0}to{opacity:1}}
+  .autosave-toast{position:fixed;bottom:18px;left:50%;transform:translate(-50%,16px);
+    background:rgba(42,21,81,.92);color:#fff;font-size:12px;font-weight:600;
+    padding:8px 16px;border-radius:999px;opacity:0;pointer-events:none;
+    transition:opacity .25s,transform .25s;z-index:90;box-shadow:var(--shadow)}
+  .autosave-toast.show{opacity:1;transform:translate(-50%,0)}
 
   /* ---------- data na grade ---------- */
   .grid figure .g-date{position:absolute;left:6px;top:6px;font-size:10px;background:rgba(247,243,236,.92);
@@ -301,8 +306,16 @@
   .ov{font-size:12px;color:#fff;background:rgba(60,31,110,.66);padding:6px 12px;border-radius:999px;backdrop-filter:blur(3px);text-decoration:none}
   a.ov-link{border:1px solid rgba(255,255,255,.35)}
   a.ov-link:active{transform:scale(.96)}
-  .count{position:absolute;top:12px;left:12px;font-size:11px;color:#fff;background:rgba(60,31,110,.6);padding:3px 9px;border-radius:999px;z-index:2}
   .g-multi{position:absolute;right:6px;top:6px;font-size:10px;background:rgba(60,31,110,.8);color:#fff;padding:3px 7px;border-radius:999px}
+
+  /* botãozinho discreto de descrição da foto (topo-esquerda) */
+  .info-btn{position:absolute;top:10px;left:10px;z-index:2;width:26px;height:26px;border-radius:50%;
+    border:0;cursor:pointer;background:rgba(42,21,81,.4);color:rgba(255,255,255,.9);font-size:12px;
+    display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+  .desc-bubble{position:absolute;top:42px;left:10px;right:10px;z-index:4;
+    background:rgba(42,21,81,.82);color:#fff;font-size:12.5px;line-height:1.5;
+    padding:10px 12px;border-radius:10px;backdrop-filter:blur(3px);
+    box-shadow:0 4px 14px rgba(0,0,0,.3);animation:fadein .15s ease}
 
   /* bolinhas FORA da foto (não cobrem a etiqueta de pessoas) */
   .dots-bar{display:flex;gap:6px;justify-content:center;padding:9px 0 2px}
@@ -310,35 +323,31 @@
   .dots-bar span.on{background:var(--purple);width:18px;border-radius:999px}
 
   /* coluna de ações (download + coração) suspensa no canto */
-  .actions-col{position:absolute;bottom:12px;right:12px;z-index:3;display:flex;flex-direction:column;gap:10px;align-items:center}
-  .dl-btn{width:38px;height:38px;border-radius:50%;border:0;cursor:pointer;flex:none;
-    background:rgba(42,21,81,.55);backdrop-filter:blur(3px);color:#fff;font-size:16px;
-    display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+  .actions-col{position:absolute;bottom:12px;right:12px;z-index:3;display:flex;flex-direction:column;gap:8px;align-items:center}
+  .dl-btn{width:26px;height:26px;border-radius:50%;border:0;cursor:pointer;flex:none;
+    background:rgba(42,21,81,.32);backdrop-filter:blur(2px);color:rgba(255,255,255,.8);font-size:11.5px;
+    display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.18)}
   .dl-btn:active{transform:scale(.92)}
 
-  /* coração suspenso: vidro escuro + contorno dourado/roxo brilhante (3D) */
+  /* coração suspenso: vidro escuro + contorno dourado/roxo (3D), sem brilho extra */
   .heart-btn{position:relative;border:2px solid transparent;
     background:
       linear-gradient(rgba(42,21,81,.55),rgba(42,21,81,.55)) padding-box,
       linear-gradient(135deg,var(--gold),var(--purple) 60%,#f3cb63) border-box;
     border-radius:18px;padding:7px 7px 5px;display:flex;flex-direction:column;align-items:center;gap:1px;
     cursor:pointer;backdrop-filter:blur(3px);
-    box-shadow:0 0 12px rgba(233,185,73,.55), inset 0 1px 3px rgba(255,255,255,.25), inset 0 -2px 4px rgba(0,0,0,.3), 0 4px 14px rgba(60,31,110,.4);
+    box-shadow:inset 0 1px 3px rgba(255,255,255,.25), inset 0 -2px 4px rgba(0,0,0,.3), 0 4px 10px rgba(0,0,0,.25);
     animation:floaty 2.6s ease-in-out infinite}
   .heart-btn .heart{font-size:21px;line-height:1;display:inline-block;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}
   .heart-btn .heart.beat{animation:beat .6s cubic-bezier(.34,1.56,.64,1)}
   .heart-btn .heart-count{font-size:11px;font-weight:800;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4)}
-  .heart-btn::after{content:"";position:absolute;inset:-6px;border-radius:22px;pointer-events:none;
-    background:radial-gradient(circle,rgba(243,203,99,.65),transparent 70%);opacity:0}
-  .heart-btn.pulse::after{animation:ringpulse .6s ease-out}
-  @keyframes ringpulse{0%{opacity:.9;transform:scale(.7)}100%{opacity:0;transform:scale(1.7)}}
   @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
   @keyframes beat{0%{transform:scale(1) rotate(0)}20%{transform:scale(1.6) rotate(-16deg)}40%{transform:scale(.85) rotate(10deg)}60%{transform:scale(1.25) rotate(-6deg)}80%{transform:scale(.95) rotate(3deg)}100%{transform:scale(1) rotate(0)}}
   .heart-float{position:fixed;z-index:330;font-size:20px;pointer-events:none;transform:translate(-50%,-50%);
     animation:heartup .9s ease-out forwards}
   @keyframes heartup{0%{opacity:0;transform:translate(-50%,-50%) scale(.6)}25%{opacity:1}100%{opacity:0;transform:translate(-50%,-150%) scale(1.1)}}
   .lb-heart{position:fixed;bottom:24px;right:16px;z-index:5;animation:none}
-  .lb-dl{position:fixed;bottom:24px;right:64px;z-index:5}
+  .lb-dl{position:fixed;bottom:26px;right:58px;z-index:5}
 
   /* moldura fina, tipo fio brilhante */
   .card .carousel{background:linear-gradient(135deg,#2a1551,#3c1f6e);
@@ -360,6 +369,30 @@
   .fc-remove{position:absolute;right:8px;top:8px;border:0;background:rgba(214,69,61,.92);color:#fff;width:28px;height:28px;border-radius:50%;font-size:14px;cursor:pointer}
   .foto-card .people-input{margin-bottom:0}
   .foto-card .pessoas-chips{margin-top:8px}
+
+  /* botõezinhos discretos: ver foto grande / descrição */
+  .fc-tools{display:flex;gap:8px;margin-bottom:10px}
+  .fc-tool{border:1px solid var(--line);background:var(--paper-2);border-radius:9px;
+    padding:6px 11px;font-size:12.5px;color:var(--ink-soft);cursor:pointer;font-weight:600}
+  .fc-tool.has{color:var(--purple);border-color:var(--purple)}
+
+  /* visualizar foto em tamanho maior */
+  .img-preview-overlay{position:fixed;inset:0;z-index:250;background:rgba(28,16,48,.95);
+    display:flex;align-items:center;justify-content:center;padding:20px;animation:fadein .15s ease}
+  .img-preview-overlay img{max-width:100%;max-height:90vh;object-fit:contain;border-radius:10px}
+
+  /* recorte 9:16 (arrastar para posicionar) */
+  .crop-modal{position:fixed;inset:0;z-index:260;background:rgba(28,16,48,.92);
+    display:flex;align-items:center;justify-content:center;padding:20px;animation:fadein .15s ease}
+  .crop-card{background:var(--paper);border-radius:18px;padding:20px;max-width:340px;width:100%;text-align:center;box-shadow:var(--shadow)}
+  .crop-card h3{margin:0 0 6px}
+  .crop-tip{font-size:12.5px;color:var(--ink-soft);margin:0 0 4px}
+  .crop-frame{position:relative;width:200px;aspect-ratio:9/16;margin:14px auto;
+    overflow:hidden;border-radius:12px;border:2px solid var(--gold);background:#2a1551;touch-action:none}
+  .crop-img{position:absolute;top:0;left:0;max-width:none;cursor:grab;-webkit-user-drag:none;
+    -webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+  .crop-actions{display:flex;gap:10px;margin-top:14px}
+  .crop-actions .btn{flex:1}
   .form-head{text-align:center;margin-bottom:18px}
   .form-head h3{font-family:"Fraunces",serif;font-weight:600;font-size:22px;color:var(--ink)}
   .form-sub{font-size:13px;color:var(--ink-soft);margin-top:3px}
@@ -440,24 +473,82 @@ function lsGet(k){ try{ const v=localStorage.getItem(k); return v==null?null:JSO
 function lsSet(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){ _mem[k]=v; } }
 function visitante(){ return lsGet("qn_visitante"); }
 
+/* ---- IndexedDB: guarda rascunhos do admin (fotos em base64 são pesadas p/ localStorage) ---- */
+const IDB_NOME="eurotrip_db", IDB_LOJA="kv";
+function idbAbrir(){
+  return new Promise((res,rej)=>{
+    try{
+      const req=indexedDB.open(IDB_NOME,1);
+      req.onupgradeneeded=()=>{ try{ req.result.createObjectStore(IDB_LOJA); }catch(e){} };
+      req.onsuccess=()=>res(req.result);
+      req.onerror=()=>rej(req.error);
+    }catch(e){ rej(e); }
+  });
+}
+async function idbGet(k){
+  try{
+    const db=await idbAbrir();
+    return await new Promise((res,rej)=>{
+      const rq=db.transaction(IDB_LOJA,"readonly").objectStore(IDB_LOJA).get(k);
+      rq.onsuccess=()=>res(rq.result===undefined?null:rq.result);
+      rq.onerror=()=>rej(rq.error);
+    });
+  }catch(e){ return (k in _mem)?_mem[k]:null; }
+}
+async function idbSet(k,v){
+  try{
+    const db=await idbAbrir();
+    return await new Promise((res,rej)=>{
+      const tx=db.transaction(IDB_LOJA,"readwrite");
+      tx.objectStore(IDB_LOJA).put(v,k);
+      tx.oncomplete=()=>res(true);
+      tx.onerror=()=>rej(tx.error);
+    });
+  }catch(e){ _mem[k]=v; return false; }
+}
+async function idbDel(k){
+  try{
+    const db=await idbAbrir();
+    return await new Promise((res,rej)=>{
+      const tx=db.transaction(IDB_LOJA,"readwrite");
+      tx.objectStore(IDB_LOJA).delete(k);
+      tx.oncomplete=()=>res(true);
+      tx.onerror=()=>rej(tx.error);
+    });
+  }catch(e){ delete _mem[k]; return false; }
+}
+/* avisinho discreto "Rascunho salvo ✓" */
+let _toastTimer=null;
+function mostrarSalvo(texto){
+  let t=document.getElementById("autosaveToast");
+  if(!t){ t=document.createElement("div"); t.id="autosaveToast"; t.className="autosave-toast"; document.body.appendChild(t); }
+  t.textContent=texto||"Rascunho salvo ✓";
+  t.classList.remove("show"); void t.offsetWidth; t.classList.add("show");
+  clearTimeout(_toastTimer);
+  _toastTimer=setTimeout(()=>t.classList.remove("show"),1400);
+}
+
 /* reduz a foto e ACEITA SÓ 9:16 (retrato). Rejeita com aviso se não for. */
+/* reduz a foto. Se já for 9:16, otimiza e devolve. Se não for, devolve os dados
+   (reduzidos) para o recorte manual em abrirRecorte(). */
 function otimizarImagem(file, maxLado=1700, q=0.9){
   return new Promise((resolve,reject)=>{
     const rd=new FileReader();
     rd.onload=()=>{
       const img=new Image();
       img.onload=()=>{
-        const ratio = img.width/img.height; // 9:16 = 0.5625
-        if(ratio < 0.50 || ratio > 0.66){ reject({code:"ratio"}); return; }
         let {width:w,height:h}=img;
         if(Math.max(w,h)>maxLado){
           if(w>=h){ h=Math.round(h*maxLado/w); w=maxLado; }
           else    { w=Math.round(w*maxLado/h); h=maxLado; }
         }
+        const ratio = w/h; // 9:16 = 0.5625
         try{
           const c=document.createElement("canvas"); c.width=w; c.height=h;
           c.getContext("2d").drawImage(img,0,0,w,h);
-          resolve(c.toDataURL("image/jpeg", q));
+          const src=c.toDataURL("image/jpeg", q);
+          if(ratio < 0.50 || ratio > 0.66){ reject({code:"ratio", src, width:w, height:h}); return; }
+          resolve(src);
         }catch(err){ resolve(rd.result); }
       };
       img.onerror=()=>resolve(rd.result);
@@ -505,7 +596,6 @@ function incCoracao(id, x, y){
   document.querySelectorAll('.heart-btn[data-post="'+id+'"]').forEach(btn=>{
     const c=btn.querySelector(".heart-count"); if(c) c.textContent=hearts[id];
     const h=btn.querySelector(".heart"); if(h){ h.classList.remove("beat"); void h.offsetWidth; h.classList.add("beat"); }
-    btn.classList.remove("pulse"); void btn.offsetWidth; btn.classList.add("pulse");
   });
   if(x!=null) festejar(x,y);
   return hearts[id];
@@ -519,7 +609,7 @@ function ligarInteracoes(){
     const track=c.querySelector(".track");
     const indice=()=>Math.round(track.scrollLeft/Math.max(1,track.clientWidth));
     let sx=0, sy=0, moved=false, holdT=null, fastI=null, didHold=false, px=0, py=0;
-    const guarded=(e)=> e.target.closest(".heart-btn") || e.target.closest(".ov-link") || e.target.closest(".dl-btn");
+    const guarded=(e)=> e.target.closest(".heart-btn") || e.target.closest(".ov-link") || e.target.closest(".dl-btn") || e.target.closest(".info-btn") || e.target.closest(".desc-bubble");
     const start=(x,y)=>{ moved=false; didHold=false; px=x; py=y;
       holdT=setTimeout(()=>{ didHold=true; incCoracao(id,px,py); fastI=setInterval(()=>incCoracao(id,px,py),150); }, 320); };
     const cancel=()=>{ clearTimeout(holdT); clearInterval(fastI); holdT=fastI=null; };
@@ -554,6 +644,7 @@ function abrirLightbox(post, startIndex){
     <div class="lb-track">${fotos.map(f=>`
       <div class="lb-slide">
         <img src="${f.src}" alt="" draggable="false">
+        ${f.descricao?`<button class="info-btn" data-desc="${esc(f.descricao)}" aria-label="Ver descrição" title="Ver descrição">ℹ️</button>`:""}
         <div class="lb-ovs">
           ${f.local?`<a class="ov ov-link" href="${mapsURL(f.local,post.cidade,post.pais)}" target="_blank" rel="noopener">📍 ${esc(f.local)}</a>`:""}
           ${(f.pessoas&&f.pessoas.length)?`<span class="ov">🏷️ ${f.pessoas.map(esc).join(" · ")}</span>`:""}
@@ -563,6 +654,7 @@ function abrirLightbox(post, startIndex){
   document.body.appendChild(lb);
   document.body.style.overflow="hidden";
   ativarCoracao(lb.querySelector(".lb-heart"));
+  ligarDescricoes(lb);
   const track=lb.querySelector(".lb-track");
   const dots=lb.querySelectorAll(".lb-dots span");
   requestAnimationFrame(()=>{ track.scrollLeft=(startIndex||0)*track.clientWidth; });
@@ -584,7 +676,7 @@ function abrirLightbox(post, startIndex){
   // tocar na foto grande conta +1; segurar sobe rápido; arrastar navega
   const pid=post.id;
   let sx=0, sy=0, moved=false, holdT=null, fastI=null, didHold=false, px=0, py=0;
-  const guarded=(e)=> e.target.closest(".heart-btn")||e.target.closest(".lb-close")||e.target.closest(".ov-link")||e.target.closest(".dl-btn");
+  const guarded=(e)=> e.target.closest(".heart-btn")||e.target.closest(".lb-close")||e.target.closest(".ov-link")||e.target.closest(".dl-btn")||e.target.closest(".info-btn")||e.target.closest(".desc-bubble");
   const start=(x,y)=>{ moved=false; didHold=false; px=x; py=y;
     holdT=setTimeout(()=>{ didHold=true; incCoracao(pid,px,py); fastI=setInterval(()=>incCoracao(pid,px,py),150); },320); };
   const cancel=()=>{ clearTimeout(holdT); clearInterval(fastI); holdT=fastI=null; };
@@ -660,7 +752,10 @@ function datalistHTML(id,campo){
   return `<datalist id="${id}">${valoresUnicos(campo).map(v=>`<option value="${esc(v)}">`).join("")}</datalist>`;
 }
 function ordenados(){
-  return posts.slice().sort((a,b)=> (a.data<b.data?1:-1));
+  return posts.slice().sort((a,b)=>{
+    const da=a.data||"", db=b.data||"";
+    if(da<db) return -1; if(da>db) return 1; return 0;
+  });
 }
 function filtrados(){
   const o = ordenados();
@@ -748,6 +843,87 @@ function baixarFoto(src, nome){
   }catch(e){ window.open(src,"_blank"); }
 }
 
+/* ver foto em tamanho maior (admin) */
+function mostrarImagemGrande(src){
+  const ov=document.createElement("div"); ov.className="img-preview-overlay";
+  ov.innerHTML=`<button class="lb-close" aria-label="Fechar">✕</button><img src="${src}" alt="">`;
+  const fechar=()=>ov.remove();
+  ov.querySelector(".lb-close").onclick=fechar;
+  ov.addEventListener("click",e=>{ if(e.target===ov) fechar(); });
+  document.body.appendChild(ov);
+}
+
+/* recorte 9:16: arraste a foto dentro da moldura e confirme */
+function abrirRecorte(item, onDone){
+  const modal=document.createElement("div"); modal.className="crop-modal";
+  modal.innerHTML=`
+    <div class="crop-card">
+      <h3>📐 Ajustar para 9:16</h3>
+      <p class="crop-tip">Essa foto não está no formato vertical 9:16. Arraste para posicionar dentro da moldura.</p>
+      <div class="crop-frame"><img class="crop-img" src="${item.src}" alt="" draggable="false"></div>
+      <div class="crop-actions">
+        <button type="button" class="btn ghost" id="cropPular">Pular esta foto</button>
+        <button type="button" class="btn primary" id="cropOk">Usar recorte</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+  const frame=modal.querySelector(".crop-frame");
+  const img=modal.querySelector(".crop-img");
+  let scale=1, left=0, top=0, fw=0, fh=0;
+  const clamp=()=>{
+    const dw=item.width*scale, dh=item.height*scale;
+    left=Math.min(0,Math.max(fw-dw, left));
+    top=Math.min(0,Math.max(fh-dh, top));
+  };
+  const aplicar=()=>{ clamp(); img.style.transform=`translate(${left}px,${top}px)`; };
+  const setup=()=>{
+    fw=frame.clientWidth; fh=frame.clientHeight;
+    scale=Math.max(fw/item.width, fh/item.height);
+    img.style.width=(item.width*scale)+"px";
+    img.style.height=(item.height*scale)+"px";
+    left=(fw-item.width*scale)/2; top=(fh-item.height*scale)/2;
+    aplicar();
+  };
+  if(img.complete) setup(); else img.onload=setup;
+
+  let arrastando=false, sx=0, sy=0, ol=0, ot=0;
+  const onDown=(x,y)=>{ arrastando=true; sx=x; sy=y; ol=left; ot=top; };
+  const onMove=(x,y)=>{ if(!arrastando) return; left=ol+(x-sx); top=ot+(y-sy); aplicar(); };
+  const onUp=()=>{ arrastando=false; };
+  const mDown=e=>onDown(e.clientX,e.clientY);
+  const mMove=e=>onMove(e.clientX,e.clientY);
+  const mUp=()=>onUp();
+  const tStart=e=>{ const t=e.touches[0]; onDown(t.clientX,t.clientY); };
+  const tMove=e=>{ const t=e.touches[0]; onMove(t.clientX,t.clientY); };
+  frame.addEventListener("mousedown",mDown);
+  window.addEventListener("mousemove",mMove);
+  window.addEventListener("mouseup",mUp);
+  frame.addEventListener("touchstart",tStart,{passive:true});
+  frame.addEventListener("touchmove",tMove,{passive:true});
+  frame.addEventListener("touchend",onUp);
+
+  const limpar=()=>{
+    window.removeEventListener("mousemove",mMove);
+    window.removeEventListener("mouseup",mUp);
+    modal.remove();
+  };
+  modal.querySelector("#cropPular").onclick=()=>{ limpar(); onDone(null); };
+  modal.querySelector("#cropOk").onclick=()=>{
+    const cropXnat = -left/scale, cropYnat = -top/scale;
+    const cropWnat = fw/scale, cropHnat = fh/scale;
+    const outW=Math.round(Math.min(cropWnat,1080));
+    const outH=Math.round(outW*(16/9));
+    const c=document.createElement("canvas"); c.width=outW; c.height=outH;
+    const tmp=new Image();
+    tmp.onload=()=>{
+      c.getContext("2d").drawImage(tmp, cropXnat, cropYnat, cropWnat, cropHnat, 0, 0, outW, outH);
+      const out=c.toDataURL("image/jpeg",0.9);
+      limpar(); onDone(out);
+    };
+    tmp.src=item.src;
+  };
+}
+
 function htmlFeed(lista){
   if(!lista.length) return htmlVazio();
   const hearts = lsGet("qn_hearts")||{};
@@ -756,19 +932,18 @@ function htmlFeed(lista){
     const slides=fotos.map(f=>`
       <div class="slide">
         <img src="${f.src}" loading="lazy" alt="" draggable="false">
+        ${f.descricao?`<button class="info-btn" data-desc="${esc(f.descricao)}" aria-label="Ver descrição" title="Ver descrição">ℹ️</button>`:""}
         <div class="ovs">
           ${f.local?`<a class="ov ov-link" href="${mapsURL(f.local,p.cidade,p.pais)}" target="_blank" rel="noopener" title="Abrir no Google Maps">📍 ${esc(f.local)}</a>`:""}
           ${(f.pessoas&&f.pessoas.length)?`<span class="ov">🏷️ ${f.pessoas.map(esc).join(" · ")}</span>`:""}
         </div>
       </div>`).join("");
     const dots=fotos.length>1?`<div class="dots-bar">${fotos.map((_,i)=>`<span class="${i===0?'on':''}"></span>`).join("")}</div>`:"";
-    const count=fotos.length>1?`<div class="count">1/${fotos.length}</div>`:"";
     return `
     <article class="card">
       <div class="carousel" data-react="${p.id}">
         <div class="track">${slides}</div>
         <div class="stamp"><span class="flag-em">${PAISES[p.pais]?.flag||""}</span><br>${p.cidade||p.pais}</div>
-        ${count}
         <div class="actions-col">
           <button class="dl-btn" data-post="${p.id}" aria-label="Baixar foto" title="Baixar foto">⬇️</button>
           <button class="heart-btn" data-post="${p.id}" aria-label="Curtir">
@@ -815,6 +990,7 @@ function renderPublico(){
     ligarCarrosseis();   // deslize lateral + bolinhas
     ligarCoracoes();     // coração com contador
     ligarDownloads();    // baixar a foto atual
+    ligarDescricoes();   // botãozinho de descrição
   }
 }
 
@@ -824,13 +1000,11 @@ function ligarCarrosseis(){
     const track=c.querySelector(".track");
     const art=c.closest(".card");
     const dots=art?art.querySelectorAll(".dots-bar span"):[];
-    const count=c.querySelector(".count");
     const total=track.children.length;
     if(total<=1) return;
     track.addEventListener("scroll",()=>{
       const i=Math.round(track.scrollLeft/Math.max(1,track.clientWidth));
       dots.forEach((d,k)=>d.classList.toggle("on",k===i));
-      if(count) count.textContent=(i+1)+"/"+total;
     },{passive:true});
   });
 }
@@ -852,6 +1026,24 @@ function ativarCoracao(btn){
   btn.addEventListener("touchcancel",release);
 }
 function ligarCoracoes(){ app.querySelectorAll(".heart-btn").forEach(ativarCoracao); }
+/* botãozinho discreto ℹ️: mostra/esconde a descrição da foto */
+function ligarDescricoes(raiz){
+  (raiz||app).querySelectorAll(".info-btn").forEach(btn=>{
+    btn.addEventListener("click",e=>{
+      e.preventDefault(); e.stopPropagation();
+      const slide=btn.closest(".slide")||btn.closest(".lb-slide");
+      const aberto=slide.querySelector(".desc-bubble");
+      if(aberto){ aberto.remove(); return; }
+      slide.querySelectorAll(".desc-bubble").forEach(b=>b.remove());
+      const bubble=document.createElement("div");
+      bubble.className="desc-bubble";
+      bubble.textContent=btn.dataset.desc||"";
+      slide.appendChild(bubble);
+      const fechaFora=(ev)=>{ if(!bubble.contains(ev.target)&&ev.target!==btn){ bubble.remove(); document.removeEventListener("click",fechaFora,true); } };
+      setTimeout(()=>document.addEventListener("click",fechaFora,true),0);
+    });
+  });
+}
 /* botão de download: baixa a foto que está sendo exibida no momento */
 function ligarDownloads(){
   app.querySelectorAll(".dl-btn[data-post]").forEach(btn=>{
@@ -878,11 +1070,19 @@ function soltarCoracao(btn){
 
 /* ===================== ADMIN ===================== */
 let editandoId = null;
-function salvarRascunho(){ lsSet("qn_posts_admin", posts); }
+async function salvarRascunho(){
+  await idbSet("qn_posts_admin", posts);
+  mostrarSalvo("Momentos salvos ✓");
+}
 
-function renderAdmin(){
+async function renderAdmin(){
   // retoma o que já foi feito antes (salvo no navegador deste aparelho)
-  const rascunho = lsGet("qn_posts_admin");
+  let rascunho = await idbGet("qn_posts_admin");
+  if(!Array.isArray(rascunho) || !rascunho.length){
+    // migra de uma versão antiga que usava localStorage
+    const antigo = lsGet("qn_posts_admin");
+    if(Array.isArray(antigo) && antigo.length){ rascunho = antigo; idbSet("qn_posts_admin", antigo); }
+  }
   if(Array.isArray(rascunho) && rascunho.length) posts = normalizarLista(rascunho);
 
   app.innerHTML = `
@@ -955,8 +1155,9 @@ function renderAdmin(){
   }
   refreshSugestoes();
 
-  // ---- gerenciador de VÁRIAS fotos (cada uma com seu local e pessoas) ----
-  let fotosAtual = []; // { src, local, pessoas:[] }
+  // ---- gerenciador de VÁRIAS fotos (cada uma com seu local, pessoas e descrição) ----
+  let fotosAtual = []; // { src, local, pessoas:[], descricao }
+  let descAbertas = new Set(); // índices com o campo de descrição aberto
   const cont = $("#fotosCont");
   function pintarFotos(){
     cont.innerHTML = fotosAtual.map((f,i)=>`
@@ -966,6 +1167,15 @@ function renderAdmin(){
           <span class="fc-num">Foto ${i+1}</span>
           <button type="button" class="fc-remove" data-rmfoto="${i}" title="Remover foto">✕</button>
         </div>
+        <div class="fc-tools">
+          <button type="button" class="fc-tool" data-ver="${i}" title="Ver foto em tamanho maior">🔍 Ver foto</button>
+          <button type="button" class="fc-tool ${f.descricao?'has':''}" data-desc="${i}" title="Descrição da foto">📝 Descrição</button>
+        </div>
+        ${descAbertas.has(i)?`
+        <div class="field">
+          <label>📝 Descrição da foto (opcional)</label>
+          <textarea class="fc-descricao" data-i="${i}" placeholder="Um detalhe, uma curiosidade sobre esta foto…">${esc(f.descricao||'')}</textarea>
+        </div>`:""}
         <div class="field">
           <label>📍 Local</label>
           <input type="text" class="fc-local" data-i="${i}" list="dlLocais" placeholder="Ex.: Grand-Place" value="${esc(f.local||'')}" autocomplete="off">
@@ -980,32 +1190,91 @@ function renderAdmin(){
         </div>
       </div>`).join("");
 
-    cont.querySelectorAll(".fc-local").forEach(inp=>inp.oninput=()=>{ fotosAtual[+inp.dataset.i].local=inp.value; });
+    cont.querySelectorAll(".fc-local").forEach(inp=>inp.oninput=()=>{ fotosAtual[+inp.dataset.i].local=inp.value; agendarSalvarFormDraft(); });
+    cont.querySelectorAll(".fc-descricao").forEach(t=>t.oninput=()=>{ fotosAtual[+t.dataset.i].descricao=t.value; agendarSalvarFormDraft(); });
     cont.querySelectorAll(".fc-add").forEach(btn=>btn.onclick=()=>addPessoaFoto(+btn.dataset.i));
     cont.querySelectorAll(".fc-pessoa").forEach(inp=>inp.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); addPessoaFoto(+inp.dataset.i); } });
-    cont.querySelectorAll("[data-rmp]").forEach(b=>b.onclick=()=>{ const [i,j]=b.dataset.rmp.split(":").map(Number); fotosAtual[i].pessoas.splice(j,1); pintarFotos(); });
-    cont.querySelectorAll("[data-rmfoto]").forEach(b=>b.onclick=()=>{ fotosAtual.splice(+b.dataset.rmfoto,1); pintarFotos(); });
+    cont.querySelectorAll("[data-rmp]").forEach(b=>b.onclick=()=>{ const [i,j]=b.dataset.rmp.split(":").map(Number); fotosAtual[i].pessoas.splice(j,1); pintarFotos(); agendarSalvarFormDraft(); });
+    cont.querySelectorAll("[data-rmfoto]").forEach(b=>b.onclick=()=>{ const i=+b.dataset.rmfoto; fotosAtual.splice(i,1); descAbertas.delete(i); descAbertas=new Set([...descAbertas].map(k=>k>i?k-1:k)); pintarFotos(); agendarSalvarFormDraft(); });
+    cont.querySelectorAll("[data-ver]").forEach(b=>b.onclick=()=>mostrarImagemGrande(fotosAtual[+b.dataset.ver].src));
+    cont.querySelectorAll("[data-desc]").forEach(b=>b.onclick=()=>{
+      const i=+b.dataset.desc;
+      if(descAbertas.has(i)) descAbertas.delete(i); else descAbertas.add(i);
+      pintarFotos();
+    });
   }
   function addPessoaFoto(i){
     const inp = cont.querySelector(`.fc-pessoa[data-i="${i}"]`);
     const nome = (inp.value||"").trim(); if(!nome) return;
     if(!fotosAtual[i].pessoas) fotosAtual[i].pessoas=[];
     if(!fotosAtual[i].pessoas.some(x=>x.toLowerCase()===nome.toLowerCase())) fotosAtual[i].pessoas.push(nome);
-    pintarFotos();
+    pintarFotos(); agendarSalvarFormDraft();
   }
   $("#addFotos").onclick = ()=> $("#fFotos").click();
   $("#fFotos").onchange = e=>{
     const files=[...e.target.files]; let pend=files.length; if(!pend) return;
-    let recusadas=0;
-    const fim=()=>{ if(--pend===0){ pintarFotos(); if(recusadas) alert(recusadas+" foto(s) ignorada(s): use apenas fotos no formato 9:16 (vertical / retrato)."); } };
+    const filaRecorte=[];
+    const fim=()=>{ if(--pend===0){ pintarFotos(); agendarSalvarFormDraft(); processarFilaRecorte(filaRecorte); } };
     files.forEach(file=>{
       otimizarImagem(file).then(src=>{
-        fotosAtual.push({src, local:"", pessoas:[]}); fim();
-      }).catch(err=>{ if(err&&err.code==="ratio") recusadas++; fim(); });
+        fotosAtual.push({src, local:"", pessoas:[], descricao:""}); fim();
+      }).catch(err=>{ if(err&&err.code==="ratio") filaRecorte.push(err); fim(); });
     });
     e.target.value="";
   };
+  function processarFilaRecorte(fila){
+    if(!fila.length) return;
+    const item=fila.shift();
+    abrirRecorte(item, resultado=>{
+      if(resultado){ fotosAtual.push({src:resultado, local:"", pessoas:[], descricao:""}); pintarFotos(); agendarSalvarFormDraft(); }
+      processarFilaRecorte(fila);
+    });
+  }
   pintarFotos();
+
+  // ---- autosave do que está sendo digitado (sobrevive a recarregar a página) ----
+  let _draftTimer=null;
+  function agendarSalvarFormDraft(){
+    clearTimeout(_draftTimer);
+    _draftTimer=setTimeout(salvarFormDraft,500);
+  }
+  async function salvarFormDraft(){
+    await idbSet("qn_form_draft", {
+      editandoId,
+      pais:$("#fPais").value, cidade:$("#fCidade").value,
+      data:$("#fData").value, dataFim:$("#fDataFim").value,
+      legenda:$("#fLegenda").value, fotos:fotosAtual
+    });
+    mostrarSalvo("Rascunho salvo ✓");
+  }
+  async function limparFormDraft(){ await idbDel("qn_form_draft"); }
+
+  ["fPais","fCidade","fData","fDataFim","fLegenda"].forEach(id=>{
+    const el=$("#"+id);
+    el.addEventListener("input",agendarSalvarFormDraft);
+    el.addEventListener("change",agendarSalvarFormDraft);
+  });
+
+  // recupera o que estava sendo digitado, caso a página tenha sido atualizada
+  idbGet("qn_form_draft").then(draft=>{
+    if(!draft) return;
+    const temConteudo = (draft.fotos&&draft.fotos.length) || draft.cidade || draft.legenda || draft.data || draft.dataFim || draft.editandoId;
+    if(!temConteudo) return;
+    editandoId = draft.editandoId||null;
+    fotosAtual = draft.fotos||[];
+    if(draft.pais) $("#fPais").value=draft.pais;
+    $("#fCidade").value=draft.cidade||"";
+    $("#fData").value=draft.data||"";
+    $("#fDataFim").value=draft.dataFim||"";
+    $("#fLegenda").value=draft.legenda||"";
+    if(editandoId){
+      $("#formTitulo").textContent="Editar momento";
+      $("#salvar").textContent="Salvar alterações";
+      $("#cancelar").style.display="block";
+    }
+    pintarFotos();
+    mostrarSalvo("Rascunho recuperado ✓");
+  });
 
   // lista de posts existentes
   function pintarLista(){
@@ -1027,20 +1296,22 @@ function renderAdmin(){
     });
     $("#lista").querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>{
       const p = posts.find(x=>x.id===b.dataset.edit); if(!p) return;
-      editandoId = p.id;
-      fotosAtual = (p.fotos||[]).map(f=>({src:f.src, local:f.local||"", pessoas:(f.pessoas||[]).slice()})); pintarFotos();
+      editandoId = p.id; descAbertas=new Set();
+      fotosAtual = (p.fotos||[]).map(f=>({src:f.src, local:f.local||"", pessoas:(f.pessoas||[]).slice(), descricao:f.descricao||""})); pintarFotos();
       $("#fPais").value=p.pais; $("#fCidade").value=p.cidade||"";
       $("#fData").value=p.data||""; $("#fDataFim").value=p.dataFim||""; $("#fLegenda").value=p.legenda||"";
       $("#formTitulo").textContent="Editar momento";
       $("#salvar").textContent="Salvar alterações";
       $("#cancelar").style.display="block";
+      agendarSalvarFormDraft();
       window.scrollTo({top:0,behavior:"smooth"});
     });
   }
   pintarLista();
 
   function limparForm(){
-    editandoId=null; fotosAtual=[]; pintarFotos();
+    clearTimeout(_draftTimer);
+    editandoId=null; fotosAtual=[]; descAbertas=new Set(); pintarFotos();
     ["fCidade","fLegenda"].forEach(id=>$("#"+id).value="");
     $("#fData").value=""; $("#fDataFim").value="";
     $("#formTitulo").textContent="✨ Novo momento";
@@ -1062,7 +1333,7 @@ function renderAdmin(){
       data:$("#fData").value,
       dataFim:$("#fDataFim").value,
       legenda:$("#fLegenda").value.trim(),
-      fotos: fotosAtual.map(f=>({src:f.src, local:(f.local||"").trim(), pessoas:(f.pessoas||[]).slice()}))
+      fotos: fotosAtual.map(f=>({src:f.src, local:(f.local||"").trim(), pessoas:(f.pessoas||[]).slice(), descricao:(f.descricao||"").trim()}))
     };
     if(editandoId){
       const i=posts.findIndex(x=>x.id===editandoId);
@@ -1070,9 +1341,10 @@ function renderAdmin(){
     }else{
       posts.push({id:"p"+Date.now(),...dados});
     }
+    limparFormDraft();
     limparForm(); pintarLista(); refreshSugestoes(); salvarRascunho();
   };
-  $("#cancelar").onclick = limparForm;
+  $("#cancelar").onclick = ()=>{ limparFormDraft(); limparForm(); };
 
   // ---- engrenagem suspensa (abre/fecha o menu de opções) ----
   const gearMenu=$("#gearMenu");
