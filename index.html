@@ -126,8 +126,20 @@
   .empty .big{font-size:34px;margin-bottom:10px}
 
   /* ---------- ADMIN ---------- */
-  .admin-bar{background:var(--ink);color:#fff;padding:10px 16px;font-size:13px;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
-  .admin-bar b{font-weight:600}
+  /* botão flutuante de opções (engrenagem) */
+  .gear-wrap{position:fixed;top:16px;right:16px;z-index:60}
+  .gear-btn{width:46px;height:46px;border-radius:50%;border:0;cursor:pointer;
+    background:linear-gradient(135deg,#6a2fb0,#9a4fd0);color:#fff;font-size:20px;
+    display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);
+    transition:transform .2s ease}
+  .gear-btn:active{transform:scale(.94)}
+  .gear-menu{position:absolute;top:54px;right:0;min-width:190px;background:var(--paper);
+    border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);
+    padding:6px;display:flex;flex-direction:column;gap:2px;animation:fadein .15s ease}
+  .gear-menu button{width:100%;text-align:left;background:none;border:0;border-radius:9px;
+    padding:11px 14px;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;
+    font-family:inherit;transition:background .15s ease}
+  .gear-menu button:active,.gear-menu button:hover{background:var(--paper-2)}
   .btn{border:0;border-radius:9px;padding:9px 14px;font-size:13px;font-weight:600}
   .btn.primary{background:linear-gradient(135deg,#f3cb63,#e9b949 60%,#d8a52f);color:var(--purple-deep);
     box-shadow:0 4px 14px rgba(233,185,73,.4)}
@@ -232,7 +244,7 @@
   .lb-track{flex:1;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
   .lb-track::-webkit-scrollbar{display:none}
   .lb-slide{flex:0 0 100%;scroll-snap-align:center;display:flex;align-items:center;justify-content:center;position:relative;padding:16px}
-  .lb-slide img{max-width:100%;max-height:78vh;object-fit:contain;border-radius:10px}
+  .lb-slide img{max-width:100%;max-height:78vh;object-fit:contain;border-radius:10px;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;pointer-events:none}
   .lb-ovs{position:absolute;left:16px;bottom:26px;display:flex;flex-direction:column;gap:6px;align-items:flex-start;max-width:54%;z-index:4}
   .lb-dots{position:absolute;top:20px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:4}
   .lb-dots span{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.5);transition:.2s}
@@ -276,7 +288,7 @@
   .track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;height:100%}
   .track::-webkit-scrollbar{display:none}
   .slide{flex:0 0 100%;scroll-snap-align:center;position:relative;height:100%}
-  .slide img{width:100%;height:100%;object-fit:cover;display:block}
+  .slide img{width:100%;height:100%;object-fit:cover;display:block;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;pointer-events:none}
   .ovs{position:absolute;left:10px;bottom:10px;display:flex;flex-direction:column;gap:6px;align-items:flex-start;max-width:84%;z-index:2}
   .ov{font-size:12px;color:#fff;background:rgba(60,31,110,.66);padding:6px 12px;border-radius:999px;backdrop-filter:blur(3px);text-decoration:none}
   a.ov-link{border:1px solid rgba(255,255,255,.35)}
@@ -514,7 +526,7 @@ function abrirLightbox(post, startIndex){
     </button>
     <div class="lb-track">${fotos.map(f=>`
       <div class="lb-slide">
-        <img src="${f.src}" alt="">
+        <img src="${f.src}" alt="" draggable="false">
         <div class="lb-ovs">
           ${f.local?`<a class="ov ov-link" href="${mapsURL(f.local,post.cidade,post.pais)}" target="_blank" rel="noopener">📍 ${esc(f.local)}</a>`:""}
           ${(f.pessoas&&f.pessoas.length)?`<span class="ov">🏷️ ${f.pessoas.map(esc).join(" · ")}</span>`:""}
@@ -696,7 +708,7 @@ function htmlFeed(lista){
     const fotos=p.fotos||[];
     const slides=fotos.map(f=>`
       <div class="slide">
-        <img src="${f.src}" loading="lazy" alt="">
+        <img src="${f.src}" loading="lazy" alt="" draggable="false">
         <div class="ovs">
           ${f.local?`<a class="ov ov-link" href="${mapsURL(f.local,p.cidade,p.pais)}" target="_blank" rel="noopener" title="Abrir no Google Maps">📍 ${esc(f.local)}</a>`:""}
           ${(f.pessoas&&f.pessoas.length)?`<span class="ov">🏷️ ${f.pessoas.map(esc).join(" · ")}</span>`:""}
@@ -1091,7 +1103,7 @@ function renderBoasVindas(){
         <h2 class="w-title"><span class="plane">✈️</span><span class="shine">Eurotrip</span></h2>
         <p class="w-sub">A viagem da <b>Família Queiroz Nascimento</b> por França, Bélgica e Holanda.</p>
         <p class="w-ask">Antes de entrar, como podemos te chamar?</p>
-        <input type="text" id="nomeVisitante" placeholder="Seu nome" autocomplete="off" autofocus>
+        <input type="text" id="nomeVisitante" placeholder="Seu nome" autocomplete="off" value="${esc(visitante()||'')}" autofocus>
         <button class="btn primary block" id="entrarVisitante">Entrar ✨</button>
         <p class="w-tip">Toque numa foto para vê-la grande e use o coração 💛</p>
       </div>
@@ -1104,6 +1116,8 @@ function renderBoasVindas(){
   $("#entrarVisitante").onclick = entrar;
   $("#nomeVisitante").onkeydown = e=>{ if(e.key==="Enter") entrar(); };
   $("#wLock").onclick = ()=> renderLogin();
+  const campo=$("#nomeVisitante");
+  if(campo.value) campo.select();
 }
 
 /* ===================== INÍCIO ===================== */
@@ -1111,8 +1125,7 @@ function renderBoasVindas(){
   try{
     posts = normalizarLista(DADOS_EMBUTIDOS.length ? DADOS_EMBUTIDOS : EXEMPLOS); // 1) desenha JÁ
     if(ehAdmin) renderLogin();
-    else if(visitante()) renderPublico();  // já se identificou antes
-    else renderBoasVindas();               // primeira visita: pergunta o nome
+    else renderBoasVindas();               // sempre pergunta "quem é você" primeiro
     carregarEmSegundoPlano();              // 2) tenta os dados reais depois
   }catch(e){
     app.innerHTML = '<pre style="padding:24px;white-space:pre-wrap;color:#d6453d">'
