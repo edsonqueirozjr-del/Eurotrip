@@ -262,8 +262,8 @@
   /* palco com a mesma proporção 9:16 das fotos: tudo fica dentro dele */
   .lb-stage{position:relative;width:100%;max-width:calc((100vh - 32px) * 9 / 16);
     aspect-ratio:9/16;border-radius:14px;overflow:hidden;background:#2a1551}
-  .lb-close{position:absolute;top:10px;right:10px;z-index:6;width:38px;height:38px;border-radius:50%;border:0;
-    background:transparent;color:#fff;font-size:17px;cursor:pointer;
+  .lb-close{position:absolute;top:10px;right:10px;z-index:50;width:38px;height:38px;border-radius:50%;border:0;
+    background:rgba(0,0,0,.45);color:#fff;font-size:17px;line-height:1;cursor:pointer;
     display:flex;align-items:center;justify-content:center;
     filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))}
   .lb-track{position:absolute;inset:0;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
@@ -724,7 +724,7 @@ function abrirLightbox(post, startIndex){
   // tocar na foto grande conta +1; segurar sobe rápido; arrastar navega
   const pid=post.id;
   let sx=0, sy=0, moved=false, holdT=null, fastI=null, didHold=false, px=0, py=0;
-  const guarded=(e)=> e.target.closest(".heart-btn")||e.target.closest(".lb-close")||e.target.closest(".ov-link")||e.target.closest(".dl-btn")||e.target.closest(".desc-bubble");
+  const guarded=(e)=> e.target.closest(".heart-btn")||e.target.closest(".lb-close")||e.target.closest(".ov-link")||e.target.closest(".dl-btn")||e.target.closest(".desc-bubble")||e.target.closest(".stamp");
   const start=(x,y)=>{ moved=false; didHold=false; px=x; py=y;
     holdT=setTimeout(()=>{ didHold=true; incCoracao(pid,px,py); fastI=setInterval(()=>incCoracao(pid,px,py),150); },320); };
   const cancel=()=>{ clearTimeout(holdT); clearInterval(fastI); holdT=fastI=null; };
@@ -1046,6 +1046,7 @@ function estiloStamp(post){
 }
 /* deixa o selo arrastável dentro do contêiner (carrossel no feed ou lightbox no destaque) */
 function tornarStampArrastavel(stamp, post, container){
+  if(!stamp || !container) return;
   stamp.classList.add("draggable");
   let arrastando=false;
   const mover=(clientX,clientY)=>{
@@ -1059,15 +1060,23 @@ function tornarStampArrastavel(stamp, post, container){
     stamp.style.top=post.stampPos.y+"%";
     stamp.style.right="auto";
   };
-  const onDown=(e,x,y)=>{ e.preventDefault(); e.stopPropagation(); arrastando=true; };
-  const onMoveEv=(e,x,y)=>{ if(!arrastando) return; e.preventDefault(); mover(x,y); };
-  const onUp=()=>{ arrastando=false; };
-  stamp.addEventListener("mousedown",e=>onDown(e,e.clientX,e.clientY));
-  window.addEventListener("mousemove",e=>onMoveEv(e,e.clientX,e.clientY));
-  window.addEventListener("mouseup",onUp);
-  stamp.addEventListener("touchstart",e=>{ const t=e.touches[0]; onDown(e,t.clientX,t.clientY); },{passive:false});
-  stamp.addEventListener("touchmove",e=>{ const t=e.touches[0]; onMoveEv(e,t.clientX,t.clientY); },{passive:false});
-  stamp.addEventListener("touchend",onUp);
+  stamp.addEventListener("pointerdown",e=>{
+    e.preventDefault(); e.stopPropagation();
+    arrastando=true;
+    try{ stamp.setPointerCapture(e.pointerId); }catch(err){}
+  });
+  stamp.addEventListener("pointermove",e=>{
+    if(!arrastando) return;
+    e.preventDefault();
+    mover(e.clientX,e.clientY);
+  });
+  const soltar=(e)=>{
+    if(!arrastando) return;
+    arrastando=false;
+    try{ stamp.releasePointerCapture(e.pointerId); }catch(err){}
+  };
+  stamp.addEventListener("pointerup",soltar);
+  stamp.addEventListener("pointercancel",soltar);
 }
 
 function htmlFeed(lista){
