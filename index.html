@@ -104,11 +104,14 @@
   .filter-dots span.on{background:var(--purple);width:16px;border-radius:999px}
 
   /* ---------- SELETOR DE VISTA (canto separado) ---------- */
-  .view-row{display:flex;align-items:center;justify-content:flex-end;gap:9px;margin-top:16px}
+  .view-row{display:flex;align-items:center;justify-content:space-between;gap:9px;margin-top:16px;flex-wrap:wrap}
   .view-row .lbl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);font-weight:600}
   .view-toggle{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:#fff}
   .view-toggle button{border:0;background:transparent;padding:7px 13px;color:var(--ink-soft);font-size:13px}
   .view-toggle button[aria-pressed="true"]{background:var(--paper-2);color:var(--ink)}
+  .sort-toggle{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:#fff;margin-right:auto}
+  .sort-toggle button{border:0;background:transparent;padding:7px 13px;color:var(--ink-soft);font-size:13px}
+  .sort-toggle button[aria-pressed="true"]{background:var(--paper-2);color:var(--ink)}
 
   /* ---------- GRADE ---------- */
   .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:14px}
@@ -500,6 +503,7 @@ let filtroPaises = new Set();
 let filtroAutores = new Set();
 let filtroAtivo = "pais"; // "pais" | "autor"
 let modoVista = "grade"; // "grade" | "feed"
+let modoOrdem = "data"; // "data" | "recentes"
 
 const $ = (s,el=document)=>el.querySelector(s);
 const app = $("#app");
@@ -805,6 +809,9 @@ function datalistHTML(id,campo){
   return `<datalist id="${id}">${valoresUnicos(campo).map(v=>`<option value="${esc(v)}">`).join("")}</datalist>`;
 }
 function ordenados(){
+  if(modoOrdem==="recentes"){
+    return posts.slice().reverse();
+  }
   return posts.slice().sort((a,b)=>{
     const da=a.data||"", db=b.data||"";
     if(da<db) return -1; if(da>db) return 1; return 0;
@@ -868,6 +875,10 @@ function htmlFiltros(){
 function htmlVista(){
   return `
   <div class="view-row">
+    <div class="sort-toggle">
+      <button data-ordem="data" aria-pressed="${modoOrdem==="data"}" title="Ordenar por data">📅 Data</button>
+      <button data-ordem="recentes" aria-pressed="${modoOrdem==="recentes"}" title="Ordenar por adicionados recentemente">🆕 Recentes</button>
+    </div>
     <span class="lbl">Ver</span>
     <div class="view-toggle">
       <button data-vista="grade" aria-pressed="${modoVista==="grade"}">▦ Grade</button>
@@ -1184,6 +1195,7 @@ function renderPublico(){
     },{passive:true});
   }
   app.querySelectorAll(".view-toggle button").forEach(b=>b.onclick=()=>{modoVista=b.dataset.vista;renderPublico();});
+  app.querySelectorAll(".sort-toggle button").forEach(b=>b.onclick=()=>{modoOrdem=b.dataset.ordem;renderPublico();});
   // na grade, tocar abre o feed
   if(modoVista==="grade"){
     app.querySelectorAll(".grid figure").forEach(f=>f.onclick=()=>{modoVista="feed";renderPublico();});
@@ -1415,6 +1427,9 @@ async function renderAdmin(){
           <div class="admin-actions-row">
             <button class="btn outline" id="exportarMom">Exportar</button>
             <button class="btn outline" id="importar">Importar</button>
+          </div>
+          <div class="admin-actions-row" style="margin-top:6px">
+            <button class="btn outline" id="baixarModelo">Modelo (.json)</button>
           </div>
         </div>
         <div class="admin-actions-group">
@@ -1798,6 +1813,34 @@ let _configTimer=null;
     }catch(err){
       alert("Para baixar o site completo, abra pela URL publicada (GitHub Pages), não pelo arquivo local.");
     }
+  };
+
+  // ---- baixar modelo (template) em JSON para importar momentos ----
+  $("#baixarModelo").onclick = ()=>{
+    const modelo = [
+      {
+        id: "id-unico-do-momento",
+        pais: "França",
+        cidade: "Paris",
+        legenda: "Texto da legenda/descrição do momento. Aparece no card do feed.",
+        data: "2026-04-15",
+        dataFim: "",
+        instagram: "",
+        spotify: "",
+        stampPos: null,
+        fotos: [
+          {
+            src: "https://link-direto-da-foto.jpg",
+            local: "Torre Eiffel",
+            pessoas: ["Junior", "María"],
+            descricao: ""
+          }
+        ]
+      }
+    ];
+    const blob=new Blob([JSON.stringify(modelo,null,2)],{type:"application/json"});
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob); a.download="template-momentos.json"; a.click();
   };
 
   // ---- exportar SÓ os momentos (para enviar a outra pessoa) ----
