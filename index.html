@@ -1385,6 +1385,7 @@ async function renderAdmin(){
         <div class="fotos-cont" id="fotosCont"></div>
         <button type="button" class="btn add-fotos" id="addFotos">➕ Adicionar foto(s)</button>
         <input type="file" id="fFotos" accept="image/*" multiple hidden>
+        <input type="file" id="fFotoTrocar" accept="image/*" hidden>
 
         <div id="autorCont"></div>
 
@@ -1492,6 +1493,7 @@ async function renderAdmin(){
 
   // ---- gerenciador de VÁRIAS fotos (cada uma com seu local, pessoas e descrição) ----
   let fotosAtual = []; // { src, local, pessoas:[], descricao }
+  let trocarFotoIndex = null;
   let descAbertas = new Set(); // índices com o campo de descrição aberto
   const cont = $("#fotosCont");
   function pintarFotos(){
@@ -1507,6 +1509,7 @@ async function renderAdmin(){
         </div>
         <div class="fc-tools">
           <button type="button" class="fc-tool" data-ver="${i}" title="Ver foto em tamanho maior">🔍 Ver foto</button>
+          <button type="button" class="fc-tool" data-trocar="${i}" title="Trocar esta foto">🔄 Trocar foto</button>
           <button type="button" class="fc-tool ${f.descricao?'has':''}" data-desc="${i}" title="Descrição da foto">📝 Descrição</button>
           ${fotosAtual.length>1?`<button type="button" class="fc-tool ${ (capaIndex===i) ?'has':''}" data-capa="${i}" title="Definir como foto de capa">${capaIndex===i?'⭐':'☆'} Capa</button>`:""}
         </div>
@@ -1525,6 +1528,7 @@ async function renderAdmin(){
     cont.querySelectorAll(".fc-descricao").forEach(t=>t.oninput=()=>{ fotosAtual[+t.dataset.i].descricao=t.value; agendarSalvarFormDraft(); });
     cont.querySelectorAll("[data-rmfoto]").forEach(b=>b.onclick=()=>{ const i=+b.dataset.rmfoto; const eraCapa=fotosAtual[i].capa; fotosAtual.splice(i,1); if(eraCapa&&fotosAtual.length) fotosAtual[0].capa=true; descAbertas.delete(i); descAbertas=new Set([...descAbertas].map(k=>k>i?k-1:k)); pintarFotos(); agendarSalvarFormDraft(); });
     cont.querySelectorAll("[data-ver]").forEach(b=>b.onclick=()=>mostrarImagemGrande(fotosAtual[+b.dataset.ver].src));
+    cont.querySelectorAll("[data-trocar]").forEach(b=>b.onclick=()=>{ trocarFotoIndex=+b.dataset.trocar; $("#fFotoTrocar").click(); });
     cont.querySelectorAll("[data-desc]").forEach(b=>b.onclick=()=>{
       const i=+b.dataset.desc;
       if(descAbertas.has(i)) descAbertas.delete(i); else descAbertas.add(i);
@@ -1561,6 +1565,20 @@ async function renderAdmin(){
       }).catch(err=>{ if(err&&err.code==="ratio") filaRecorte.push(err); fim(); });
     });
     e.target.value="";
+  };
+  $("#fFotoTrocar").onchange = e=>{
+    const file = e.target.files[0]; e.target.value="";
+    if(!file || trocarFotoIndex===null) return;
+    const i = trocarFotoIndex; trocarFotoIndex = null;
+    otimizarImagem(file).then(src=>{
+      fotosAtual[i].src = src; pintarFotos(); agendarSalvarFormDraft();
+    }).catch(err=>{
+      if(err && err.code==="ratio"){
+        abrirRecorte(err, resultado=>{
+          if(resultado){ fotosAtual[i].src = resultado; pintarFotos(); agendarSalvarFormDraft(); }
+        });
+      }
+    });
   };
   function processarFilaRecorte(fila){
     if(!fila.length) return;
