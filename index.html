@@ -527,7 +527,7 @@ let filtroPaises = new Set();
 let filtroAutores = new Set();
 let filtroAtivo = "pais"; // "pais" | "autor"
 let modoVista = "grade"; // "grade" | "feed"
-let modoOrdem = "data"; // "data" | "recentes"
+let ordemDataAsc = true; // true = mais antigo -> mais novo
 
 const $ = (s,el=document)=>el.querySelector(s);
 const app = $("#app");
@@ -833,13 +833,11 @@ function datalistHTML(id,campo){
   return `<datalist id="${id}">${valoresUnicos(campo).map(v=>`<option value="${esc(v)}">`).join("")}</datalist>`;
 }
 function ordenados(){
-  if(modoOrdem==="recentes"){
-    return posts.slice().reverse();
-  }
-  return posts.slice().sort((a,b)=>{
+  const arr = posts.slice().sort((a,b)=>{
     const da=a.data||"", db=b.data||"";
     if(da<db) return -1; if(da>db) return 1; return 0;
   });
+  return ordemDataAsc ? arr : arr.reverse();
 }
 function filtrados(){
   let o = ordenados();
@@ -898,12 +896,12 @@ function htmlFiltros(){
 
 function htmlVista(){
   const icoCalendario=`<svg viewBox="0 0 16 16" aria-hidden="true" style="width:13px;height:13px;fill:currentColor;flex:none"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/></svg>`;
-  const icoNovo=`<svg viewBox="0 0 16 16" aria-hidden="true" style="width:13px;height:13px;fill:currentColor;flex:none"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 1a6 6 0 1 1 0 12A6 6 0 0 1 8 2zm.5 2.5a.5.5 0 0 0-1 0V8a.5.5 0 0 0 .146.354l2 2a.5.5 0 0 0 .708-.708L8.5 7.793V4.5z"/></svg>`;
+  const setaUp=`<svg viewBox="0 0 16 16" aria-hidden="true" style="width:11px;height:11px;fill:currentColor;flex:none"><path d="M8 3a.5.5 0 0 1 .354.146l4 4a.5.5 0 0 1-.708.708L8.5 4.707V13.5a.5.5 0 0 1-1 0V4.707L4.354 7.854a.5.5 0 1 1-.708-.708l4-4A.5.5 0 0 1 8 3z"/></svg>`;
+  const setaDown=`<svg viewBox="0 0 16 16" aria-hidden="true" style="width:11px;height:11px;fill:currentColor;flex:none"><path d="M8 13a.5.5 0 0 1-.354-.146l-4-4a.5.5 0 1 1 .708-.708L7.5 11.293V2.5a.5.5 0 0 1 1 0v8.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4A.5.5 0 0 1 8 13z"/></svg>`;
   return `
   <div class="view-row">
     <div class="sort-toggle">
-      <button data-ordem="data" aria-pressed="${modoOrdem==="data"}" title="Ordenar por data">${icoCalendario}Data</button>
-      <button data-ordem="recentes" aria-pressed="${modoOrdem==="recentes"}" title="Ordenar por adicionados recentemente">${icoNovo}Recentes</button>
+      <button data-ordem="data" aria-pressed="true" title="Ordenar por data">${icoCalendario}Data${ordemDataAsc?setaUp:setaDown}</button>
     </div>
     <div class="view-toggle">
       <button data-vista="grade" aria-pressed="${modoVista==="grade"}">▦ Grade</button>
@@ -1220,7 +1218,10 @@ function renderPublico(){
     },{passive:true});
   }
   app.querySelectorAll(".view-toggle button").forEach(b=>b.onclick=()=>{modoVista=b.dataset.vista;renderPublico();});
-  app.querySelectorAll(".sort-toggle button").forEach(b=>b.onclick=()=>{modoOrdem=b.dataset.ordem;renderPublico();});
+  app.querySelectorAll(".sort-toggle button").forEach(b=>b.onclick=()=>{
+    ordemDataAsc = !ordemDataAsc;
+    renderPublico();
+  });
   // na grade, tocar abre o feed
   if(modoVista==="grade"){
     app.querySelectorAll(".grid figure").forEach(f=>f.onclick=()=>{modoVista="feed";renderPublico();});
@@ -1387,7 +1388,7 @@ async function renderAdmin(){
 
         <div id="formBody" style="display:none">
         <div class="fotos-toggle-row">
-          <button type="button" class="btn outline" id="toggleFotos" style="width:100%;margin-bottom:8px">Mostrar fotos</button>
+          <button type="button" class="btn outline" id="toggleFotos" style="width:100%;margin-bottom:8px;padding:10px 11px;font-size:14px">Mostrar fotos</button>
         </div>
         <div id="fotosSection" style="display:none">
         <div class="fotos-cont" id="fotosCont"></div>
