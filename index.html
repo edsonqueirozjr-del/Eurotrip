@@ -118,7 +118,7 @@
   /* ---------- GRADE ---------- */
   .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:14px}
   .grid figure{position:relative;aspect-ratio:9/16;overflow:hidden;background:var(--paper-2);border-radius:4px;border:1px solid var(--line)}
-  .grid img{width:100%;height:100%;object-fit:cover}
+  .grid img{width:100%;height:100%;object-fit:cover;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;pointer-events:none}
   .grid .tag{position:absolute;left:4px;bottom:4px;right:4px;font-size:10px;line-height:1.2;background:rgba(255,255,255,.92);color:var(--ink);padding:3px 7px;border-radius:999px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;font-weight:600;box-shadow:0 1px 4px rgba(74,53,40,.15)}
   .grid figure:has(.g-multi) .tag{right:30px}
 
@@ -169,11 +169,15 @@
   .btn.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.4)}
   .btn.outline{background:transparent;color:var(--ink);border:1px solid var(--line)}
   .btn.outline.has{color:var(--purple);border-color:var(--purple);background:rgba(181,86,46,.08)}
+  .btn-toggle{color:#4d6b85;border-color:#a9c0d3;background:rgba(107,140,174,.07)}
+  .btn-cancel{color:#9c4a2a;border-color:#d6a48d;background:rgba(194,86,47,.07)}
   .btn.danger{background:var(--stamp);color:#fff}
   .btn.block{display:block;width:100%;margin-top:4px}
 
   .toggle-row{display:flex;gap:8px;margin-bottom:12px}
   .toggle-row .btn{flex:1;padding:10px 11px;font-size:14px;display:flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
+  #fotosSection{background:#f1ebe0;border-radius:12px;padding:12px;margin-bottom:4px}
+  #detalhesSection{background:#f6e9dc;border-radius:12px;padding:12px;margin-bottom:4px}
   .icon-btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 9px;font-size:12px;color:var(--ink-soft)}
 
   .panel{max-width:680px;margin:18px auto;padding:0 16px}
@@ -194,12 +198,12 @@
   .field-icon-wrap input{padding-left:34px!important}
   .spotify-preview{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:12px;color:var(--ink-soft)}
   .spotify-preview img{width:32px;height:32px;border-radius:4px;flex:none}
-  .field input,.field textarea,.field select{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px 11px;font-family:inherit;font-size:14px;background:var(--paper)}
+  .field input,.field textarea,.field select{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px 11px;font-family:inherit;font-size:14px;background:#fff}
   .field textarea{min-height:70px;resize:vertical}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
   .admin-list{margin-top:16px;display:flex;flex-direction:column;gap:8px}
-  .admin-item{display:flex;gap:10px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:11px;padding:8px;min-height:72px}
+  .admin-item{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:11px;padding:9px;min-height:84px}
   .admin-item img{width:56px;height:56px;border-radius:8px;object-fit:cover;flex:none;background:var(--paper-2)}
   .admin-item .info{flex:1;min-width:0}
   .admin-item .info b{font-size:13px;display:block;line-height:1.3}
@@ -357,7 +361,7 @@
   .tools-col{position:absolute;top:12px;left:12px;z-index:3;display:flex;flex-direction:column;gap:8px;align-items:center}
   .dl-btn{width:26px;height:26px;border:0;cursor:pointer;flex:none;background:transparent;
     color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;
-    filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))}
+    filter:drop-shadow(0 0 1.5px rgba(0,0,0,.85)) drop-shadow(0 0 3px rgba(0,0,0,.65)) drop-shadow(0 1px 3px rgba(0,0,0,.5))}
   .dl-btn:active{transform:scale(.92)}
 
   /* coração: suspenso no canto inferior direito */
@@ -402,7 +406,7 @@
   .fc-capa-star{position:absolute;left:8px;bottom:8px;border:0;background:transparent;font-size:24px;line-height:1;cursor:pointer;color:rgba(255,255,255,.5);filter:drop-shadow(0 1px 2px rgba(0,0,0,.7));padding:0;transition:color .15s}
   .fc-capa-star.ativa{color:#f5c518}
 
-  .foto-card{border:1px solid var(--line);border-radius:14px;padding:10px;background:var(--paper)}
+  .foto-card{border:1px solid var(--line);border-radius:14px;padding:10px;background:#fff}
   .fc-top{position:relative;margin-bottom:10px}
   .fc-top img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:10px}
   .fc-num{position:absolute;left:8px;top:8px;font-size:11px;line-height:1.2;background:rgba(247,243,236,.92);color:var(--ink);padding:3px 9px;border-radius:999px;font-weight:600;box-shadow:0 1px 4px rgba(74,53,40,.15)}
@@ -415,8 +419,9 @@
   /* botõezinhos discretos: ver foto grande / descrição */
   .fc-tools{display:flex;gap:8px;margin-bottom:10px}
   .fc-tool{flex:1;border:1px solid var(--line);background:var(--paper-2);border-radius:9px;
-    padding:6px 4px;font-size:10.5px;color:var(--ink-soft);cursor:pointer;font-weight:600;
-    text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    padding:7px 4px;font-size:12px;color:var(--ink-soft);cursor:pointer;font-weight:600;
+    text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    display:flex;align-items:center;justify-content:center;gap:5px}
   .fc-tool.has{color:var(--purple);border-color:var(--purple)}
 
   /* visualizar foto em tamanho maior */
@@ -865,6 +870,15 @@ function fmtPeriodo(ini, fim){
   if(a1===a2 && m1===m2) return `${dd1} até ${dd2} ${MESES[m1-1]} ${a1}`;
   if(a1===a2)            return `${dd1} ${MESES[m1-1]} até ${dd2} ${MESES[m2-1]} ${a1}`;
   return `${fmtData(ini)} até ${fmtData(fim)}`;
+}
+/* extrai a data de criação a partir do timestamp embutido no ID do post */
+function fmtDataCriacao(id){
+  const ts = parseInt(String(id||"").replace(/\D/g,""),10);
+  if(!ts) return "";
+  const d = new Date(ts);
+  if(isNaN(d.getTime())) return "";
+  const dd=String(d.getDate()).padStart(2,"0");
+  return `${dd} ${MESES[d.getMonth()]} ${d.getFullYear()}`;
 }
 /* valores já usados (para sugestões automáticas no admin) */
 function valoresUnicos(campo){
@@ -1488,14 +1502,14 @@ async function renderAdmin(){
         <input type="file" id="fFotoTrocar" accept="image/*" hidden>
 
         <div class="toggle-row" id="fotosToggleRow" style="display:none">
-          <button type="button" class="btn outline" id="toggleFotos">Mostrar fotos</button>
+          <button type="button" class="btn outline btn-toggle" id="toggleFotos">Mostrar fotos</button>
         </div>
         <div id="fotosSection" style="display:none">
         <div class="fotos-cont" id="fotosCont"></div>
         </div>
 
         <div class="toggle-row">
-          <button type="button" class="btn outline" id="toggleDetalhes">Mostrar detalhes</button>
+          <button type="button" class="btn outline btn-toggle" id="toggleDetalhes">Mostrar detalhes</button>
         </div>
         <div id="detalhesSection" style="display:none">
         <div id="autorCont"></div>
@@ -1548,8 +1562,8 @@ async function renderAdmin(){
 
         <div class="btn-row" style="margin-top:18px">
           <button class="btn primary" id="salvar" style="display:none">Guardar</button>
-          <button class="btn outline" id="cancelarEdicao" style="display:none">Cancelar</button>
-          <button class="btn outline" id="cancelarInsercao" style="display:none">Cancelar</button>
+          <button class="btn outline btn-cancel" id="cancelarEdicao" style="display:none">Cancelar</button>
+          <button class="btn outline btn-cancel" id="cancelarInsercao" style="display:none">Cancelar</button>
         </div>
         </div>
       </div>
@@ -1558,13 +1572,13 @@ async function renderAdmin(){
 
       <div class="form" style="margin-top:16px">
         <div class="toggle-row">
-          <button type="button" class="btn outline" id="toggleLista">Mostrar publicações</button>
+          <button type="button" class="btn outline btn-toggle" id="toggleLista">Mostrar publicações</button>
           <button type="button" class="btn outline" id="sortOrdem" style="display:none">
             <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/></svg>
             <span id="sortOrdemTexto">Criação</span>
           </button>
         </div>
-        <div id="listaSection" style="display:none">
+        <div id="listaSection" style="display:none;background:#f1ebe0;border-radius:12px;padding:10px;margin-top:8px">
           <div class="admin-list" id="lista"></div>
         </div>
       </div>
@@ -1617,9 +1631,9 @@ async function renderAdmin(){
           ${fotosAtual.length>1?`<button type="button" class="fc-capa-star ${capaIndex===i?'ativa':''}" data-capa="${i}" title="Definir como foto de capa">★</button>`:""}
         </div>
         <div class="fc-tools">
-          <button type="button" class="fc-tool" data-trocar="${i}" title="Trocar esta foto">🔄 Trocar</button>
-          <button type="button" class="fc-tool" data-ver="${i}" title="Ver foto em tamanho maior">🔍 Ver foto</button>
-          <button type="button" class="fc-tool ${f.descricao?'has':''}" data-desc="${i}" title="Descrição da foto">📝 Descrição</button>
+          <button type="button" class="fc-tool" data-trocar="${i}" title="Trocar esta foto"><svg viewBox="0 0 16 16" aria-hidden="true" style="width:13px;height:13px;fill:currentColor;flex:none"><path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/><path d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.766-.642A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .766.642A6.002 6.002 0 0 1 2.083 9H3.1z"/></svg> Trocar</button>
+          <button type="button" class="fc-tool" data-ver="${i}" title="Ver foto em tamanho maior"><svg viewBox="0 0 16 16" aria-hidden="true" style="width:13px;height:13px;fill:currentColor;flex:none"><path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/><path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z"/></svg> Ver foto</button>
+          <button type="button" class="fc-tool ${f.descricao?'has':''}" data-desc="${i}" title="Descrição da foto"><svg viewBox="0 0 16 16" aria-hidden="true" style="width:13px;height:13px;fill:currentColor;flex:none"><path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.179z"/></svg> Descrição</button>
         </div>
         ${descAbertas.has(i)?`
         <div class="field">
@@ -1867,7 +1881,7 @@ async function renderAdmin(){
         <img src="${(p.fotos&&p.fotos[0]&&p.fotos[0].src)||''}" alt="">
         <div class="info">
           <b>${p.cidade||p.pais}${(p.fotos&&p.fotos.length>1)?` · ${p.fotos.length} fotos`:''}</b>
-          <small>${PAISES[p.pais]?.flag||""} ${p.pais}${fmtPeriodo(p.data,p.dataFim)?` · 📅 ${fmtPeriodo(p.data,p.dataFim)}`:""}${p.autor?` · 👤 ${esc(p.autor)}`:""}${p.editadoPor?` · ✏️ Editado por ${esc(p.editadoPor)}`:""}</small>
+          <small>${PAISES[p.pais]?.flag||""} ${p.pais}${fmtPeriodo(p.data,p.dataFim)?` · 📅 ${fmtPeriodo(p.data,p.dataFim)}`:""}${p.autor?` · 👤 ${esc(p.autor)}`:""}${p.editadoPor?` · ✏️ Editado por ${esc(p.editadoPor)}`:""}<br>🗓️ Criado em ${fmtDataCriacao(p.id)}</small>
         </div>
         <div class="acts">
           <button class="icon-btn" data-edit="${p.id}">Editar</button>
