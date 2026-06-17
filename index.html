@@ -38,21 +38,21 @@
 
 <style>
   :root{
-    --ink:#3a2459;          /* roxo profundo (texto) */
-    --ink-soft:#6a5690;
-    --paper:#f6f1fc;        /* lavanda bem clara */
-    --paper-2:#ece3f8;
-    --stamp:#8a4fd0;         /* roxo encantado */
-    --gold:#e9b949;          /* dourado mágico */
+    --ink:#3a2a1c;          /* marrom café (texto) */
+    --ink-soft:#8a7560;
+    --paper:#fbf5ea;        /* creme quente */
+    --paper-2:#f0e6d2;
+    --stamp:#c2562f;         /* terracota (selo de passaporte) */
+    --gold:#e9b949;          /* dourado */
     --gold-deep:#caa033;
-    --purple:#7b3fc4;        /* roxo real */
-    --purple-deep:#3c1f6e;
-    --line:#e4d8f5;
-    --shadow:0 10px 30px rgba(60,31,110,.18);
+    --purple:#b5562e;        /* terracota (destaque) */
+    --purple-deep:#7a3a1e;
+    --line:#e8dcc8;
+    --shadow:0 10px 30px rgba(58,42,28,.16);
 
-    --fr:#6d6ad6;  /* França  */
+    --fr:#6b8cae;  /* França  */
     --be:#e9b949;  /* Bélgica */
-    --nl:#b86bd6;  /* Holanda */
+    --nl:#d2691e;  /* Holanda (laranja, cor nacional) */
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{background:var(--paper);color:var(--ink);font-family:"Inter",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
@@ -64,7 +64,7 @@
 
   /* ---------- CABEÇALHO / PERFIL ---------- */
   header.profile{
-    background:linear-gradient(160deg,#2a1551 0%, #6a2fb0 50%, #9a4fd0 80%, #e9b949 140%);
+    background:linear-gradient(160deg,#2e2118 0%, #7a3a1e 50%, #c17f2e 80%, #e9b949 140%);
     color:var(--paper);
     padding:34px 16px 24px;
     text-align:center;
@@ -98,7 +98,7 @@
   .filter-carousel::-webkit-scrollbar{display:none}
   .filter-slide{flex:0 0 100%;scroll-snap-align:start;display:flex;gap:6px;padding:0 12px}
   .chip{flex:1 1 0;min-width:0;justify-content:center;border:1px solid var(--line);background:#fff;border-radius:999px;
-    padding:8px 4px;font-size:12.5px;font-weight:500;color:var(--ink-soft);display:flex;align-items:center;gap:5px;
+    padding:9px 6px;font-size:13px;font-weight:600;color:var(--ink-soft);display:flex;align-items:center;gap:5px;
     transition:.15s;white-space:nowrap}
   .chip .flag{font-size:13px;line-height:1}
   .chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
@@ -111,8 +111,8 @@
   .view-row{display:flex;align-items:stretch;justify-content:space-between;gap:6px;margin-top:14px}
   .view-toggle{display:flex;flex:0 0 auto;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:#fff}
   .sort-toggle{display:flex;flex:0 0 auto;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:#fff}
-  .view-toggle button,.sort-toggle button{flex:1;border:0;background:transparent;padding:7px 12px;color:var(--ink-soft);
-    font-size:12px;display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap}
+  .view-toggle button,.sort-toggle button{flex:1;border:0;background:transparent;padding:9px 12px;color:var(--ink-soft);
+    font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap}
   .view-toggle button[aria-pressed="true"],.sort-toggle button[aria-pressed="true"]{background:var(--paper-2);color:var(--ink)}
 
   /* ---------- GRADE ---------- */
@@ -168,7 +168,7 @@
     box-shadow:0 4px 14px rgba(233,185,73,.4)}
   .btn.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.4)}
   .btn.outline{background:transparent;color:var(--ink);border:1px solid var(--line)}
-  .btn.outline.has{color:var(--purple);border-color:var(--purple);background:rgba(106,47,176,.06)}
+  .btn.outline.has{color:var(--purple);border-color:var(--purple);background:rgba(181,86,46,.08)}
   .btn.danger{background:var(--stamp);color:#fff}
   .btn.block{display:block;width:100%;margin-top:4px}
 
@@ -251,7 +251,7 @@
 
   /* foto da família (quadrada — sem corte branco) */
   .avatar{width:110px;height:110px;margin:0 auto 12px;border-radius:18px;overflow:hidden;
-    border:2px solid var(--gold);box-shadow:0 8px 22px rgba(60,31,110,.4);position:relative;z-index:1}
+    border:2px solid var(--gold);box-shadow:0 8px 22px rgba(58,42,28,.35);position:relative;z-index:1}
   .avatar img{width:100%;height:100%;object-fit:cover;display:block}
 
   /* título com brilho DOURADO e avião flutuante */
@@ -276,11 +276,11 @@
   .card .body{padding:14px 6px 4px}
 
   /* foto(s) em destaque — tela cheia */
-  .lightbox{position:fixed;inset:0;z-index:200;background:rgba(28,16,48,.97);
+  .lightbox{position:fixed;inset:0;z-index:200;background:rgba(30,21,14,.97);
     display:flex;align-items:center;justify-content:center;padding:16px;animation:fadein .2s ease}
   /* palco com a mesma proporção 9:16 das fotos: tudo fica dentro dele */
   .lb-stage{position:relative;width:100%;max-width:calc((100vh - 32px) * 9 / 16);
-    aspect-ratio:9/16;border-radius:14px;overflow:hidden;background:#2a1551}
+    aspect-ratio:9/16;border-radius:14px;overflow:hidden;background:#2e2118}
   .lb-close{position:absolute;top:10px;right:10px;z-index:50;width:38px;height:38px;border-radius:50%;border:0;
     background:rgba(0,0,0,.45);color:#fff;font-size:17px;line-height:1;cursor:pointer;
     display:flex;align-items:center;justify-content:center;
@@ -301,7 +301,7 @@
   
   @keyframes fadein{from{opacity:0}to{opacity:1}}
   .autosave-toast{position:fixed;bottom:18px;left:50%;transform:translate(-50%,16px);
-    background:rgba(42,21,81,.92);color:#fff;font-size:12px;font-weight:600;
+    background:rgba(58,42,28,.92);color:#fff;font-size:12px;font-weight:600;
     padding:8px 16px;border-radius:999px;opacity:0;pointer-events:none;
     transition:opacity .25s,transform .25s;z-index:90;box-shadow:var(--shadow)}
   .autosave-toast.show{opacity:1;transform:translate(-50%,0)}
@@ -328,7 +328,7 @@
 
   /* ---------- carrossel de fotos (feed) — sempre 9:16 ---------- */
   .feed .card{max-width:430px;margin-left:auto;margin-right:auto}
-  .carousel{position:relative;overflow:hidden;background:#2a1551;border-radius:14px;aspect-ratio:9/16}
+  .carousel{position:relative;overflow:hidden;background:#2e2118;border-radius:14px;aspect-ratio:9/16}
   .track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;height:100%}
   .track::-webkit-scrollbar{display:none}
   .slide{flex:0 0 100%;scroll-snap-align:center;position:relative;height:100%}
@@ -341,12 +341,12 @@
   /* balão de fala (speech bubble) para a descrição da foto */
   .desc-bubble{position:absolute;top:52px;left:4px;z-index:5;
     max-width:80%;width:max-content;
-    background:rgba(42,21,81,.9);color:#fff;font-size:12.5px;line-height:1.5;
+    background:rgba(58,42,28,.9);color:#fff;font-size:12.5px;line-height:1.5;
     padding:10px 13px;border-radius:12px;backdrop-filter:blur(4px);
     box-shadow:0 4px 18px rgba(0,0,0,.35);animation:fadein .15s ease}
   /* rabinho do balão apontando para o 💬 (topo-esquerdo) */
   .desc-bubble::before{content:"";position:absolute;top:-8px;left:8px;
-    border:5px solid transparent;border-bottom-color:rgba(42,21,81,.9)}
+    border:5px solid transparent;border-bottom-color:rgba(58,42,28,.9)}
 
   /* bolinhas FORA da foto (não cobrem a etiqueta de pessoas) */
   .dots-bar{display:flex;gap:6px;justify-content:center;padding:9px 0 2px}
@@ -386,10 +386,10 @@
   .lb-heart{animation:floaty 2.6s ease-in-out infinite}
 
   /* moldura fina, tipo fio brilhante */
-  .card .carousel{background:linear-gradient(135deg,#2a1551,#3c1f6e);
-    box-shadow:0 0 9px rgba(233,185,73,.4), 0 6px 18px rgba(60,31,110,.22)}
+  .card .carousel{background:linear-gradient(135deg,#2e2118,#7a3a1e);
+    box-shadow:0 0 9px rgba(233,185,73,.4), 0 6px 18px rgba(58,42,28,.20)}
   .card .carousel::after{content:"";position:absolute;inset:0;border-radius:14px;padding:1.5px;
-    background:linear-gradient(135deg,#f3cb63,#c77dd6 50%,#f3cb63);
+    background:linear-gradient(135deg,#f3cb63,#fff3c4 50%,#f3cb63);
     -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
     -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;z-index:1}
 
@@ -420,7 +420,7 @@
   .fc-tool.has{color:var(--purple);border-color:var(--purple)}
 
   /* visualizar foto em tamanho maior */
-  .img-preview-overlay{position:fixed;inset:0;z-index:250;background:rgba(28,16,48,.95);
+  .img-preview-overlay{position:fixed;inset:0;z-index:250;background:rgba(30,21,14,.95);
     display:flex;align-items:center;justify-content:center;padding:20px;animation:fadein .15s ease}
   .img-preview-overlay img{max-width:100%;max-height:90vh;object-fit:contain;border-radius:10px}
   .img-preview-frame{position:relative;max-width:100%;max-height:90vh;display:flex}
@@ -428,11 +428,11 @@
   .img-preview-frame .stamp:active{cursor:grabbing}
 
   /* recorte 9:16 (arrastar para posicionar) */
-  .crop-modal{position:fixed;inset:0;z-index:260;background:rgba(28,16,48,.92);
+  .crop-modal{position:fixed;inset:0;z-index:260;background:rgba(30,21,14,.92);
     display:flex;align-items:center;justify-content:center;padding:20px;animation:fadein .15s ease}
 
   /* janela de confirmação customizada (excluir / baixar) */
-  .confirm-modal{position:fixed;inset:0;z-index:270;background:rgba(28,16,48,.92);
+  .confirm-modal{position:fixed;inset:0;z-index:270;background:rgba(30,21,14,.92);
     display:flex;align-items:center;justify-content:center;padding:20px;animation:fadein .15s ease}
   .confirm-card{background:var(--paper);border-radius:18px;padding:22px;max-width:320px;width:100%;text-align:center;box-shadow:var(--shadow)}
   .confirm-card h3{margin:0 0 8px}
@@ -443,7 +443,7 @@
   .crop-card h3{margin:0 0 6px}
   .crop-tip{font-size:12.5px;color:var(--ink-soft);margin:0 0 4px}
   .crop-frame{position:relative;width:200px;aspect-ratio:9/16;margin:14px auto;
-    overflow:hidden;border-radius:12px;border:2px solid var(--gold);background:#2a1551;touch-action:none}
+    overflow:hidden;border-radius:12px;border:2px solid var(--gold);background:#2e2118;touch-action:none}
   .crop-img{position:absolute;top:0;left:0;max-width:none;cursor:grab;-webkit-user-drag:none;
     -webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
   .crop-actions{display:flex;gap:10px;margin-top:14px}
@@ -1054,13 +1054,13 @@ function mostrarImagemGrande(src){
   ov.innerHTML=`<div class="img-preview-frame">
     <button class="lb-close" aria-label="Fechar">✕</button>
     <img src="${src}" alt="">
-    <div class="stamp" data-stamp="preview" style="${estiloStamp(previewPost)}"><span class="pin">📌</span><span class="flag-em">${PAISES[pais]?.flag||""}</span><br>${cidade||pais||"Local"}</div>
+    <div class="stamp" data-stamp="preview" style="${estiloStamp(previewPost)}"><span class="flag-em">${PAISES[pais]?.flag||""}</span><br>${cidade||pais||"Local"}</div>
   </div>`;
   const fechar=()=>ov.remove();
   ov.querySelector(".lb-close").onclick=fechar;
   ov.addEventListener("click",e=>{ if(e.target===ov) fechar(); });
   document.body.appendChild(ov);
-  tornarStampArrastavel(ov.querySelector(".stamp[data-stamp]"), previewPost, ov.querySelector(".img-preview-frame"), "admin_"+(editandoId||"novo"));
+  tornarStampArrastavel(ov.querySelector(".stamp[data-stamp]"), previewPost, ov.querySelector(".img-preview-frame"), null, true);
 }
 
 /* recorte 9:16: arraste a foto dentro da moldura e confirme */
@@ -1143,11 +1143,11 @@ function estiloStamp(post){
 }
 /* deixa o selo arrastável dentro do contêiner (carrossel no feed ou lightbox no destaque)
    pinId: chave usada para lembrar, no navegador, se esse selo está fixado (padrão: post.id) */
-function tornarStampArrastavel(stamp, post, container, pinId){
+function tornarStampArrastavel(stamp, post, container, pinId, sempreArrastavel){
   if(!stamp || !container) return;
   const idFixar = pinId || (post && post.id) || "selo";
   stamp.classList.add("draggable");
-  stamp.classList.toggle("pinned", stampEstaFixado(idFixar));
+  if(!sempreArrastavel) stamp.classList.toggle("pinned", stampEstaFixado(idFixar));
   let arrastando=false;
   const mover=(clientX,clientY)=>{
     const r=container.getBoundingClientRect();
@@ -1162,7 +1162,7 @@ function tornarStampArrastavel(stamp, post, container, pinId){
   };
   stamp.addEventListener("pointerdown",e=>{
     if(e.target.closest(".pin")) return;          // o alfinete cuida do próprio toque (fixar/destravar)
-    if(stamp.classList.contains("pinned")) return; // fixado: não deixa arrastar
+    if(!sempreArrastavel && stamp.classList.contains("pinned")) return; // fixado: não deixa arrastar
     e.preventDefault(); e.stopPropagation();
     arrastando=true;
     try{ stamp.setPointerCapture(e.pointerId); }catch(err){}
