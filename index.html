@@ -751,7 +751,7 @@ function ligarInteracoes(){
     const track=c.querySelector(".track");
     const indice=()=>Math.round(track.scrollLeft/Math.max(1,track.clientWidth));
     let sx=0, sy=0, moved=false, holdT=null, fastI=null, didHold=false, px=0, py=0;
-    const guarded=(e)=> e.target.closest(".heart-btn") || e.target.closest(".ov-link") || e.target.closest(".dl-btn") || e.target.closest(".desc-bubble");
+    const guarded=(e)=> e.target.closest(".heart-btn") || e.target.closest(".ov-link") || e.target.closest(".dl-btn") || e.target.closest(".desc-bubble") || e.target.closest(".stamp");
     const start=(x,y)=>{ moved=false; didHold=false; px=x; py=y;
       holdT=setTimeout(()=>{ didHold=true; incCoracao(id,px,py); fastI=setInterval(()=>incCoracao(id,px,py),150); }, 320); };
     const cancel=()=>{ clearTimeout(holdT); clearInterval(fastI); holdT=fastI=null; };
@@ -759,12 +759,12 @@ function ligarInteracoes(){
       incCoracao(id,x,y); abrirLightbox(post, indice()); };
     if(touch){
       c.addEventListener("touchstart",e=>{ if(guarded(e))return; const t=e.touches[0]; sx=t.clientX; sy=t.clientY; start(t.clientX,t.clientY); },{passive:true});
-      c.addEventListener("touchmove",e=>{ const t=e.touches[0]; if(Math.abs(t.clientX-sx)>10||Math.abs(t.clientY-sy)>10){ moved=true; cancel(); } },{passive:true});
+      c.addEventListener("touchmove",e=>{ const t=e.touches[0]; if(Math.abs(t.clientX-sx)>10||Math.abs(t.clientY-sy)>10){ moved=true; if(!didHold) clearTimeout(holdT); } },{passive:true});
       c.addEventListener("touchend",e=>{ if(guarded(e))return; const t=e.changedTouches[0]; end(t.clientX,t.clientY); },{passive:true});
       c.addEventListener("touchcancel",cancel);
     } else {
       c.addEventListener("mousedown",e=>{ if(guarded(e))return; sx=e.clientX; sy=e.clientY; start(e.clientX,e.clientY); });
-      c.addEventListener("mousemove",e=>{ if(holdT&&(Math.abs(e.clientX-sx)>10||Math.abs(e.clientY-sy)>10)){ moved=true; cancel(); } });
+      c.addEventListener("mousemove",e=>{ if(holdT&&(Math.abs(e.clientX-sx)>10||Math.abs(e.clientY-sy)>10)){ moved=true; if(!didHold) clearTimeout(holdT); } });
       c.addEventListener("mouseup",e=>{ if(guarded(e))return; end(e.clientX,e.clientY); });
       c.addEventListener("mouseleave",cancel);
     }
@@ -797,7 +797,7 @@ function abrirLightbox(post, startIndex){
       </div>
       <div class="lb-actions">
         <button class="heart-btn lb-heart" data-post="${post.id}" aria-label="Curtir">
-          <span class="heart"><svg viewBox="0 0 16 16" aria-hidden="true" style="width:21px;height:21px;fill:#fff"><path d="M8 14.25l-.345-.31C3.45 10.012 1 7.706 1 5.022 1 2.846 2.736 1 4.99 1c1.295 0 2.566.62 3.01 1.673C8.444 1.62 9.715 1 11.01 1 13.264 1 15 2.846 15 5.022c0 2.684-2.45 4.99-6.655 8.918L8 14.25z"/></svg></span><span class="heart-count">${hearts[post.id]||0}</span>
+          <span class="heart"><svg viewBox="0 0 16 16" aria-hidden="true" style="width:30px;height:30px;fill:#fff"><path d="M8 14.25l-.345-.31C3.45 10.012 1 7.706 1 5.022 1 2.846 2.736 1 4.99 1c1.295 0 2.566.62 3.01 1.673C8.444 1.62 9.715 1 11.01 1 13.264 1 15 2.846 15 5.022c0 2.684-2.45 4.99-6.655 8.918L8 14.25z"/></svg></span><span class="heart-count">${hearts[post.id]||0}</span>
         </button>
       </div>
     </div>`;
@@ -833,10 +833,10 @@ function abrirLightbox(post, startIndex){
   const cancel=()=>{ clearTimeout(holdT); clearInterval(fastI); holdT=fastI=null; };
   const end=(x,y)=>{ cancel(); if(moved||didHold) return; incCoracao(pid,x,y); };
   track.addEventListener("touchstart",e=>{ if(guarded(e))return; const t=e.touches[0]; sx=t.clientX; sy=t.clientY; start(t.clientX,t.clientY); },{passive:true});
-  track.addEventListener("touchmove",e=>{ const t=e.touches[0]; if(Math.abs(t.clientX-sx)>10||Math.abs(t.clientY-sy)>10){ moved=true; cancel(); } },{passive:true});
+  track.addEventListener("touchmove",e=>{ const t=e.touches[0]; if(Math.abs(t.clientX-sx)>10||Math.abs(t.clientY-sy)>10){ moved=true; if(!didHold) clearTimeout(holdT); } },{passive:true});
   track.addEventListener("touchend",e=>{ if(guarded(e))return; const t=e.changedTouches[0]; end(t.clientX,t.clientY); },{passive:true});
   track.addEventListener("mousedown",e=>{ if(guarded(e))return; sx=e.clientX; sy=e.clientY; start(e.clientX,e.clientY); });
-  track.addEventListener("mousemove",e=>{ if(holdT&&(Math.abs(e.clientX-sx)>10||Math.abs(e.clientY-sy)>10)){ moved=true; cancel(); } });
+  track.addEventListener("mousemove",e=>{ if(holdT&&(Math.abs(e.clientX-sx)>10||Math.abs(e.clientY-sy)>10)){ moved=true; if(!didHold) clearTimeout(holdT); } });
   track.addEventListener("mouseup",e=>{ if(guarded(e))return; end(e.clientX,e.clientY); });
 }
 
@@ -1230,7 +1230,7 @@ function htmlFeed(lista){
         </div>
         <div class="actions-col">
           <button class="heart-btn" data-post="${p.id}" aria-label="Curtir">
-            <span class="heart"><svg viewBox="0 0 16 16" aria-hidden="true" style="width:21px;height:21px;fill:#fff"><path d="M8 14.25l-.345-.31C3.45 10.012 1 7.706 1 5.022 1 2.846 2.736 1 4.99 1c1.295 0 2.566.62 3.01 1.673C8.444 1.62 9.715 1 11.01 1 13.264 1 15 2.846 15 5.022c0 2.684-2.45 4.99-6.655 8.918L8 14.25z"/></svg></span>
+            <span class="heart"><svg viewBox="0 0 16 16" aria-hidden="true" style="width:30px;height:30px;fill:#fff"><path d="M8 14.25l-.345-.31C3.45 10.012 1 7.706 1 5.022 1 2.846 2.736 1 4.99 1c1.295 0 2.566.62 3.01 1.673C8.444 1.62 9.715 1 11.01 1 13.264 1 15 2.846 15 5.022c0 2.684-2.45 4.99-6.655 8.918L8 14.25z"/></svg></span>
             <span class="heart-count">${hearts[p.id]||0}</span>
           </button>
         </div>
@@ -1465,8 +1465,10 @@ async function renderAdmin(){
     <div class="admin-top">
       <div class="admin-top-row">
         <h2>🔒 ${esc(membroLogado)}</h2>
-        <button class="btn outline" id="editarTitulos" title="Editar título e sub título" style="padding:6px 10px;font-size:12px;color:var(--ink-soft)">✏️ Editar</button>
-        <button class="btn outline" id="sairAdmin" title="Sair e trocar de conta Google" style="padding:6px 10px;font-size:12px;color:var(--ink-soft)">🚪 Sair</button>
+        <div style="display:flex;gap:8px">
+          <button class="btn outline" id="editarTitulos" title="Editar título e sub título" style="padding:6px 10px;font-size:12px;color:var(--ink-soft);width:80px">✏️ Editar</button>
+          <button class="btn outline" id="sairAdmin" title="Sair e trocar de conta Google" style="padding:6px 10px;font-size:12px;color:var(--ink-soft);width:80px">🚪 Sair</button>
+        </div>
       </div>
       <div class="grid2" id="titulosCont" style="display:none;margin-bottom:-6px">
         <div class="field">
@@ -1498,6 +1500,11 @@ async function renderAdmin(){
         <input type="file" id="fFotoTrocar" accept="image/*" hidden>
 
         <div id="autorCont"></div>
+
+        <div class="fotos-toggle-row">
+          <button type="button" class="btn outline" id="toggleDetalhes" style="width:100%;margin-bottom:8px;padding:10px 11px;font-size:14px">Mostrar detalhes</button>
+        </div>
+        <div id="detalhesSection" style="display:none">
 
         <div class="grid2">
           <div class="field">
@@ -1541,6 +1548,8 @@ async function renderAdmin(){
             <input type="url" id="fSpotify" placeholder="https://open.spotify.com/track/...">
           </div>
           <div id="spotifyPreview" class="spotify-preview" style="display:none"></div>
+        </div>
+
         </div>
 
         <button class="btn primary block big" id="salvar">Guardar momento</button>
@@ -1666,6 +1675,15 @@ async function renderAdmin(){
     fotosVisiveis = !fotosVisiveis;
     $("#fotosSection").style.display = fotosVisiveis ? "" : "none";
     atualizarToggleFotos();
+  };
+  let detalhesVisiveis = false;
+  function atualizarToggleDetalhes(){
+    $("#toggleDetalhes").textContent = detalhesVisiveis ? "Ocultar detalhes" : "Mostrar detalhes";
+  }
+  $("#toggleDetalhes").onclick = ()=>{
+    detalhesVisiveis = !detalhesVisiveis;
+    $("#detalhesSection").style.display = detalhesVisiveis ? "" : "none";
+    atualizarToggleDetalhes();
   };
   $("#addFotos").onclick = ()=> $("#fFotos").click();
   $("#fFotos").onchange = e=>{
@@ -1909,6 +1927,8 @@ async function renderAdmin(){
     $("#abrirForm").style.display="";
     fotosVisiveis = false;
     $("#fotosSection").style.display="none";
+    detalhesVisiveis = false;
+    $("#detalhesSection").style.display="none";
   }
   $("#abrirForm").onclick = ()=>{
     $("#formBody").style.display="";
