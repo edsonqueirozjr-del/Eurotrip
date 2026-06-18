@@ -203,12 +203,11 @@
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
   .admin-list{margin-top:16px;display:flex;flex-direction:column;gap:8px}
-  .admin-item{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:11px;padding:9px;min-height:84px}
+  .admin-item{display:flex;gap:10px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:11px;padding:9px;height:84px;overflow:hidden}
   .admin-item img{width:56px;height:56px;border-radius:8px;object-fit:cover;flex:none;background:var(--paper-2)}
-  .admin-item .info{flex:1;min-width:0}
-  .admin-item .info b{font-size:13px;display:block;line-height:1.3}
-  .admin-item .info small{font-size:11px;color:var(--ink-soft);display:block;line-height:1.4}
-  .admin-item .info small.edit-flag{display:block;margin-top:2px}
+  .admin-item .info{flex:1;min-width:0;overflow:hidden}
+  .admin-item .info b{font-size:13px;display:block;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .admin-item .info-l{font-size:11px;color:var(--ink-soft);line-height:1.6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .admin-item .acts{display:flex;gap:6px;flex:none}
 
   /* ---------- LOGIN ---------- */
@@ -877,8 +876,10 @@ function fmtDataCriacao(id){
   if(!ts) return "";
   const d = new Date(ts);
   if(isNaN(d.getTime())) return "";
+  const ano = d.getFullYear();
+  if(ano < 2020 || ano > new Date().getFullYear()+1) return ""; // ID antigo sem timestamp real embutido
   const dd=String(d.getDate()).padStart(2,"0");
-  return `${dd} ${MESES[d.getMonth()]} ${d.getFullYear()}`;
+  return `${dd} ${MESES[d.getMonth()]} ${ano}`;
 }
 /* valores já usados (para sugestões automáticas no admin) */
 function valoresUnicos(campo){
@@ -1876,18 +1877,23 @@ async function renderAdmin(){
   let listaVisivel = false;
   function pintarLista(){
     atualizarToggleLista();
-    $("#lista").innerHTML = porDataCadastro().map(p=>`
+    $("#lista").innerHTML = porDataCadastro().map(p=>{
+      const dataCriacao = fmtDataCriacao(p.id);
+      const linha2 = [p.autor?`👤 ${esc(p.autor)}`:"", p.editadoPor?`✏️ Editado por ${esc(p.editadoPor)}`:"", dataCriacao?`🗓️ ${dataCriacao}`:""].filter(Boolean).join(" · ");
+      return `
       <div class="admin-item">
         <img src="${(p.fotos&&p.fotos[0]&&p.fotos[0].src)||''}" alt="">
         <div class="info">
           <b>${p.cidade||p.pais}${(p.fotos&&p.fotos.length>1)?` · ${p.fotos.length} fotos`:''}</b>
-          <small>${PAISES[p.pais]?.flag||""} ${p.pais}${fmtPeriodo(p.data,p.dataFim)?` · 📅 ${fmtPeriodo(p.data,p.dataFim)}`:""}${p.autor?` · 👤 ${esc(p.autor)}`:""}${p.editadoPor?` · ✏️ Editado por ${esc(p.editadoPor)}`:""}<br>🗓️ Criado em ${fmtDataCriacao(p.id)}</small>
+          <div class="info-l">${PAISES[p.pais]?.flag||""} ${p.pais}${fmtPeriodo(p.data,p.dataFim)?` · 📅 ${fmtPeriodo(p.data,p.dataFim)}`:""}</div>
+          <div class="info-l">${linha2}</div>
         </div>
         <div class="acts">
           <button class="icon-btn" data-edit="${p.id}">Editar</button>
           <button class="icon-btn" data-del="${p.id}">Excluir</button>
         </div>
-      </div>`).join("") || `<div class="empty" style="padding:24px">Nenhum momento ainda.</div>`;
+      </div>`;
+    }).join("") || `<div class="empty" style="padding:24px">Nenhum momento ainda.</div>`;
 
     $("#lista").querySelectorAll("[data-del]").forEach(b=>b.onclick=async ()=>{
       const ok = await confirmarModal("Excluir publicação", "Tem certeza que deseja excluir este momento? Essa ação não pode ser desfeita.", "Excluir", "Cancelar");
