@@ -169,8 +169,8 @@
   .btn.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.4)}
   .btn.outline{background:transparent;color:var(--ink);border:1px solid var(--line)}
   .btn.outline.has{color:var(--purple);border-color:var(--purple);background:rgba(181,86,46,.08)}
-  .btn-toggle{color:var(--ink);border-color:var(--ink-soft);background:var(--paper-2)}
-  .btn-cancel{color:var(--purple-deep);border-color:var(--purple-deep);background:rgba(122,58,30,.08)}
+  .btn.outline.btn-toggle{color:var(--ink);border-color:var(--ink-soft);background:var(--paper-2)}
+  .btn.outline.btn-cancel{color:var(--purple-deep);border-color:var(--purple-deep);background:rgba(122,58,30,.08)}
   .btn.danger{background:var(--stamp);color:#fff}
   .btn.block{display:block;width:100%;margin-top:4px}
 
@@ -178,7 +178,7 @@
   .toggle-row .btn{flex:1;padding:10px 11px;font-size:14px;display:flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
   #fotosSection{background:#f1ebe0;border-radius:12px;padding:12px;margin-bottom:4px}
   #detalhesSection{background:#f6e9dc;border-radius:12px;padding:12px;margin-bottom:4px}
-  .icon-btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 9px;font-size:12px;color:var(--ink-soft)}
+  .icon-btn{border:1px solid var(--line);background:var(--paper-2);border-radius:8px;padding:6px 9px;font-size:12px;color:var(--ink-soft)}
 
   .panel{max-width:680px;margin:18px auto;padding:0 16px}
   .form{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
@@ -1481,8 +1481,8 @@ async function renderAdmin(){
       <div class="admin-top-row">
         <h2>🔒 ${esc(membroLogado)}</h2>
         <div style="display:flex;gap:8px">
-          <button class="btn outline" id="editarTitulos" title="Editar título e sub título" style="padding:6px 10px;font-size:12px;color:var(--ink-soft);width:80px;background:var(--paper)">✏️ Editar</button>
-          <button class="btn outline" id="sairAdmin" title="Sair e trocar de conta Google" style="padding:6px 10px;font-size:12px;color:var(--ink-soft);width:80px;background:var(--paper)">🚪 Sair</button>
+          <button class="btn outline" id="editarTitulos" title="Editar título e sub título" style="padding:10px 11px;font-size:14px;color:var(--ink-soft);width:90px;background:#fff">✏️ Editar</button>
+          <button class="btn outline" id="sairAdmin" title="Sair e trocar de conta Google" style="padding:10px 11px;font-size:14px;color:var(--ink-soft);width:90px;background:#fff">🚪 Sair</button>
         </div>
       </div>
       <div class="grid2" id="titulosCont" style="display:none;margin-bottom:-6px">
@@ -1580,7 +1580,7 @@ async function renderAdmin(){
       <div class="form" style="margin-top:16px">
         <div class="toggle-row">
           <button type="button" class="btn outline btn-toggle" id="toggleLista">Mostrar publicações</button>
-          <button type="button" class="btn outline" id="sortOrdem" style="display:none">
+          <button type="button" class="btn outline" id="sortOrdem" style="display:none;background:var(--paper-2)">
             <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/></svg>
             <span id="sortOrdemTexto">Criação</span>
           </button>
@@ -1593,6 +1593,9 @@ async function renderAdmin(){
       <div class="form" style="margin-top:16px">
         <button class="btn outline" id="compartilharSite" style="width:100%">📤 Compartilhar</button>
       </div>
+
+      <div class="form" style="margin-top:16px">
+        <button class="btn outline" id="corrigirAutores" style="width:100%">🔧 Corrigir autor "Thaysa" → "Junior"</button>
 
       <button class="lock-fab" id="verFeed" title="Ver feed público" aria-label="Ver feed público">🏠</button>
     </div>
@@ -1891,14 +1894,14 @@ async function renderAdmin(){
       <div class="admin-item">
         <div class="admin-thumb">
           <img src="${(p.fotos&&p.fotos[0]&&p.fotos[0].src)||''}" alt="">
-          ${p.editadoPor?`<button type="button" class="thumb-badge" data-vereditado="${p.id}" title="Editado por ${esc(p.editadoPor)}">✏️</button>`:""}
+          ${(p.editadoPor && p.editadoPor!==p.autor)?`<button type="button" class="thumb-badge" data-vereditado="${p.id}" title="Editado por ${esc(p.editadoPor)}">✏️</button>`:""}
         </div>
         <div class="info">
           <b>${PAISES[p.pais]?.flag||""} ${p.cidade||p.pais}${(p.fotos&&p.fotos.length>1)?` · ${p.fotos.length} fotos`:''}</b>
           ${periodo?`<div class="info-l">Data: ${periodo}</div>`:""}
           ${p.autor?`<div class="info-l">Autor: ${esc(p.autor)}</div>`:""}
           ${dataCriacao?`<div class="info-l">Criado em ${dataCriacao}</div>`:""}
-          ${(p.editadoPor && editadoAbertos.has(p.id))?`<div class="info-l">Editado por ${esc(p.editadoPor)}</div>`:""}
+          ${(p.editadoPor && p.editadoPor!==p.autor && editadoAbertos.has(p.id))?`<div class="info-l">Editado por ${esc(p.editadoPor)}</div>`:""}
         </div>
         <div class="acts">
           <button class="icon-btn" data-edit="${p.id}">Editar</button>
@@ -2114,6 +2117,19 @@ let _configTimer=null;
       try{ await navigator.clipboard.writeText(url); mostrarSalvo("Link copiado ✓"); }
       catch(e){ alert(url); }
     }
+  };
+  $("#corrigirAutores").onclick = async ()=>{
+    const afetados = posts.filter(p=>p.autor==="Thaysa");
+    if(!afetados.length){ alert("Nenhuma publicação com autor \"Thaysa\" encontrada."); return; }
+    const ok = await confirmarModal("Corrigir autor", `${afetados.length} publicação(ões) com autor "Thaysa" serão alteradas para "Junior". Continuar?`, "Corrigir", "Cancelar");
+    if(!ok) return;
+    for(const p of afetados){
+      p.autor = "Junior";
+      try{ await firebase.firestore().collection("posts").doc(p.id).update({autor:"Junior"}); }
+      catch(e){ console.error("Corrigir autor:", e); }
+    }
+    pintarLista();
+    alert(`${afetados.length} publicação(ões) corrigida(s) ✓`);
   };
 }
 
